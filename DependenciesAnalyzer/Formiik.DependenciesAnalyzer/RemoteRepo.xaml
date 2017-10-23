@@ -1,0 +1,41 @@
+﻿<Window x:Class="Formiik.DependenciesAnalyzer.RemoteRepo"
+        xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+        xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+        xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+        xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+        xmlns:local="clr-namespace:Formiik.DependenciesAnalyzer"
+        mc:Ignorable="d"
+        Title="Configuración de Repositorio Remto" 
+        Height="235" Width="400" 
+        MinHeight="235" MinWidth="400" 
+        ResizeMode="CanResizeWithGrip"
+        ShowInTaskbar="False"
+        WindowStartupLocation="CenterScreen">
+    <Grid>
+        <StackPanel Margin="10">
+            <Label FontWeight="Bold">
+                Url del Repositorio:
+            </Label>
+            <TextBox x:Name="TxtUrlRepo">
+            </TextBox>
+            <Label FontWeight="Bold">
+                Usuario:
+            </Label>
+            <TextBox x:Name="TxtUsuario">
+            </TextBox>
+            <Label FontWeight="Bold">
+                Password:
+            </Label>
+            <PasswordBox x:Name="PwdRemoteRepo">
+            </PasswordBox>
+            <Button 
+                x:Name="BtnGuardarRemoteRepo" 
+                Width="150" Height="35" 
+                Margin="0,10,0,0" 
+                Click="BtnGuardarRemoteRepo_Click">
+                Guardar Configuración
+            </Button>
+        </StackPanel>
+    </Grid>
+</Window>
+

@@ -1,0 +1,37 @@
+﻿
+Microsoft Visual Studio Solution File, Format Version 12.00
+# Visual Studio 14
+VisualStudioVersion = 14.0.25420.1
+MinimumVisualStudioVersion = 10.0.40219.1
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Formiik.DependenciesAnalyzer.Core", "Formiik.DependenciesAnalyzer.Core\Formiik.DependenciesAnalyzer.Core.csproj", "{5B897B75-6AB4-46E2-ACD5-15097E890DEE}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Formiik.DependenciesAnalyzer.Core.Test", "Formiik.DependenciesAnalyzer.Core.Test\Formiik.DependenciesAnalyzer.Core.Test.csproj", "{7B162192-6E19-45FE-9381-6AE1A8C117D5}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Formiik.DependenciesAnalyzer", "Formiik.DependenciesAnalyzer\Formiik.DependenciesAnalyzer.csproj", "{D18287F5-800B-4812-AC15-DD70FA50DD96}"
+EndProject
+Global
+	GlobalSection(SolutionConfigurationPlatforms) = preSolution
+		Debug|Any CPU = Debug|Any CPU
+		Release|Any CPU = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(ProjectConfigurationPlatforms) = postSolution
+		{5B897B75-6AB4-46E2-ACD5-15097E890DEE}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{5B897B75-6AB4-46E2-ACD5-15097E890DEE}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{5B897B75-6AB4-46E2-ACD5-15097E890DEE}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{5B897B75-6AB4-46E2-ACD5-15097E890DEE}.Release|Any CPU.Build.0 = Release|Any CPU
+		{7B162192-6E19-45FE-9381-6AE1A8C117D5}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{7B162192-6E19-45FE-9381-6AE1A8C117D5}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{7B162192-6E19-45FE-9381-6AE1A8C117D5}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{7B162192-6E19-45FE-9381-6AE1A8C117D5}.Release|Any CPU.Build.0 = Release|Any CPU
+		{D18287F5-800B-4812-AC15-DD70FA50DD96}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{D18287F5-800B-4812-AC15-DD70FA50DD96}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{D18287F5-800B-4812-AC15-DD70FA50DD96}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{D18287F5-800B-4812-AC15-DD70FA50DD96}.Release|Any CPU.Build.0 = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(SolutionProperties) = preSolution
+		HideSolutionNode = FALSE
+	EndGlobalSection
+	GlobalSection(ExtensibilityGlobals) = postSolution
+		SolutionGuid = {15034A32-9E73-4983-AC60-8978B82825FA}
+	EndGlobalSection
+EndGlobal

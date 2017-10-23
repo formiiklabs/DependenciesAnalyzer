@@ -1,0 +1,9 @@
+﻿<Application x:Class="Formiik.DependenciesAnalyzer.App"
+             xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+             xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+             xmlns:local="clr-namespace:Formiik.DependenciesAnalyzer"
+             StartupUri="DependenciesAnalyzer.xaml">
+    <Application.Resources>
+
+    </Application.Resources>
+</Application>

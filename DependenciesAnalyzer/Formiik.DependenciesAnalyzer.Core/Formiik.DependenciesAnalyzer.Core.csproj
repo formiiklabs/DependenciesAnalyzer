@@ -1,0 +1,423 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<Project ToolsVersion="14.0" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+  <Import Project="..\packages\LibGit2Sharp.NativeBinaries.1.0.185\build\LibGit2Sharp.NativeBinaries.props" Condition="Exists('..\packages\LibGit2Sharp.NativeBinaries.1.0.185\build\LibGit2Sharp.NativeBinaries.props')" />
+  <Import Project="$(MSBuildExtensionsPath)\$(MSBuildToolsVersion)\Microsoft.Common.props" Condition="Exists('$(MSBuildExtensionsPath)\$(MSBuildToolsVersion)\Microsoft.Common.props')" />
+  <PropertyGroup>
+    <Configuration Condition=" '$(Configuration)' == '' ">Debug</Configuration>
+    <Platform Condition=" '$(Platform)' == '' ">AnyCPU</Platform>
+    <ProjectGuid>{5B897B75-6AB4-46E2-ACD5-15097E890DEE}</ProjectGuid>
+    <OutputType>Library</OutputType>
+    <AppDesignerFolder>Properties</AppDesignerFolder>
+    <RootNamespace>Formiik.DependenciesAnalyzer.Core</RootNamespace>
+    <AssemblyName>Formiik.DependenciesAnalyzer.Core</AssemblyName>
+    <TargetFrameworkVersion>v4.6.1</TargetFrameworkVersion>
+    <FileAlignment>512</FileAlignment>
+    <NuGetPackageImportStamp>
+    </NuGetPackageImportStamp>
+  </PropertyGroup>
+  <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Debug|AnyCPU' ">
+    <DebugSymbols>true</DebugSymbols>
+    <DebugType>full</DebugType>
+    <Optimize>false</Optimize>
+    <OutputPath>bin\Debug\</OutputPath>
+    <DefineConstants>DEBUG;TRACE</DefineConstants>
+    <ErrorReport>prompt</ErrorReport>
+    <WarningLevel>4</WarningLevel>
+  </PropertyGroup>
+  <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Release|AnyCPU' ">
+    <DebugType>pdbonly</DebugType>
+    <Optimize>true</Optimize>
+    <OutputPath>bin\Release\</OutputPath>
+    <DefineConstants>TRACE</DefineConstants>
+    <ErrorReport>prompt</ErrorReport>
+    <WarningLevel>4</WarningLevel>
+  </PropertyGroup>
+  <ItemGroup>
+    <Reference Include="Esent.Interop, Version=1.9.4.0, Culture=neutral, PublicKeyToken=31bf3856ad364e35, processorArchitecture=MSIL">
+      <HintPath>..\packages\ManagedEsent.1.9.4\lib\net40\Esent.Interop.dll</HintPath>
+    </Reference>
+    <Reference Include="LibGit2Sharp, Version=0.24.0.0, Culture=neutral, PublicKeyToken=7cbde695407f0333, processorArchitecture=MSIL">
+      <HintPath>..\packages\LibGit2Sharp.0.24.0\lib\net40\LibGit2Sharp.dll</HintPath>
+      <Private>True</Private>
+    </Reference>
+    <Reference Include="Microsoft.Build, Version=14.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a, processorArchitecture=MSIL">
+      <HintPath>..\packages\Microsoft.Build.14.3.0\lib\net45\Microsoft.Build.dll</HintPath>
+      <Private>True</Private>
+    </Reference>
+    <Reference Include="Microsoft.Build.Framework, Version=14.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a, processorArchitecture=MSIL">
+      <HintPath>..\packages\Microsoft.Build.Framework.14.3.0\lib\net45\Microsoft.Build.Framework.dll</HintPath>
+      <Private>True</Private>
+    </Reference>
+    <Reference Include="Microsoft.Build.Tasks.Core, Version=14.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a, processorArchitecture=MSIL">
+      <HintPath>..\packages\Microsoft.Build.Tasks.Core.14.3.0\lib\net45\Microsoft.Build.Tasks.Core.dll</HintPath>
+      <Private>True</Private>
+    </Reference>
+    <Reference Include="Microsoft.Build.Utilities.Core, Version=14.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a, processorArchitecture=MSIL">
+      <HintPath>..\packages\Microsoft.Build.Utilities.Core.14.3.0\lib\net45\Microsoft.Build.Utilities.Core.dll</HintPath>
+      <Private>True</Private>
+    </Reference>
+    <Reference Include="Microsoft.CodeAnalysis, Version=1.3.1.0, Culture=neutral, PublicKeyToken=31bf3856ad364e35, processorArchitecture=MSIL">
+      <HintPath>..\packages\Microsoft.CodeAnalysis.Common.1.3.2\lib\net45\Microsoft.CodeAnalysis.dll</HintPath>
+      <Private>True</Private>
+    </Reference>
+    <Reference Include="Microsoft.CodeAnalysis.CSharp, Version=1.3.1.0, Culture=neutral, PublicKeyToken=31bf3856ad364e35, processorArchitecture=MSIL">
+      <HintPath>..\packages\Microsoft.CodeAnalysis.CSharp.1.3.2\lib\net45\Microsoft.CodeAnalysis.CSharp.dll</HintPath>
+      <Private>True</Private>
+    </Reference>
+    <Reference Include="Microsoft.CodeAnalysis.CSharp.Workspaces, Version=1.3.1.0, Culture=neutral, PublicKeyToken=31bf3856ad364e35, processorArchitecture=MSIL">
+      <HintPath>..\packages\Microsoft.CodeAnalysis.CSharp.Workspaces.1.3.2\lib\net45\Microsoft.CodeAnalysis.CSharp.Workspaces.dll</HintPath>
+      <Private>True</Private>
+    </Reference>
+    <Reference Include="Microsoft.CodeAnalysis.Elfie, Version=0.10.6.0, Culture=neutral, PublicKeyToken=31bf3856ad364e35, processorArchitecture=MSIL">
+      <HintPath>..\packages\Microsoft.CodeAnalysis.Elfie.0.10.6\lib\net46\Microsoft.CodeAnalysis.Elfie.dll</HintPath>
+      <Private>True</Private>
+    </Reference>
+    <Reference Include="Microsoft.CodeAnalysis.VisualBasic, Version=1.3.1.0, Culture=neutral, PublicKeyToken=31bf3856ad364e35, processorArchitecture=MSIL">
+      <HintPath>..\packages\Microsoft.CodeAnalysis.VisualBasic.1.3.2\lib\net45\Microsoft.CodeAnalysis.VisualBasic.dll</HintPath>
+      <Private>True</Private>
+    </Reference>
+    <Reference Include="Microsoft.CodeAnalysis.VisualBasic.Workspaces, Version=1.3.1.0, Culture=neutral, PublicKeyToken=31bf3856ad364e35, processorArchitecture=MSIL">
+      <HintPath>..\packages\Microsoft.CodeAnalysis.VisualBasic.Workspaces.1.3.2\lib\net45\Microsoft.CodeAnalysis.VisualBasic.Workspaces.dll</HintPath>
+      <Private>True</Private>
+    </Reference>
+    <Reference Include="Microsoft.CodeAnalysis.Workspaces, Version=1.3.1.0, Culture=neutral, PublicKeyToken=31bf3856ad364e35, processorArchitecture=MSIL">
+      <HintPath>..\packages\Microsoft.CodeAnalysis.Workspaces.Common.1.3.2\lib\net45\Microsoft.CodeAnalysis.Workspaces.dll</HintPath>
+      <Private>True</Private>
+    </Reference>
+    <Reference Include="Microsoft.CodeAnalysis.Workspaces.Desktop, Version=1.3.1.0, Culture=neutral, PublicKeyToken=31bf3856ad364e35, processorArchitecture=MSIL">
+      <HintPath>..\packages\Microsoft.CodeAnalysis.Workspaces.Common.1.3.2\lib\net45\Microsoft.CodeAnalysis.Workspaces.Desktop.dll</HintPath>
+      <Private>True</Private>
+    </Reference>
+    <Reference Include="System" />
+    <Reference Include="System.AppContext, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a, processorArchitecture=MSIL">
+      <HintPath>..\packages\System.AppContext.4.3.0\lib\net46\System.AppContext.dll</HintPath>
+    </Reference>
+    <Reference Include="System.Collections.Immutable, Version=1.2.1.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a, processorArchitecture=MSIL">
+      <HintPath>..\packages\System.Collections.Immutable.1.3.1\lib\portable-net45+win8+wp8+wpa81\System.Collections.Immutable.dll</HintPath>
+      <Private>True</Private>
+    </Reference>
+    <Reference Include="System.ComponentModel.Composition" />
+    <Reference Include="System.Composition.AttributedModel, Version=1.0.27.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a, processorArchitecture=MSIL">
+      <HintPath>..\packages\Microsoft.Composition.1.0.27\lib\portable-net45+win8+wp8+wpa81\System.Composition.AttributedModel.dll</HintPath>
+      <Private>True</Private>
+    </Reference>
+    <Reference Include="System.Composition.Convention, Version=1.0.27.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a, processorArchitecture=MSIL">
+      <HintPath>..\packages\Microsoft.Composition.1.0.27\lib\portable-net45+win8+wp8+wpa81\System.Composition.Convention.dll</HintPath>
+      <Private>True</Private>
+    </Reference>
+    <Reference Include="System.Composition.Hosting, Version=1.0.27.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a, processorArchitecture=MSIL">
+      <HintPath>..\packages\Microsoft.Composition.1.0.27\lib\portable-net45+win8+wp8+wpa81\System.Composition.Hosting.dll</HintPath>
+      <Private>True</Private>
+    </Reference>
+    <Reference Include="System.Composition.Runtime, Version=1.0.27.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a, processorArchitecture=MSIL">
+      <HintPath>..\packages\Microsoft.Composition.1.0.27\lib\portable-net45+win8+wp8+wpa81\System.Composition.Runtime.dll</HintPath>
+      <Private>True</Private>
+    </Reference>
+    <Reference Include="System.Composition.TypedParts, Version=1.0.27.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a, processorArchitecture=MSIL">
+      <HintPath>..\packages\Microsoft.Composition.1.0.27\lib\portable-net45+win8+wp8+wpa81\System.Composition.TypedParts.dll</HintPath>
+      <Private>True</Private>
+    </Reference>
+    <Reference Include="System.Console, Version=4.0.1.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a, processorArchitecture=MSIL">
+      <HintPath>..\packages\System.Console.4.3.0\lib\net46\System.Console.dll</HintPath>
+    </Reference>
+    <Reference Include="System.Core" />
+    <Reference Include="System.Diagnostics.FileVersionInfo, Version=4.0.1.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a, processorArchitecture=MSIL">
+      <HintPath>..\packages\System.Diagnostics.FileVersionInfo.4.3.0\lib\net46\System.Diagnostics.FileVersionInfo.dll</HintPath>
+    </Reference>
+    <Reference Include="System.Diagnostics.StackTrace, Version=4.0.3.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a, processorArchitecture=MSIL">
+      <HintPath>..\packages\System.Diagnostics.StackTrace.4.3.0\lib\net46\System.Diagnostics.StackTrace.dll</HintPath>
+    </Reference>
+    <Reference Include="System.IO.Compression, Version=4.1.2.0, Culture=neutral, PublicKeyToken=b77a5c561934e089, processorArchitecture=MSIL">
+      <HintPath>..\packages\System.IO.Compression.4.3.0\lib\net46\System.IO.Compression.dll</HintPath>
+      <Private>True</Private>
+    </Reference>
+    <Reference Include="System.IO.FileSystem, Version=4.0.2.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a, processorArchitecture=MSIL">
+      <HintPath>..\packages\System.IO.FileSystem.4.3.0\lib\net46\System.IO.FileSystem.dll</HintPath>
+    </Reference>
+    <Reference Include="System.IO.FileSystem.Primitives, Version=4.0.2.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a, processorArchitecture=MSIL">
+      <HintPath>..\packages\System.IO.FileSystem.Primitives.4.3.0\lib\net46\System.IO.FileSystem.Primitives.dll</HintPath>
+    </Reference>
+    <Reference Include="System.Numerics" />
+    <Reference Include="System.Reflection.Metadata, Version=1.4.1.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a, processorArchitecture=MSIL">
+      <HintPath>..\packages\System.Reflection.Metadata.1.4.2\lib\portable-net45+win8\System.Reflection.Metadata.dll</HintPath>
+    </Reference>
+    <Reference Include="System.Runtime.InteropServices.RuntimeInformation, Version=4.0.1.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a, processorArchitecture=MSIL">
+      <HintPath>..\packages\System.Runtime.InteropServices.RuntimeInformation.4.3.0\lib\net45\System.Runtime.InteropServices.RuntimeInformation.dll</HintPath>
+      <Private>True</Private>
+    </Reference>
+    <Reference Include="System.Security.Cryptography.Algorithms, Version=4.1.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a, processorArchitecture=MSIL">
+      <HintPath>..\packages\System.Security.Cryptography.Algorithms.4.3.0\lib\net461\System.Security.Cryptography.Algorithms.dll</HintPath>
+    </Reference>
+    <Reference Include="System.Security.Cryptography.Encoding, Version=4.0.1.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a, processorArchitecture=MSIL">
+      <HintPath>..\packages\System.Security.Cryptography.Encoding.4.3.0\lib\net46\System.Security.Cryptography.Encoding.dll</HintPath>
+    </Reference>
+    <Reference Include="System.Security.Cryptography.Primitives, Version=4.0.1.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a, processorArchitecture=MSIL">
+      <HintPath>..\packages\System.Security.Cryptography.Primitives.4.3.0\lib\net46\System.Security.Cryptography.Primitives.dll</HintPath>
+    </Reference>
+    <Reference Include="System.Security.Cryptography.X509Certificates, Version=4.1.1.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a, processorArchitecture=MSIL">
+      <HintPath>..\packages\System.Security.Cryptography.X509Certificates.4.3.0\lib\net461\System.Security.Cryptography.X509Certificates.dll</HintPath>
+    </Reference>
+    <Reference Include="System.Text.Encoding.CodePages, Version=4.0.2.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a, processorArchitecture=MSIL">
+      <HintPath>..\packages\System.Text.Encoding.CodePages.4.3.0\lib\net46\System.Text.Encoding.CodePages.dll</HintPath>
+    </Reference>
+    <Reference Include="System.Threading.Thread, Version=4.0.1.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a, processorArchitecture=MSIL">
+      <HintPath>..\packages\System.Threading.Thread.4.3.0\lib\net46\System.Threading.Thread.dll</HintPath>
+    </Reference>
+    <Reference Include="System.ValueTuple, Version=4.0.1.0, Culture=neutral, PublicKeyToken=cc7b13ffcd2ddd51, processorArchitecture=MSIL">
+      <HintPath>..\packages\System.ValueTuple.4.3.0\lib\netstandard1.0\System.ValueTuple.dll</HintPath>
+    </Reference>
+    <Reference Include="System.Xml.Linq" />
+    <Reference Include="System.Data.DataSetExtensions" />
+    <Reference Include="Microsoft.CSharp" />
+    <Reference Include="System.Data" />
+    <Reference Include="System.Net.Http" />
+    <Reference Include="System.Xml" />
+    <Reference Include="System.Xml.ReaderWriter, Version=4.1.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a, processorArchitecture=MSIL">
+      <HintPath>..\packages\System.Xml.ReaderWriter.4.3.0\lib\net46\System.Xml.ReaderWriter.dll</HintPath>
+    </Reference>
+    <Reference Include="System.Xml.XmlDocument, Version=4.0.2.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a, processorArchitecture=MSIL">
+      <HintPath>..\packages\System.Xml.XmlDocument.4.3.0\lib\net46\System.Xml.XmlDocument.dll</HintPath>
+    </Reference>
+    <Reference Include="System.Xml.XPath, Version=4.0.2.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a, processorArchitecture=MSIL">
+      <HintPath>..\packages\System.Xml.XPath.4.3.0\lib\net46\System.Xml.XPath.dll</HintPath>
+    </Reference>
+    <Reference Include="System.Xml.XPath.XDocument, Version=4.0.2.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a, processorArchitecture=MSIL">
+      <HintPath>..\packages\System.Xml.XPath.XDocument.4.3.0\lib\net46\System.Xml.XPath.XDocument.dll</HintPath>
+    </Reference>
+  </ItemGroup>
+  <ItemGroup>
+    <Compile Include="CodeCompletion\AmbienceReflectionDecorator.cs" />
+    <Compile Include="CodeCompletion\CodeCompletionOptions.cs" />
+    <Compile Include="Converter\CodeCompiler.cs" />
+    <Compile Include="Converter\CodeConverter.cs" />
+    <Compile Include="Dom\Ambience.cs" />
+    <Compile Include="Dom\ClassFinder.cs" />
+    <Compile Include="Dom\CSharp\CSharpAmbience.cs" />
+    <Compile Include="Dom\CSharp\ExpressionFinder.cs" />
+    <Compile Include="Dom\CtrlSpaceResolveHelper.cs" />
+    <Compile Include="Dom\DiffUtility.cs" />
+    <Compile Include="Dom\EasyCodeDom.cs" />
+    <Compile Include="Dom\ExpressionContext.cs" />
+    <Compile Include="Dom\FilePosition.cs" />
+    <Compile Include="Dom\FoldingRegion.cs" />
+    <Compile Include="Dom\Functional.cs" />
+    <Compile Include="Dom\FusionNative.cs" />
+    <Compile Include="Dom\GacInterop.cs" />
+    <Compile Include="Dom\HostCallback.cs" />
+    <Compile Include="Dom\IComment.cs" />
+    <Compile Include="Dom\IExpressionFinder.cs" />
+    <Compile Include="Dom\Implementations\AbstractDecoration.cs" />
+    <Compile Include="Dom\Implementations\AbstractMember.cs" />
+    <Compile Include="Dom\Implementations\AbstractNamedEntity.cs" />
+    <Compile Include="Dom\Implementations\AbstractReturnType.cs" />
+    <Compile Include="Dom\Implementations\AnonymousMethodReturnType.cs" />
+    <Compile Include="Dom\Implementations\ArrayReturnType.cs" />
+    <Compile Include="Dom\Implementations\CombinedReturnType.cs" />
+    <Compile Include="Dom\Implementations\CompoundClass.cs" />
+    <Compile Include="Dom\Implementations\ConstructedReturnType.cs" />
+    <Compile Include="Dom\Implementations\DefaultAttribute.cs" />
+    <Compile Include="Dom\Implementations\DefaultClass.cs" />
+    <Compile Include="Dom\Implementations\DefaultComment.cs" />
+    <Compile Include="Dom\Implementations\DefaultCompilationUnit.cs" />
+    <Compile Include="Dom\Implementations\DefaultEvent.cs" />
+    <Compile Include="Dom\Implementations\DefaultField.cs" />
+    <Compile Include="Dom\Implementations\DefaultMethod.cs" />
+    <Compile Include="Dom\Implementations\DefaultParameter.cs" />
+    <Compile Include="Dom\Implementations\DefaultProperty.cs" />
+    <Compile Include="Dom\Implementations\DefaultReturnType.cs" />
+    <Compile Include="Dom\Implementations\DefaultTypeParameter.cs" />
+    <Compile Include="Dom\Implementations\DefaultUsing.cs" />
+    <Compile Include="Dom\Implementations\GenericReturnType.cs" />
+    <Compile Include="Dom\Implementations\GetClassReturnType.cs" />
+    <Compile Include="Dom\Implementations\NullReturnType.cs" />
+    <Compile Include="Dom\Implementations\ProxyReturnType.cs" />
+    <Compile Include="Dom\Implementations\SearchClassReturnType.cs" />
+    <Compile Include="Dom\Implementations\SystemTypes.cs" />
+    <Compile Include="Dom\Interfaces\ClassType.cs" />
+    <Compile Include="Dom\Interfaces\ExplicitInterfaceImplementation.cs" />
+    <Compile Include="Dom\Interfaces\IAttribute.cs" />
+    <Compile Include="Dom\Interfaces\IClass.cs" />
+    <Compile Include="Dom\Interfaces\ICompilationUnit.cs" />
+    <Compile Include="Dom\Interfaces\IDecoration.cs" />
+    <Compile Include="Dom\Interfaces\IEvent.cs" />
+    <Compile Include="Dom\Interfaces\IField.cs" />
+    <Compile Include="Dom\Interfaces\IMember.cs" />
+    <Compile Include="Dom\Interfaces\IMethod.cs" />
+    <Compile Include="Dom\Interfaces\IParameter.cs" />
+    <Compile Include="Dom\Interfaces\IProperty.cs" />
+    <Compile Include="Dom\Interfaces\IReturnType.cs" />
+    <Compile Include="Dom\Interfaces\ITypeParameter.cs" />
+    <Compile Include="Dom\Interfaces\IUsing.cs" />
+    <Compile Include="Dom\Interfaces\ModifierEnum.cs" />
+    <Compile Include="Dom\Interfaces\ParameterModifiers.cs" />
+    <Compile Include="Dom\Interfaces\Region.cs" />
+    <Compile Include="Dom\IResolver.cs" />
+    <Compile Include="Dom\LanguageProperties.cs" />
+    <Compile Include="Dom\LoggingService.cs" />
+    <Compile Include="Dom\MemberLookupHelper.cs" />
+    <Compile Include="Dom\NRefactoryResolver\NRefactoryASTConvertVisitor.cs" />
+    <Compile Include="Dom\NRefactoryResolver\NRefactoryInformationProvider.cs" />
+    <Compile Include="Dom\NRefactoryResolver\NRefactoryResolver.cs" />
+    <Compile Include="Dom\NRefactoryResolver\TypeVisitor.cs" />
+    <Compile Include="Dom\ProjectContent\DefaultProjectContent.cs" />
+    <Compile Include="Dom\ProjectContent\DomAssemblyName.cs" />
+    <Compile Include="Dom\ProjectContent\IProjectContent.cs" />
+    <Compile Include="Dom\ProjectContent\ParseInformation.cs" />
+    <Compile Include="Dom\ProjectContent\ProjectContentRegistry.cs" />
+    <Compile Include="Dom\ProjectContent\ReflectionProjectContent.cs" />
+    <Compile Include="Dom\Refactoring\CodeGenerator.cs" />
+    <Compile Include="Dom\Refactoring\CodeGeneratorOptions.cs" />
+    <Compile Include="Dom\Refactoring\IDocument.cs" />
+    <Compile Include="Dom\Refactoring\NRefactoryCodeGenerator.cs" />
+    <Compile Include="Dom\Refactoring\NRefactoryRefactoringProvider.cs" />
+    <Compile Include="Dom\Refactoring\RefactoringProvider.cs" />
+    <Compile Include="Dom\ReflectionLayer\DomPersistence.cs" />
+    <Compile Include="Dom\ReflectionLayer\ReflectionClass.cs" />
+    <Compile Include="Dom\ReflectionLayer\ReflectionEvent.cs" />
+    <Compile Include="Dom\ReflectionLayer\ReflectionField.cs" />
+    <Compile Include="Dom\ReflectionLayer\ReflectionLoader.cs" />
+    <Compile Include="Dom\ReflectionLayer\ReflectionMethod.cs" />
+    <Compile Include="Dom\ReflectionLayer\ReflectionParameter.cs" />
+    <Compile Include="Dom\ReflectionLayer\ReflectionProperty.cs" />
+    <Compile Include="Dom\ReflectionLayer\ReflectionReturnType.cs" />
+    <Compile Include="Dom\ResolveResult.cs" />
+    <Compile Include="Dom\Tag.cs" />
+    <Compile Include="Dom\VBNet\ExpressionFinder.cs" />
+    <Compile Include="Dom\VBNet\VBNetAmbience.cs" />
+    <Compile Include="Dom\XmlDoc.cs" />
+    <Compile Include="Entities\FileGit.cs" />
+    <Compile Include="Entities\FilesSet.cs" />
+    <Compile Include="Entities\Node.cs" />
+    <Compile Include="Entities\ScriptLanguage.cs" />
+    <Compile Include="Entities\StatesFileGitEnum.cs" />
+    <Compile Include="Entities\TreeNode.cs" />
+    <Compile Include="Entities\UnitCode.cs" />
+    <Compile Include="GitActionsManager.cs" />
+    <Compile Include="Messages.Designer.cs">
+      <AutoGen>True</AutoGen>
+      <DesignTime>True</DesignTime>
+      <DependentUpon>Messages.resx</DependentUpon>
+    </Compile>
+    <Compile Include="MethodAnalyzer.cs" />
+    <Compile Include="NRefactory\Ast\AbstractNode.cs" />
+    <Compile Include="NRefactory\Ast\Enums.cs" />
+    <Compile Include="NRefactory\Ast\General\BlockStatement.cs" />
+    <Compile Include="NRefactory\Ast\General\CompilationUnit.cs" />
+    <Compile Include="NRefactory\Ast\General\Expression.cs" />
+    <Compile Include="NRefactory\Ast\General\LocalVariableDeclaration.cs" />
+    <Compile Include="NRefactory\Ast\General\PrimitiveExpression.cs" />
+    <Compile Include="NRefactory\Ast\General\Statement.cs" />
+    <Compile Include="NRefactory\Ast\Generated.cs" />
+    <Compile Include="NRefactory\Ast\INode.cs" />
+    <Compile Include="NRefactory\Ast\INullable.cs" />
+    <Compile Include="NRefactory\Ast\TypeReference.cs" />
+    <Compile Include="NRefactory\EnvironmentInformationProvider.cs" />
+    <Compile Include="NRefactory\IAstVisitor.cs" />
+    <Compile Include="NRefactory\Lexer\AbstractLexer.cs" />
+    <Compile Include="NRefactory\Lexer\CSharp\Keywords.cs" />
+    <Compile Include="NRefactory\Lexer\CSharp\Lexer.cs" />
+    <Compile Include="NRefactory\Lexer\CSharp\Tokens.cs" />
+    <Compile Include="NRefactory\Lexer\ILexer.cs" />
+    <Compile Include="NRefactory\Lexer\LookupTable.cs" />
+    <Compile Include="NRefactory\Lexer\Special\BlankLine.cs" />
+    <Compile Include="NRefactory\Lexer\Special\Comment.cs" />
+    <Compile Include="NRefactory\Lexer\Special\CommentType.cs" />
+    <Compile Include="NRefactory\Lexer\Special\ISpecial.cs" />
+    <Compile Include="NRefactory\Lexer\Special\PreProcessingDirective.cs" />
+    <Compile Include="NRefactory\Lexer\Special\SpecialTracker.cs" />
+    <Compile Include="NRefactory\Lexer\Special\TagComment.cs" />
+    <Compile Include="NRefactory\Lexer\Token.cs" />
+    <Compile Include="NRefactory\Lexer\VBNet\Keywords.cs" />
+    <Compile Include="NRefactory\Lexer\VBNet\Lexer.cs" />
+    <Compile Include="NRefactory\Lexer\VBNet\Tokens.cs" />
+    <Compile Include="NRefactory\Location.cs" />
+    <Compile Include="NRefactory\ParserFactory.cs" />
+    <Compile Include="NRefactory\Parser\AbstractParser.cs" />
+    <Compile Include="NRefactory\Parser\CSharp\CSharpParser.cs" />
+    <Compile Include="NRefactory\Parser\CSharp\Parser.cs" />
+    <Compile Include="NRefactory\Parser\Errors.cs" />
+    <Compile Include="NRefactory\Parser\IParser.cs" />
+    <Compile Include="NRefactory\Parser\ModifierList.cs" />
+    <Compile Include="NRefactory\Parser\VBNet\ParamModifierList.cs" />
+    <Compile Include="NRefactory\Parser\VBNet\Parser.cs" />
+    <Compile Include="NRefactory\Parser\VBNet\VBNetParser.cs" />
+    <Compile Include="NRefactory\PrettyPrinter\AbstractOutputFormatter.cs" />
+    <Compile Include="NRefactory\PrettyPrinter\AbstractPrettyPrintOptions.cs" />
+    <Compile Include="NRefactory\PrettyPrinter\CSharp\CSharpOutputVisitor.cs" />
+    <Compile Include="NRefactory\PrettyPrinter\CSharp\OutputFormatter.cs" />
+    <Compile Include="NRefactory\PrettyPrinter\CSharp\PrettyPrintOptions.cs" />
+    <Compile Include="NRefactory\PrettyPrinter\IOutputAstVisitor.cs" />
+    <Compile Include="NRefactory\PrettyPrinter\NodeInformVisitor.cs" />
+    <Compile Include="NRefactory\PrettyPrinter\SpecialNodesInserter.cs" />
+    <Compile Include="NRefactory\PrettyPrinter\VBNet\VBNetOutputFormatter.cs" />
+    <Compile Include="NRefactory\PrettyPrinter\VBNet\VBNetOutputVisitor.cs" />
+    <Compile Include="NRefactory\PrettyPrinter\VBNet\VBNetPrettyPrintOptions.cs" />
+    <Compile Include="NRefactory\SnippetParser.cs" />
+    <Compile Include="NRefactory\Visitors\AbstractAstTransformer.cs" />
+    <Compile Include="NRefactory\Visitors\AbstractASTVisitor.cs" />
+    <Compile Include="NRefactory\Visitors\CodeDOMOutputVisitor.cs" />
+    <Compile Include="NRefactory\Visitors\CodeDOMVerboseOutputGenerator.cs" />
+    <Compile Include="NRefactory\Visitors\CSharpConstructsVisitor.cs" />
+    <Compile Include="NRefactory\Visitors\CSharpToVBNetConvertVisitor.cs" />
+    <Compile Include="NRefactory\Visitors\LookupTableVisitor.cs" />
+    <Compile Include="NRefactory\Visitors\NodeTrackingAstVisitor.cs" />
+    <Compile Include="NRefactory\Visitors\PrefixFieldsVisitor.cs" />
+    <Compile Include="NRefactory\Visitors\ToCSharpConvertVisitor.cs" />
+    <Compile Include="NRefactory\Visitors\ToVBNetConvertVisitor.cs" />
+    <Compile Include="NRefactory\Visitors\VBNetConstructsConvertVisitor.cs" />
+    <Compile Include="NRefactory\Visitors\VBNetToCSharpConvertVisitor.cs" />
+    <Compile Include="Parser\CSharpParser.cs" />
+    <Compile Include="Parser\IParser.cs" />
+    <Compile Include="Parser\ParserManager.cs" />
+    <Compile Include="Parser\ProjectContentItem.cs" />
+    <Compile Include="Parser\ProjectParser.cs" />
+    <Compile Include="Parser\VbExpressionFinder.cs" />
+    <Compile Include="Parser\VbParser.cs" />
+    <Compile Include="Project\ComReferenceProjectItem.cs" />
+    <Compile Include="Project\DefaultProject.cs" />
+    <Compile Include="Project\FileProjectItem.cs" />
+    <Compile Include="Project\ImportProjectItem.cs" />
+    <Compile Include="Project\IProject.cs" />
+    <Compile Include="Project\ItemType.cs" />
+    <Compile Include="Project\ProjectItem.cs" />
+    <Compile Include="Project\ReferenceProjectItem.cs" />
+    <Compile Include="Project\TypeLibrary.cs" />
+    <Compile Include="Project\UnknownProjectItem.cs" />
+    <Compile Include="Project\WebReferencesProjectItem.cs" />
+    <Compile Include="Project\WebReferenceUrl.cs" />
+    <Compile Include="Properties\AssemblyInfo.cs" />
+    <Compile Include="TreeGraph.cs" />
+    <Compile Include="Utilities\FileUtility.cs" />
+    <Compile Include="Utilities\GenericConverter.cs" />
+    <Compile Include="Utilities\ReadOnlyCollectionWrapper.cs" />
+    <Compile Include="Utilities\Set.cs" />
+    <Compile Include="UtilsGit.cs" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="app.config" />
+    <None Include="NRefactory\Parser\Frames\Parser.frame" />
+    <None Include="NRefactory\Parser\Frames\Scanner.frame" />
+    <None Include="NRefactory\Parser\VBNet\VBNET.ATG" />
+    <None Include="packages.config">
+      <SubType>Designer</SubType>
+    </None>
+  </ItemGroup>
+  <ItemGroup>
+    <EmbeddedResource Include="Messages.resx">
+      <Generator>ResXFileCodeGenerator</Generator>
+      <LastGenOutput>Messages.Designer.cs</LastGenOutput>
+    </EmbeddedResource>
+  </ItemGroup>
+  <ItemGroup>
+    <Analyzer Include="..\packages\Microsoft.CodeAnalysis.Analyzers.1.1.0\analyzers\dotnet\cs\Microsoft.CodeAnalysis.Analyzers.dll" />
+    <Analyzer Include="..\packages\Microsoft.CodeAnalysis.Analyzers.1.1.0\analyzers\dotnet\cs\Microsoft.CodeAnalysis.CSharp.Analyzers.dll" />
+  </ItemGroup>
+  <ItemGroup />
+  <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
+  <Target Name="EnsureNuGetPackageBuildImports" BeforeTargets="PrepareForBuild">
+    <PropertyGroup>
+      <ErrorText>This project references NuGet package(s) that are missing on this computer. Use NuGet Package Restore to download them.  For more information, see http://go.microsoft.com/fwlink/?LinkID=322105. The missing file is {0}.</ErrorText>
+    </PropertyGroup>
+    <Error Condition="!Exists('..\packages\LibGit2Sharp.NativeBinaries.1.0.185\build\LibGit2Sharp.NativeBinaries.props')" Text="$([System.String]::Format('$(ErrorText)', '..\packages\LibGit2Sharp.NativeBinaries.1.0.185\build\LibGit2Sharp.NativeBinaries.props'))" />
+  </Target>
+</Project>
