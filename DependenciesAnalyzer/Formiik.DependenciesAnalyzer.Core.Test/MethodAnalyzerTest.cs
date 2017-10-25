@@ -1,5 +1,7 @@
-﻿using Microsoft.VisualStudio.TestTools.UnitTesting;
-using System;
+﻿using Microsoft.CodeAnalysis;
+using Microsoft.CodeAnalysis.MSBuild;
+using Microsoft.VisualStudio.TestTools.UnitTesting;
+using System.Diagnostics;
 
 namespace Formiik.DependenciesAnalyzer.Core.Test
 {
@@ -39,13 +41,17 @@ namespace Formiik.DependenciesAnalyzer.Core.Test
         {
             try
             {
-                var solutionPath = @"C:\Test\Mobiik.Popcorn\Mobiik.Popcorn.sln";
+                var solutionFile = @"C:\Test\Mobiik.Popcorn\Mobiik.Popcorn.sln";
 
-                //var fullNameMethod = "Mobiik.Formiik.DataBasePersistence.Fake.PersistanceFake.GetDescriptionsFake()";
+                var fullNameMethod = "Mobiik.Formiik.DataBasePersistence.Fake.PersistanceFake.GetDescriptionsFake()";
 
-                var fullNameMethod = @"Mobiik.Formiik.DataBasePersistence.GeofencePersistance.GetGeofencesByGroup()";
+                var workspace = MSBuildWorkspace.Create();
 
-                var node = methodAnalyzer.Analyze(solutionPath, fullNameMethod);
+                workspace.WorkspaceFailed += Workspace_WorkspaceFailed;
+
+                var solution = workspace.OpenSolutionAsync(solutionFile).Result;
+
+                var node = methodAnalyzer.Analyze(solution, fullNameMethod);
 
                 Assert.IsTrue(true);
             }
@@ -53,6 +59,38 @@ namespace Formiik.DependenciesAnalyzer.Core.Test
             {
                 Assert.Fail();
             }
+        }
+
+        [TestMethod]
+        public void SpanAnalyzeTest()
+        {
+            try
+            {
+                var solutionPath = @"C:\Test\Mobiik.Popcorn\Mobiik.Popcorn.sln";
+
+                var filePath = @"/Mobiik.Popcorn/Infrastructure/Mobiik.Formiik.DataBasePersistence/GeofencePersistance.cs";
+
+                var lineCode = 43;
+
+                var workspace = MSBuildWorkspace.Create();
+
+                workspace.WorkspaceFailed += Workspace_WorkspaceFailed;
+
+                var solution = workspace.OpenSolutionAsync(solutionPath).Result;
+
+                var method = methodAnalyzer.GetMethodFromLineCode(solution, filePath, lineCode);
+
+                Assert.IsTrue(true);
+            }
+            catch
+            {
+                Assert.Fail();
+            }
+        }
+
+        private void Workspace_WorkspaceFailed(object sender, WorkspaceDiagnosticEventArgs e)
+        {
+            Debug.WriteLine(e.Diagnostic.Message);
         }
     }
 }

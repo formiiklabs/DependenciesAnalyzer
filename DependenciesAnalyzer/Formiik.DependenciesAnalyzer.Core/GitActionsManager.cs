@@ -1,6 +1,8 @@
 ﻿using Formiik.DependenciesAnalyzer.Core.Parser;
 using LibGit2Sharp;
 using LibGit2Sharp.Handlers;
+using Microsoft.CodeAnalysis;
+using Microsoft.CodeAnalysis.MSBuild;
 using System;
 using System.Collections.Generic;
 using System.Diagnostics;
@@ -150,15 +152,15 @@ namespace Formiik.DependenciesAnalyzer.Core
             return output;
         }
 
-        public List<string> GetListMethodsOfFile(string pathRepo, string pathFileRelative)
+        public List<string> GetListMethodsOfFile(string pathRepo, Solution solution, string pathFileRelative)
         {
             var result = new List<string>();
 
             var fullPathFile = string.Format("{0}{1}", pathRepo, pathFileRelative.Replace('/', '\\'));
 
-            using (var parserManager = new ParserManager())
+            using (var methodAnalyzer = new MethodAnalyzer())
             {
-                var methods = parserManager.GetCodeMehtods(fullPathFile);
+                var methods = methodAnalyzer.GetMethods(solution, pathFileRelative);
 
                 if (methods.Any())
                 {
@@ -175,7 +177,7 @@ namespace Formiik.DependenciesAnalyzer.Core
             return result;
         }
 
-        public List<string> GetListMethodsOfFileModified(string pathRepo, string branchName, string pathFileRelative)
+        public List<string> GetListMethodsOfFileModified(string pathRepo, string branchName, Solution solution, string pathFileRelative)
         {
             var fullPathFile = string.Format("{0}{1}", pathRepo, pathFileRelative.Replace('/', '\\')); 
 
@@ -225,9 +227,9 @@ namespace Formiik.DependenciesAnalyzer.Core
 
                         if (int.TryParse(numberString, out numberLine))
                         {
-                            using (var parserManager = new ParserManager())
+                            using (var methodAnalyzer = new MethodAnalyzer())
                             {
-                                var method = parserManager.GetCodeMethodByLineNumber(fullPathFile, numberLine);
+                                var method = methodAnalyzer.GetMethodFromLineCode(solution, pathFileRelative, numberLine);
 
                                 if (!result.Any(x => x.Equals(method)) && !string.IsNullOrEmpty(method.Trim()))
                                 {
@@ -253,6 +255,13 @@ namespace Formiik.DependenciesAnalyzer.Core
         public void Dispose()
         {
             GC.SuppressFinalize(this);
+        }
+        #endregion
+
+        #region Private Methods
+        private void Workspace_WorkspaceFailed(object sender, WorkspaceDiagnosticEventArgs e)
+        {
+            Debug.WriteLine(e.Diagnostic.Message);
         }
         #endregion
     }

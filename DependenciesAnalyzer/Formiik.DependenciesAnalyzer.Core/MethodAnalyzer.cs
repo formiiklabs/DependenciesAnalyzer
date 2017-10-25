@@ -3,6 +3,7 @@ using Microsoft.CodeAnalysis;
 using Microsoft.CodeAnalysis.CSharp;
 using Microsoft.CodeAnalysis.CSharp.Syntax;
 using Microsoft.CodeAnalysis.MSBuild;
+using Microsoft.CodeAnalysis.Text;
 using System;
 using System.Collections.Generic;
 using System.Diagnostics;
@@ -15,25 +16,14 @@ namespace Formiik.DependenciesAnalyzer.Core
 {
     public class MethodAnalyzer : IDisposable
     {
-        public Node Analyze(string solutionPath, string fullNameMethod)
+        public Node Analyze(Solution solution, string fullNameMethod)
         {
-            if (string.IsNullOrEmpty(solutionPath) || string.IsNullOrEmpty(fullNameMethod))
-            {
-                throw new ArgumentException(Messages.ArgumentInvalid);
-            }
-
             try
             {
                 var node = new Node
                 {
                     MethodName = fullNameMethod
                 };
-
-                var workspace = MSBuildWorkspace.Create();
-
-                workspace.WorkspaceFailed += Workspace_WorkspaceFailed;
-
-                var solution = workspace.OpenSolutionAsync(solutionPath).Result;
 
                 this.ComputeReferences(ref solution, node);
 
@@ -73,6 +63,126 @@ namespace Formiik.DependenciesAnalyzer.Core
             }
         }
 
+        public string GetMethodFromLineCode(Solution solution, string pathFile, int lineCode)
+        {
+            var isFound = false;
+
+            var methodName = string.Empty;
+
+            var tokensFilePath = pathFile.Split('/');
+
+            if (tokensFilePath.Count() >= 2)
+            {
+                var documentName = tokensFilePath.Last();
+
+                foreach (var project in solution.Projects)
+                {
+                    foreach (var document in project.Documents)
+                    {
+                        if (document.Name.Equals(documentName))
+                        {
+                            var model = document.GetSemanticModelAsync().Result;
+
+                            var methodInvocation = document.GetSyntaxRootAsync().Result;
+
+                            var span = document.GetSyntaxTreeAsync().Result.GetText().Lines[lineCode].Span;
+
+                            var nodes = from node in methodInvocation.DescendantNodes().OfType<MethodDeclarationSyntax>()
+                                        let symbol = model.GetDeclaredSymbol(node) as IMethodSymbol
+                                        where symbol != null
+                                        where node.Span.IntersectsWith(span) 
+                                        select new
+                                        {
+                                            node,
+                                            symbol
+                                        };
+
+                            if (nodes.Any())
+                            {
+                                foreach (var node in nodes)
+                                {
+                                    methodName = node.symbol.ToString();
+
+                                    isFound = true;
+
+                                    break;
+                                }
+                            }
+
+                            break;
+                        }
+                    }
+
+                    if (isFound)
+                    {
+                        break;
+                    }
+                }
+            }
+
+            return methodName;
+        }
+
+        public List<string> GetMethods(Solution solution, string pathFile)
+        {
+            var isFound = false;
+
+            var methodsName = new List<string>();
+
+            var tokensFilePath = pathFile.Split('\\');
+
+            if (tokensFilePath.Length == 1)
+            {
+                tokensFilePath = pathFile.Split('/');
+            }
+
+            if (tokensFilePath.Count() >= 2)
+            {
+                var documentName = tokensFilePath.Last();
+
+                foreach (var project in solution.Projects)
+                {
+                    foreach (var document in project.Documents)
+                    {
+                        if (document.Name.Equals(documentName))
+                        {
+                            var model = document.GetSemanticModelAsync().Result;
+
+                            var methodInvocation = document.GetSyntaxRootAsync().Result;
+
+                            var nodes = from node in methodInvocation.DescendantNodes().OfType<MethodDeclarationSyntax>()
+                                        let symbol = model.GetDeclaredSymbol(node) as IMethodSymbol
+                                        where symbol != null
+                                        select new
+                                        {
+                                            node,
+                                            symbol
+                                        };
+
+                            if (nodes.Any())
+                            {
+                                foreach (var node in nodes)
+                                {
+                                    methodsName.Add(node.symbol.ToString());
+                                }
+                            }
+
+                            isFound = true;
+
+                            break;
+                        }
+                    }
+
+                    if (isFound)
+                    {
+                        break;
+                    }
+                }
+            }
+
+            return methodsName;
+        }
+
         public void Dispose()
         {
             GC.SuppressFinalize(this);
@@ -90,23 +200,16 @@ namespace Formiik.DependenciesAnalyzer.Core
 
                         var methodInvocation = document.GetSyntaxRootAsync().Result;
 
-                        //var descendantNodes = methodInvocation.DescendantNodes();
-
-                        var nameMethod = nodeTree.MethodName.Replace("()", "");
-
                         var nodes = from node in methodInvocation.DescendantNodes()
                             .OfType<InvocationExpressionSyntax>()
                                     let symbol = model.GetSymbolInfo(node.Expression).Symbol as IMethodSymbol
                                     where symbol != null
-                                    where symbol.ToString().Contains(nameMethod)
+                                    where symbol.ToString().Equals(nodeTree.MethodName)
                                     select new
                                     {
                                         node,
                                         symbol
                                     };
-
-                        //var symbols = nodes.Select(x => x.symbol).ToList();
-                        //continue;
 
                         if (nodes.Any())
                         {

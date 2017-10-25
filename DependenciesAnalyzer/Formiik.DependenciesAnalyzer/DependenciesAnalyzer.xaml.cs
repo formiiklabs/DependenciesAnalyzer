@@ -2,6 +2,8 @@
 using Formiik.DependenciesAnalyzer.Core.Entities;
 using Formiik.DependenciesAnalyzer.Entities;
 using LibGit2Sharp;
+using Microsoft.CodeAnalysis;
+using Microsoft.CodeAnalysis.MSBuild;
 using Microsoft.Msagl.Drawing;
 using Microsoft.Msagl.WpfGraphControl;
 using System;
@@ -483,78 +485,108 @@ namespace Formiik.DependenciesAnalyzer
 
                         backgroundWorkerTree.RunWorkerCompleted += BackgroundWorkerTree_RunWorkerCompleted;
 
-                        if (isAdded)
+                        string[] solutionFiles = Directory.GetFiles(
+                            Properties.Settings.Default.RepoPath, 
+                            "*.sln", 
+                            SearchOption.AllDirectories);
+
+                        if (solutionFiles.Length > 0)
                         {
-                            var methodsAdded = new List<string>();
+                            var solutionFile = solutionFiles[0];
 
-                            using (var gitActionsManager = new GitActionsManager())
+                            if (isAdded)
                             {
-                                var result = gitActionsManager.GetListMethodsOfFile(Properties.Settings.Default.RepoPath, path);
+                                var methodsAdded = new List<string>();
 
-                                if (result.Any())
+                                using (var gitActionsManager = new GitActionsManager())
                                 {
-                                    result.ForEach(r =>
+                                    var workspace = MSBuildWorkspace.Create();
+
+                                    workspace.WorkspaceFailed += Workspace_WorkspaceFailed;
+
+                                    var solution = workspace.OpenSolutionAsync(solutionFile).Result;
+
+                                    var result = gitActionsManager.GetListMethodsOfFile(
+                                        Properties.Settings.Default.RepoPath,
+                                        solution,
+                                        path);
+
+                                    workspace.CloseSolution();
+
+                                    if (result.Any())
                                     {
-                                        if (!methodsAdded.Any(x => x.Equals(r)))
+                                        result.ForEach(r =>
                                         {
-                                            methodsAdded.Add(r);
-                                        }
-                                    });
+                                            if (!methodsAdded.Any(x => x.Equals(r)))
+                                            {
+                                                methodsAdded.Add(r);
+                                            }
+                                        });
 
-                                    var data = new TreeFilter
-                                    {
-                                        Methods = methodsAdded,
-                                        RepoPath = Properties.Settings.Default.RepoPath,
-                                        TreeFilterAction = TreeFilterActionEnum.Added
-                                    };
+                                        var data = new TreeFilter
+                                        {
+                                            Methods = methodsAdded,
+                                            RepoPath = Properties.Settings.Default.RepoPath,
+                                            TreeFilterAction = TreeFilterActionEnum.Added
+                                        };
 
-                                    this.treeViewRoot.IsEnabled = false;
+                                        this.treeViewRoot.IsEnabled = false;
 
-                                    this.pgbIndeterminate.IsIndeterminate = true;
+                                        this.pgbIndeterminate.IsIndeterminate = true;
 
-                                    backgroundWorkerTree.RunWorkerAsync(data);
+                                        backgroundWorkerTree.RunWorkerAsync(data);
+                                    }
                                 }
                             }
-                        }
-                        else if (isModified)
-                        {
-                            var methodsModified = new List<string>();
-
-                            using (var gitActionsManager = new GitActionsManager())
+                            else if (isModified)
                             {
-                                var remoteBranch = string.IsNullOrEmpty(Properties.Settings.Default.SelectedBranch) ? 
-                                    this.cmbRemoteBranches.Text : 
-                                    Properties.Settings.Default.SelectedBranch;
+                                var methodsModified = new List<string>();
 
-                                var selectedBranch = remoteBranch.Remove(0, 7);
-
-                                var result = gitActionsManager.GetListMethodsOfFileModified(
-                                    Properties.Settings.Default.RepoPath,
-                                    selectedBranch,
-                                    path);
-
-                                if (result.Any())
+                                using (var gitActionsManager = new GitActionsManager())
                                 {
-                                    result.ForEach(r =>
+                                    var remoteBranch = string.IsNullOrEmpty(Properties.Settings.Default.SelectedBranch) ?
+                                        this.cmbRemoteBranches.Text :
+                                        Properties.Settings.Default.SelectedBranch;
+
+                                    var selectedBranch = remoteBranch.Remove(0, 7);
+
+                                    var workspace = MSBuildWorkspace.Create();
+
+                                    workspace.WorkspaceFailed += Workspace_WorkspaceFailed;
+
+                                    var solution = workspace.OpenSolutionAsync(solutionFile).Result;
+
+                                    var result = gitActionsManager.GetListMethodsOfFileModified(
+                                        Properties.Settings.Default.RepoPath,
+                                        selectedBranch, 
+                                        solution,
+                                        path);
+
+                                    workspace.CloseSolution();
+
+                                    if (result.Any())
                                     {
-                                        if (!methodsModified.Any(x => x.Equals(r)))
+                                        result.ForEach(r =>
                                         {
-                                            methodsModified.Add(r);
-                                        }
-                                    });
+                                            if (!methodsModified.Any(x => x.Equals(r)))
+                                            {
+                                                methodsModified.Add(r);
+                                            }
+                                        });
 
-                                    var data = new TreeFilter
-                                    {
-                                        Methods = methodsModified,
-                                        RepoPath = Properties.Settings.Default.RepoPath,
-                                        TreeFilterAction = TreeFilterActionEnum.Modified
-                                    };
+                                        var data = new TreeFilter
+                                        {
+                                            Methods = methodsModified,
+                                            RepoPath = Properties.Settings.Default.RepoPath,
+                                            TreeFilterAction = TreeFilterActionEnum.Modified
+                                        };
 
-                                    this.treeViewRoot.IsEnabled = false;
+                                        this.treeViewRoot.IsEnabled = false;
 
-                                    this.pgbIndeterminate.IsIndeterminate = true;
+                                        this.pgbIndeterminate.IsIndeterminate = true;
 
-                                    backgroundWorkerTree.RunWorkerAsync(data);
+                                        backgroundWorkerTree.RunWorkerAsync(data);
+                                    }
                                 }
                             }
                         }
@@ -642,17 +674,23 @@ namespace Formiik.DependenciesAnalyzer
 
                         using (var methodAnalyzer = new MethodAnalyzer())
                         {
-                            Parallel.ForEach(treeFilter.Methods, mo =>
+                            var workspace = MSBuildWorkspace.Create();
+
+                            workspace.WorkspaceFailed += Workspace_WorkspaceFailed;
+
+                            var solution = workspace.OpenSolutionAsync(solutionFile).Result;
+
+                            foreach (var mo in treeFilter.Methods)
                             {
-                                var node = methodAnalyzer.Analyze(
-                                    solutionFile,
-                                    string.Format("{0}()", mo));
+                                var node = methodAnalyzer.Analyze(solution, mo);
 
                                 if (node != null)
                                 {
                                     result.Add(node);
                                 }
-                            });
+                            }
+
+                            workspace.CloseSolution();
                         }
                     }
                 }
@@ -679,97 +717,121 @@ namespace Formiik.DependenciesAnalyzer
 
             var modulesAffectedFinally = new List<string>();
 
-            using (var treeGraph = new TreeGraph())
-            {
-                var fileSet = treeGraph.Build(arguments.RepoPath, arguments.SelectedBranch);
-
-                var treeNodes = treeGraph.TreeNodes;
-
-                if (fileSet != null)
-                {
-                    var methodsObserved = new List<string>();
-
-                    if (fileSet.Modified.Any())
-                    {
-                        fileSet.Modified.ForEach(file =>
-                        {
-                            if (!file.StartsWith("/"))
-                            {
-                                file = string.Format("/{0}", file);
-                            }
-
-                            if (file.EndsWith(".cs"))
-                            {
-                                using (var gitActionsManager = new GitActionsManager())
-                                {
-                                    var result = gitActionsManager.GetListMethodsOfFileModified(
-                                        arguments.RepoPath,
-                                        arguments.SelectedBranch,
-                                        file);
-
-                                    if (result.Any())
-                                    {
-                                        result.ForEach(r =>
-                                        {
-                                            if (!methodsObserved.Any(x => x.Equals(r)))
-                                            {
-                                                methodsObserved.Add(r);
-                                            }
-                                        });
-                                    }
-                                }
-                            }
-                        });
-                    }
-
-                    if (fileSet.Added.Any())
-                    {
-                        fileSet.Added.ForEach(file =>
-                        {
-                            if (!file.StartsWith("/"))
-                            {
-                                file = string.Format("/{0}", file);
-                            }
-
-                            if (file.EndsWith(".cs"))
-                            {
-                                using (var gitActionsManager = new GitActionsManager())
-                                {
-                                    var result = gitActionsManager.GetListMethodsOfFile(arguments.RepoPath, file);
-
-                                    if (result.Any())
-                                    {
-                                        result.ForEach(r =>
-                                        {
-                                            if (!methodsObserved.Any(x => x.Equals(r)))
-                                            {
-                                                methodsObserved.Add(r);
-                                            }
-                                        });
-                                    }
-                                }
-                            }
-                        });
-                    }
-                    
-                    if (methodsObserved.Any())
-                    {
-                        string[] solutionFiles = Directory.GetFiles(
-                            arguments.RepoPath, 
-                            "*.sln", 
+            string[] solutionFiles = Directory.GetFiles(
+                            arguments.RepoPath,
+                            "*.sln",
                             SearchOption.AllDirectories);
 
-                        if (solutionFiles.Length > 0)
-                        {
-                            var solutionFile = solutionFiles[0];
+            if (solutionFiles.Length > 0)
+            {
+                var solutionFile = solutionFiles[0];
 
+                using (var treeGraph = new TreeGraph())
+                {
+                    var fileSet = treeGraph.Build(arguments.RepoPath, arguments.SelectedBranch);
+
+                    var treeNodes = treeGraph.TreeNodes;
+                    
+                    if (fileSet != null)
+                    {
+                        var methodsObserved = new List<string>();
+                        
+                        if (fileSet.Modified.Any())
+                        {
+                            fileSet.Modified.ForEach(file =>
+                            {
+                                if (!file.StartsWith("/"))
+                                {
+                                    file = string.Format("/{0}", file);
+                                }
+
+                                if (file.EndsWith(".cs"))
+                                {
+                                    using (var gitActionsManager = new GitActionsManager())
+                                    {
+                                        var workspace = MSBuildWorkspace.Create();
+
+                                        workspace.WorkspaceFailed += Workspace_WorkspaceFailed;
+
+                                        var solution = workspace.OpenSolutionAsync(solutionFile).Result;
+
+                                        var result = gitActionsManager.GetListMethodsOfFileModified(
+                                            arguments.RepoPath,
+                                            arguments.SelectedBranch,
+                                            solution,
+                                            file);
+
+                                        workspace.CloseSolution();
+
+                                        if (result.Any())
+                                        {
+                                            result.ForEach(r =>
+                                            {
+                                                if (!methodsObserved.Any(x => x.Equals(r)))
+                                                {
+                                                    methodsObserved.Add(r);
+                                                }
+                                            });
+                                        }
+                                    }
+                                }
+                            });
+                        }
+
+                        if (fileSet.Added.Any())
+                        {
+                            fileSet.Added.ForEach(file =>
+                            {
+                                if (!file.StartsWith("/"))
+                                {
+                                    file = string.Format("/{0}", file);
+                                }
+
+                                if (file.EndsWith(".cs"))
+                                {
+                                    using (var gitActionsManager = new GitActionsManager())
+                                    {
+                                        var workspace = MSBuildWorkspace.Create();
+
+                                        workspace.WorkspaceFailed += Workspace_WorkspaceFailed;
+
+                                        var solution = workspace.OpenSolutionAsync(solutionFile).Result;
+
+                                        var result = gitActionsManager.GetListMethodsOfFile(
+                                            arguments.RepoPath, 
+                                            solution,
+                                            file);
+
+                                        workspace.CloseSolution();
+
+                                        if (result.Any())
+                                        {
+                                            result.ForEach(r =>
+                                            {
+                                                if (!methodsObserved.Any(x => x.Equals(r)))
+                                                {
+                                                    methodsObserved.Add(r);
+                                                }
+                                            });
+                                        }
+                                    }
+                                }
+                            });
+                        }
+
+                        if (methodsObserved.Any())
+                        {
                             using (var methodAnalyzer = new MethodAnalyzer())
                             {
-                                Parallel.ForEach(methodsObserved, mo =>
+                                var workspace = MSBuildWorkspace.Create();
+
+                                workspace.WorkspaceFailed += Workspace_WorkspaceFailed;
+
+                                var solution = workspace.OpenSolutionAsync(solutionFile).Result;
+
+                                foreach (var mo in methodsObserved)
                                 {
-                                    var node = methodAnalyzer.Analyze(
-                                        solutionFile,
-                                        string.Format("{0}()", mo));
+                                    var node = methodAnalyzer.Analyze(solution, mo);
 
                                     if (node != null)
                                     {
@@ -788,18 +850,20 @@ namespace Formiik.DependenciesAnalyzer
                                             }
                                         }
                                     }
-                                });
+                                }
+
+                                workspace.CloseSolution();
                             }
                         }
                     }
-                }
 
-                e.Result = new ResultWorkerAnalyze
-                {
-                    FileSet = fileSet,
-                    TreeNodes = treeNodes,
-                    ModulesAffected = modulesAffectedFinally
-                };
+                    e.Result = new ResultWorkerAnalyze
+                    {
+                        FileSet = fileSet,
+                        TreeNodes = treeNodes,
+                        ModulesAffected = modulesAffectedFinally
+                    };
+                }
             }
         }
 
@@ -906,6 +970,11 @@ namespace Formiik.DependenciesAnalyzer
                     }
                 }
             }
+        }
+
+        private void Workspace_WorkspaceFailed(object sender, WorkspaceDiagnosticEventArgs e)
+        {
+            Debug.WriteLine(e.Diagnostic.Message);
         }
     }
 }

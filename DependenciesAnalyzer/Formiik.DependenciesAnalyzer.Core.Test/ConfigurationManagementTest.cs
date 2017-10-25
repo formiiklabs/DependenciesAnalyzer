@@ -2,6 +2,9 @@
 using Microsoft.VisualStudio.TestTools.UnitTesting;
 using Formiik.DependenciesAnalyzer.Core;
 using LibGit2Sharp;
+using Microsoft.CodeAnalysis.MSBuild;
+using Microsoft.CodeAnalysis;
+using System.Diagnostics;
 
 namespace Formiik.DependenciesAnalyzer.Test
 {
@@ -104,7 +107,15 @@ namespace Formiik.DependenciesAnalyzer.Test
 
                 var pathFileRelative = "/Mobiik.Popcorn/Infrastructure/Mobiik.Formiik.DataBasePersistence/GeofencePersistance.cs";
 
-                var methods = gitActionsManager.GetListMethodsOfFileModified(repoPath, branchName, pathFileRelative);
+                var solutionPath = @"C:\Test\Mobiik.Popcorn\Mobiik.Popcorn.sln";
+
+                var workspace = MSBuildWorkspace.Create();
+
+                workspace.WorkspaceFailed += Workspace_WorkspaceFailed;
+
+                var solution = workspace.OpenSolutionAsync(solutionPath).Result;
+
+                var methods = gitActionsManager.GetListMethodsOfFileModified(repoPath, branchName, solution, pathFileRelative);
 
                 Assert.IsTrue(true);
             }
@@ -112,6 +123,11 @@ namespace Formiik.DependenciesAnalyzer.Test
             {
                 Assert.Fail(ex.Message);
             }
+        }
+
+        private void Workspace_WorkspaceFailed(object sender, WorkspaceDiagnosticEventArgs e)
+        {
+            Debug.WriteLine(e.Diagnostic.Message);
         }
     }
 }
