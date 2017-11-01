@@ -1,4 +1,5 @@
-﻿using Formiik.DependenciesAnalyzer.Core.Parser;
+﻿using Formiik.DependenciesAnalyzer.Core.Entities;
+using Formiik.DependenciesAnalyzer.Core.Parser;
 using LibGit2Sharp;
 using LibGit2Sharp.Handlers;
 using Microsoft.CodeAnalysis;
@@ -175,6 +176,18 @@ namespace Formiik.DependenciesAnalyzer.Core
             }
 
             return result;
+        }
+
+        public List<Component> GetComponents(Solution solution)
+        {
+            List<Component> components = null;
+
+            using (var methodAnalyzer = new MethodAnalyzer())
+            {
+                components = methodAnalyzer.GetComponents(solution);
+            }
+
+            return components;
         }
 
         public List<string> GetListMethodsOfFileModified(string pathRepo, string branchName, Solution solution, string pathFileRelative)

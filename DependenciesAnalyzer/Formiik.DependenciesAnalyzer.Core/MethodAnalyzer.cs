@@ -81,35 +81,42 @@ namespace Formiik.DependenciesAnalyzer.Core
                     {
                         if (document.Name.Equals(documentName))
                         {
-                            var model = document.GetSemanticModelAsync().Result;
-
-                            var methodInvocation = document.GetSyntaxRootAsync().Result;
-
-                            var span = document.GetSyntaxTreeAsync().Result.GetText().Lines[lineCode].Span;
-
-                            var nodes = from node in methodInvocation.DescendantNodes().OfType<MethodDeclarationSyntax>()
-                                        let symbol = model.GetDeclaredSymbol(node) as IMethodSymbol
-                                        where symbol != null
-                                        where node.Span.IntersectsWith(span) 
-                                        select new
-                                        {
-                                            node,
-                                            symbol
-                                        };
-
-                            if (nodes.Any())
+                            try
                             {
-                                foreach (var node in nodes)
+                                var model = document.GetSemanticModelAsync().Result;
+
+                                var methodInvocation = document.GetSyntaxRootAsync().Result;
+
+                                var span = document.GetSyntaxTreeAsync().Result.GetText().Lines[lineCode].Span;
+
+                                var nodes = from node in methodInvocation.DescendantNodes().OfType<MethodDeclarationSyntax>()
+                                            let symbol = model.GetDeclaredSymbol(node) as IMethodSymbol
+                                            where symbol != null
+                                            where node.Span.IntersectsWith(span)
+                                            select new
+                                            {
+                                                node,
+                                                symbol
+                                            };
+
+                                if (nodes.Any())
                                 {
-                                    methodName = node.symbol.ToString();
+                                    foreach (var node in nodes)
+                                    {
+                                        methodName = node.symbol.ToString();
 
-                                    isFound = true;
+                                        isFound = true;
 
-                                    break;
+                                        break;
+                                    }
                                 }
-                            }
 
-                            break;
+                                break;
+                            }
+                            catch (Exception exception)
+                            {
+                                Debug.WriteLine(exception.Message);
+                            }
                         }
                     }
 
@@ -183,6 +190,65 @@ namespace Formiik.DependenciesAnalyzer.Core
             return methodsName;
         }
 
+        public List<Component> GetComponents(Solution solution)
+        {
+            var components = new List<Component>();
+
+            foreach (var project in solution.Projects)
+            {
+                foreach (var document in project.Documents)
+                {
+                    try
+                    {
+                        var model = document.GetSemanticModelAsync().Result;
+
+                        var methodInvocation = document.GetSyntaxRootAsync().Result;
+
+                        var nodes = from node in methodInvocation.DescendantNodes().OfType<MethodDeclarationSyntax>()
+                                    let symbol = model.GetDeclaredSymbol(node) as IMethodSymbol
+                                    where symbol != null
+                                    select new
+                                    {
+                                        node,
+                                        symbol
+                                    };
+
+                        if (nodes.Any())
+                        {
+                            foreach (var node in nodes)
+                            {
+                                var attributes = node.symbol.GetAttributes();
+
+                                if (attributes.Any())
+                                {
+                                    foreach (var attribute in attributes)
+                                    {
+                                        if (attribute.AttributeClass.Name.Equals("ComponentAffectedAttribute"))
+                                        {
+                                            if (attribute.ConstructorArguments.Length == 2)
+                                            {
+                                                components.Add(new Component
+                                                {
+                                                    Description = attribute.ConstructorArguments[0].Value.ToString(),
+                                                    Action = attribute.ConstructorArguments[1].Value.ToString()
+                                                });
+                                            }
+                                        }
+                                    }
+                                }
+                            }
+                        }
+                    }
+                    catch (Exception exception)
+                    {
+                        Debug.WriteLine(exception.Message);
+                    }
+                }
+            }
+
+            return components;
+        }
+
         public void Dispose()
         {
             GC.SuppressFinalize(this);
@@ -231,7 +297,7 @@ namespace Formiik.DependenciesAnalyzer.Core
 
                                     var attributes = symbolParent.GetAttributes();
 
-                                    var modulesAffected = new List<string>();
+                                    var modulesAffected = new List<Component>();
 
                                     if (attributes.Any())
                                     {
@@ -239,7 +305,14 @@ namespace Formiik.DependenciesAnalyzer.Core
                                         {
                                             if (attribute.AttributeClass.Name.Equals("ComponentAffectedAttribute"))
                                             {
-                                                modulesAffected.Add(attribute.ConstructorArguments.First().Value.ToString());
+                                                if (attribute.ConstructorArguments.Length == 2)
+                                                {
+                                                    modulesAffected.Add(new Component
+                                                    {
+                                                        Description = attribute.ConstructorArguments[0].Value.ToString(),
+                                                        Action = attribute.ConstructorArguments[1].Value.ToString()
+                                                    });
+                                                }
                                             }
                                         }
                                     }

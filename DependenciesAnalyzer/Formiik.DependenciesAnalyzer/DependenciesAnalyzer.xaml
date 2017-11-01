@@ -103,6 +103,17 @@
                         Click="BtnAnalyze_Click" >
                     </RibbonButton>
                 </RibbonGroup>
+                <RibbonGroup x:Name="Scan" Header="Scan">
+                    <RibbonButton
+                        x:Name="btnScan" 
+                        LargeImageSource="Images\scan-icon.png" 
+                        SmallImageSource="Images\scan-icon.png" 
+                        Label="Scan All Components" 
+                        ToolTip="Scan the solution for to found all components that can affect."
+                        HorizontalAlignment="Center"
+                        Click="BtnScan_Click">
+                    </RibbonButton>
+                </RibbonGroup>
             </RibbonTab>
         </Ribbon>
         <DockPanel Grid.Row="1">
@@ -182,7 +193,7 @@
             <Grid>
                 <Grid.ColumnDefinitions>
                     <ColumnDefinition Width="auto"></ColumnDefinition>
-                    <ColumnDefinition Width="5"></ColumnDefinition>
+                    <ColumnDefinition Width="4"></ColumnDefinition>
                     <ColumnDefinition Width="*"></ColumnDefinition>
                 </Grid.ColumnDefinitions>
                 <ScrollViewer Grid.Column="0" VerticalScrollBarVisibility="Auto">
@@ -196,20 +207,60 @@
                 <GridSplitter Grid.Column="1" Width="5" HorizontalAlignment="Stretch"></GridSplitter>
                 <Grid Grid.Column="2">
                     <Grid.ColumnDefinitions>
+                        <ColumnDefinition Width="auto"></ColumnDefinition>
+                        <ColumnDefinition Width="4"></ColumnDefinition>
+                        <ColumnDefinition Width="auto"></ColumnDefinition>
+                        <ColumnDefinition Width="4"></ColumnDefinition>
                         <ColumnDefinition Width="*"></ColumnDefinition>
                     </Grid.ColumnDefinitions>
                     <Grid.RowDefinitions>
-                        <RowDefinition Height="Auto"></RowDefinition>
-                        <RowDefinition Height="Auto"></RowDefinition>
                         <RowDefinition Height="*"></RowDefinition>
                     </Grid.RowDefinitions>
-                    <Label x:Name="lblModulosAfectados" FontWeight="Bold">
-                    </Label>
-                    <ScrollViewer Grid.Row="1" HorizontalScrollBarVisibility="Auto" VerticalScrollBarVisibility="Auto">
-                        <StackPanel x:Name="stackModules" Orientation="Horizontal">
-                        </StackPanel>
-                    </ScrollViewer>
-                    <Grid x:Name="mainGrid" Grid.Row="2">
+                    <Grid Grid.Column="0">
+                        <Grid.RowDefinitions>
+                            <RowDefinition Height="auto"></RowDefinition>
+                            <RowDefinition Height="*"></RowDefinition>
+                        </Grid.RowDefinitions>
+                        <Grid Grid.Row="0">
+                            <Grid.ColumnDefinitions>
+                                <ColumnDefinition Width="*"></ColumnDefinition>
+                                <ColumnDefinition Width="*"></ColumnDefinition>
+                            </Grid.ColumnDefinitions>
+                            <Label Grid.Column="0" x:Name="lblTotalComponents" FontWeight="Bold">
+                            </Label>
+                            <Button Grid.Column="1" x:Name="btnExportarTextoComponentes" FontWeight="Bold" Padding="5" Visibility="Collapsed" Click="btnExportarTextoComponentes_Click">
+                                Exportar Texto
+                            </Button>
+                        </Grid>
+                        <ScrollViewer Grid.Row="1" VerticalScrollBarVisibility="Auto">
+                            <StackPanel x:Name="stackAllComponents" Orientation="Vertical">
+                            </StackPanel>
+                        </ScrollViewer>
+                    </Grid>
+                    <GridSplitter Grid.Column="1" Width="4" HorizontalAlignment="Stretch"></GridSplitter>
+                    <Grid Grid.Column="2">
+                        <Grid.RowDefinitions>
+                            <RowDefinition Height="auto"></RowDefinition>
+                            <RowDefinition Height="*"></RowDefinition>
+                        </Grid.RowDefinitions>
+                        <Grid Grid.Row="0">
+                            <Grid.ColumnDefinitions>
+                                <ColumnDefinition Width="*"></ColumnDefinition>
+                                <ColumnDefinition Width="*"></ColumnDefinition>
+                            </Grid.ColumnDefinitions>
+                            <Label Grid.Column="0" x:Name="lblModulosAfectados" FontWeight="Bold">
+                            </Label>
+                            <Button Grid.Column="1" x:Name="btnExportarTextoAfectados" FontWeight="Bold" Padding="5" Visibility="Collapsed" Click="btnExportarTextoAfectados_Click">
+                                Exportar Texto
+                            </Button>
+                        </Grid>
+                        <ScrollViewer Grid.Row="1" VerticalScrollBarVisibility="Auto">
+                            <StackPanel x:Name="stackModules" Orientation="Vertical">
+                            </StackPanel>
+                        </ScrollViewer>
+                    </Grid>
+                    <GridSplitter Grid.Column="3" Width="5" HorizontalAlignment="Stretch"></GridSplitter>
+                    <Grid Grid.Column="4" x:Name="mainGrid">
                     </Grid>
                 </Grid>
             </Grid>

@@ -11,7 +11,7 @@ namespace Formiik.DependenciesAnalyzer.Core.Entities
         public Node()
         {
             this.Nodes = new List<Node>();
-            this.ModulesAffected = new List<string>();
+            this.ModulesAffected = new List<Component>();
         }
         #endregion
 
@@ -20,7 +20,7 @@ namespace Formiik.DependenciesAnalyzer.Core.Entities
 
         public List<Node> Nodes { get; set; }
 
-        public List<string> ModulesAffected { get; set; }
+        public List<Component> ModulesAffected { get; set; }
         #endregion
     }
 }

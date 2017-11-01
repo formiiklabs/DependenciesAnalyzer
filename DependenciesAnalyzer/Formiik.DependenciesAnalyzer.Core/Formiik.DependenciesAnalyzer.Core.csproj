@@ -285,6 +285,7 @@
     <Compile Include="Dom\VBNet\ExpressionFinder.cs" />
     <Compile Include="Dom\VBNet\VBNetAmbience.cs" />
     <Compile Include="Dom\XmlDoc.cs" />
+    <Compile Include="Entities\Component.cs" />
     <Compile Include="Entities\FileGit.cs" />
     <Compile Include="Entities\FilesSet.cs" />
     <Compile Include="Entities\Node.cs" />

@@ -282,6 +282,7 @@
     <Resource Include="Images\play-normal-icon.png" />
   </ItemGroup>
   <ItemGroup>
+    <Resource Include="Images\scan-icon.png" />
     <Content Include="Libraries\Microsoft.Msagl.dll" />
     <Content Include="Libraries\Microsoft.Msagl.Drawing.dll" />
     <Content Include="Libraries\Microsoft.Msagl.WpfGraphControl.dll" />

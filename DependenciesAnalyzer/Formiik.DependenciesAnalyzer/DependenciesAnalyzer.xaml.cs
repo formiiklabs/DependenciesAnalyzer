@@ -13,7 +13,7 @@ using System.ComponentModel;
 using System.Diagnostics;
 using System.IO;
 using System.Linq;
-using System.Threading.Tasks;
+using System.Text;
 using System.Windows;
 using System.Windows.Controls;
 using System.Windows.Forms;
@@ -198,8 +198,10 @@ namespace Formiik.DependenciesAnalyzer
                     MessageBoxButton.OK,
                     MessageBoxImage.Information);
             }
-            catch (Exception)
+            catch (Exception exception)
             {
+                Debug.WriteLine(exception.Message);
+
                 System.Windows.MessageBox.Show(
                     "Ocurrió un error al obtener los remote branches.",
                     "Error",
@@ -335,6 +337,10 @@ namespace Formiik.DependenciesAnalyzer
 
                 this.btnAnalyze.IsEnabled = false;
 
+                this.btnExportarTextoAfectados.Visibility = Visibility.Collapsed;
+
+                this.btnExportarTextoComponentes.Visibility = Visibility.Collapsed;
+
                 this.pgbIndeterminate.IsIndeterminate = true;
 
                 backgroundWorker.RunWorkerAsync(data);
@@ -342,7 +348,7 @@ namespace Formiik.DependenciesAnalyzer
             catch (Exception)
             {
                 System.Windows.MessageBox.Show(
-                    "Ocurrión un error al intentar hacer el análisis del branch seleccionado.",
+                    "Ocurrió un error al intentar hacer el análisis del branch seleccionado.",
                     "Error",
                     MessageBoxButton.OK,
                     MessageBoxImage.Error);
@@ -383,7 +389,9 @@ namespace Formiik.DependenciesAnalyzer
                 {
                     this.lblModulosAfectados.Content = "Módulos Afectados:";
 
-                    result.ModulesAffected.ForEach(ma =>
+                    this.btnExportarTextoAfectados.Visibility = Visibility.Visible;
+
+                    result.ModulesAffected.ForEach(moduleAffected =>
                     {
                         TextBlock moduleAffectedBlock = new TextBlock();
 
@@ -399,7 +407,7 @@ namespace Formiik.DependenciesAnalyzer
 
                         moduleAffectedBlock.Margin = margin;
 
-                        moduleAffectedBlock.Text = ma;
+                        moduleAffectedBlock.Text = string.Format("{0}-{1}", moduleAffected.Description, moduleAffected.Action);
 
                         this.stackModules.Children.Add(moduleAffectedBlock);
                     });
@@ -715,7 +723,7 @@ namespace Formiik.DependenciesAnalyzer
         {
             var arguments = (DataWorkerAnalyze)e.Argument;
 
-            var modulesAffectedFinally = new List<string>();
+            var modulesAffectedFinally = new List<Core.Entities.Component>();
 
             string[] solutionFiles = Directory.GetFiles(
                             arguments.RepoPath,
@@ -835,7 +843,7 @@ namespace Formiik.DependenciesAnalyzer
 
                                     if (node != null)
                                     {
-                                        var modulesAffected = new List<string>();
+                                        var modulesAffected = new List<Core.Entities.Component>();
 
                                         WalkNodes(node, ref modulesAffected);
 
@@ -843,7 +851,8 @@ namespace Formiik.DependenciesAnalyzer
                                         {
                                             foreach (var moduleAffected in modulesAffected)
                                             {
-                                                if (!modulesAffectedFinally.Any(x => x.Equals(moduleAffected)))
+                                                if (!modulesAffectedFinally.Any(x => x.Description.Equals(moduleAffected.Description) 
+                                                    && x.Action.Equals(moduleAffected.Action)))
                                                 {
                                                     modulesAffectedFinally.Add(moduleAffected);
                                                 }
@@ -867,7 +876,7 @@ namespace Formiik.DependenciesAnalyzer
             }
         }
 
-        public static void WalkNodes(Core.Entities.Node node, ref List<string> modulesAffected)
+        public static void WalkNodes(Core.Entities.Node node, ref List<Core.Entities.Component> modulesAffected)
         {
             if (node.ModulesAffected.Any())
             {
@@ -975,6 +984,158 @@ namespace Formiik.DependenciesAnalyzer
         private void Workspace_WorkspaceFailed(object sender, WorkspaceDiagnosticEventArgs e)
         {
             Debug.WriteLine(e.Diagnostic.Message);
+        }
+
+        private void BtnScan_Click(object sender, RoutedEventArgs e)
+        {
+            this.stackAllComponents.Children.Clear();
+
+            this.lblTotalComponents.Content = "Total de Componentes";
+
+            try
+            {
+                var backgroundWorkerAllComponents = new BackgroundWorker();
+
+                backgroundWorkerAllComponents.DoWork += BackgroundWorkerAllComponents_DoWork;
+
+                backgroundWorkerAllComponents.RunWorkerCompleted += BackgroundWorkerAllComponents_RunWorkerCompleted;
+
+                this.btnExportarTextoAfectados.Visibility = Visibility.Collapsed;
+
+                this.btnExportarTextoComponentes.Visibility = Visibility.Collapsed;
+
+                backgroundWorkerAllComponents.RunWorkerAsync(Properties.Settings.Default.RepoPath);
+
+                this.pgbIndeterminate.IsIndeterminate = true;
+            }
+            catch (Exception)
+            {
+                System.Windows.MessageBox.Show(
+                    "Ocurrió un error al intentar obtener todos los componentes,", 
+                    "Error",
+                    MessageBoxButton.OK,
+                    MessageBoxImage.Error);
+            }
+        }
+
+        private void BackgroundWorkerAllComponents_RunWorkerCompleted(object sender, RunWorkerCompletedEventArgs e)
+        {
+            if (e.Error != null)
+            {
+            }
+            else if (e.Cancelled)
+            {
+            }
+            else
+            {
+                this.btnExportarTextoComponentes.Visibility = Visibility.Visible;
+
+                this.pgbIndeterminate.IsIndeterminate = false;
+
+                var result = (List<Core.Entities.Component>)e.Result;
+
+                if (result.Any())
+                {
+                    this.btnExportarTextoComponentes.Visibility = Visibility.Visible;
+
+                    this.stackAllComponents.Children.Clear();
+
+                    foreach (var item in result)
+                    {
+                        TextBlock moduleAffectedBlock = new TextBlock();
+
+                        Thickness margin = moduleAffectedBlock.Margin;
+
+                        margin.Left = 5;
+
+                        margin.Top = 5;
+
+                        margin.Right = 5;
+
+                        margin.Bottom = 5;
+
+                        moduleAffectedBlock.Margin = margin;
+
+                        moduleAffectedBlock.Text = string.Format("{0}-{1}", item.Description, item.Action);
+
+                        this.stackAllComponents.Children.Add(moduleAffectedBlock);
+                    }
+                }
+            }
+        }
+
+        private void BackgroundWorkerAllComponents_DoWork(object sender, DoWorkEventArgs e)
+        {
+            var repoPath = (string)e.Argument;
+
+            string[] solutionFiles = Directory.GetFiles(repoPath, "*.sln", SearchOption.AllDirectories);
+
+            if (solutionFiles.Length > 0)
+            {
+                try
+                {
+                    var solutionFile = solutionFiles[0];
+
+                    using (var gitActionsManager = new GitActionsManager())
+                    {
+                        var workspace = MSBuildWorkspace.Create();
+
+                        workspace.WorkspaceFailed += Workspace_WorkspaceFailed;
+
+                        var solution = workspace.OpenSolutionAsync(solutionFile).Result;
+
+                        var result = gitActionsManager.GetComponents(solution);
+
+                        workspace.CloseSolution();
+
+                        e.Result = result;
+                    }
+                }
+                catch (AggregateException aggregateException)
+                {
+                    Debug.WriteLine(aggregateException.Message);
+                }
+            }
+        }
+
+        private void btnExportarTextoComponentes_Click(object sender, RoutedEventArgs e)
+        {
+            StringBuilder stringBuilder = new StringBuilder();
+            SaveFileDialog saveFileDialog = new SaveFileDialog();
+            saveFileDialog.Filter = "Text file|*.txt";
+            saveFileDialog.Title = "Exportar Texto";
+            saveFileDialog.ShowDialog();
+            
+            if (saveFileDialog.FileName != "")
+            {
+                foreach (var item in this.stackAllComponents.Children)
+                {
+                    stringBuilder.Append((item as TextBlock).Text);
+                    stringBuilder.Append(Environment.NewLine);
+                }
+
+                File.WriteAllText(saveFileDialog.FileName, stringBuilder.ToString());
+            }
+        }
+
+        private void btnExportarTextoAfectados_Click(object sender, RoutedEventArgs e)
+        {
+            StringBuilder stringBuilder = new StringBuilder();
+            SaveFileDialog saveFileDialog = new SaveFileDialog();
+            saveFileDialog.Filter = "Text file|*.txt";
+            saveFileDialog.Title = "Exportar Texto";
+            saveFileDialog.ShowDialog();
+
+            if (saveFileDialog.FileName != "")
+            {
+                foreach (var item in this.stackModules.Children)
+                {
+                    stringBuilder.Append((item as TextBlock).Text);
+                    stringBuilder.Append(Environment.NewLine);
+                }
+
+                File.WriteAllText(saveFileDialog.FileName, stringBuilder.ToString());
+            }
         }
     }
 }

@@ -10,7 +10,7 @@ namespace Formiik.DependenciesAnalyzer.Entities
         {
             this.FileSet = new FilesSet();
             this.TreeNodes = new List<TreeNode>();
-            this.ModulesAffected = new List<string>();
+            this.ModulesAffected = new List<Component>();
         }
         #endregion
 
@@ -19,7 +19,7 @@ namespace Formiik.DependenciesAnalyzer.Entities
 
         public List<TreeNode> TreeNodes { get; set; }
 
-        public List<string> ModulesAffected { get; set; }
+        public List<Component> ModulesAffected { get; set; }
         #endregion
     }
 }
