@@ -71,13 +71,16 @@
                         <Grid.RowDefinitions>
                             <RowDefinition Height="*"></RowDefinition>
                         </Grid.RowDefinitions>
-                        <ComboBox
-                            x:Name="cmbRemoteBranches" 
-                            Margin="0,10,0,0"
-                            HorizontalAlignment="Stretch" 
-                            Width="200" 
-                            SelectionChanged="cmbRemoteBranches_SelectionChanged">
-                        </ComboBox>
+                        <StackPanel>
+                            <Label>Select a Branch:</Label>
+                            <ComboBox
+                                x:Name="cmbRemoteBranches" 
+                                Margin="0,10,0,0"
+                                HorizontalAlignment="Stretch" 
+                                Width="200" 
+                                SelectionChanged="cmbRemoteBranches_SelectionChanged">
+                            </ComboBox>
+                        </StackPanel>
                         <RibbonButton
                             x:Name="btnRefresh" 
                             Grid.Column="1"  
