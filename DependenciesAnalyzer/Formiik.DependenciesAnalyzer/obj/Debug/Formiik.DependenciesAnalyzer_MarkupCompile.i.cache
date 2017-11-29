@@ -4,17 +4,17 @@
 winexe
 C#
 .cs
-C:\Tools\dependenciesanalyzer\DependenciesAnalyzer\Formiik.DependenciesAnalyzer\obj\Debug\
+C:\formiiklabs\DependenciesAnalyzer\DependenciesAnalyzer\Formiik.DependenciesAnalyzer\obj\Debug\
 Formiik.DependenciesAnalyzer
 none
 false
 DEBUG;TRACE
-C:\Tools\dependenciesanalyzer\DependenciesAnalyzer\Formiik.DependenciesAnalyzer\App.xaml
+C:\formiiklabs\DependenciesAnalyzer\DependenciesAnalyzer\Formiik.DependenciesAnalyzer\App.xaml
 2433768562
 3-1552267060
 13256789459
-108-1166797268
+108-694343198
 DependenciesAnalyzer.xaml;RemoteRepo.xaml;
 
-True
+False
 

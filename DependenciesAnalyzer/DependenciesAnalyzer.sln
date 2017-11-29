@@ -9,24 +9,59 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Formiik.DependenciesAnalyze
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Formiik.DependenciesAnalyzer", "Formiik.DependenciesAnalyzer\Formiik.DependenciesAnalyzer.csproj", "{D18287F5-800B-4812-AC15-DD70FA50DD96}"
 EndProject
+Project("{6141683F-8A12-4E36-9623-2EB02B2C2303}") = "Formiik.DependenciesAnalyzer.Installer", "Formiik.DependenciesAnalyzer.Installer\Formiik.DependenciesAnalyzer.Installer.isproj", "{BC25BAE5-DB04-4EC7-8B23-39F5C68AE39F}"
+	ProjectSection(ProjectDependencies) = postProject
+		{D18287F5-800B-4812-AC15-DD70FA50DD96} = {D18287F5-800B-4812-AC15-DD70FA50DD96}
+	EndProjectSection
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
+		CD_ROM|Any CPU = CD_ROM|Any CPU
 		Debug|Any CPU = Debug|Any CPU
+		DVD-5|Any CPU = DVD-5|Any CPU
 		Release|Any CPU = Release|Any CPU
+		SingleImage|Any CPU = SingleImage|Any CPU
 	EndGlobalSection
 	GlobalSection(ProjectConfigurationPlatforms) = postSolution
+		{5B897B75-6AB4-46E2-ACD5-15097E890DEE}.CD_ROM|Any CPU.ActiveCfg = Release|Any CPU
+		{5B897B75-6AB4-46E2-ACD5-15097E890DEE}.CD_ROM|Any CPU.Build.0 = Release|Any CPU
 		{5B897B75-6AB4-46E2-ACD5-15097E890DEE}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
 		{5B897B75-6AB4-46E2-ACD5-15097E890DEE}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{5B897B75-6AB4-46E2-ACD5-15097E890DEE}.DVD-5|Any CPU.ActiveCfg = Debug|Any CPU
+		{5B897B75-6AB4-46E2-ACD5-15097E890DEE}.DVD-5|Any CPU.Build.0 = Debug|Any CPU
 		{5B897B75-6AB4-46E2-ACD5-15097E890DEE}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{5B897B75-6AB4-46E2-ACD5-15097E890DEE}.Release|Any CPU.Build.0 = Release|Any CPU
+		{5B897B75-6AB4-46E2-ACD5-15097E890DEE}.SingleImage|Any CPU.ActiveCfg = Release|Any CPU
+		{5B897B75-6AB4-46E2-ACD5-15097E890DEE}.SingleImage|Any CPU.Build.0 = Release|Any CPU
+		{7B162192-6E19-45FE-9381-6AE1A8C117D5}.CD_ROM|Any CPU.ActiveCfg = Release|Any CPU
+		{7B162192-6E19-45FE-9381-6AE1A8C117D5}.CD_ROM|Any CPU.Build.0 = Release|Any CPU
 		{7B162192-6E19-45FE-9381-6AE1A8C117D5}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
 		{7B162192-6E19-45FE-9381-6AE1A8C117D5}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{7B162192-6E19-45FE-9381-6AE1A8C117D5}.DVD-5|Any CPU.ActiveCfg = Debug|Any CPU
+		{7B162192-6E19-45FE-9381-6AE1A8C117D5}.DVD-5|Any CPU.Build.0 = Debug|Any CPU
 		{7B162192-6E19-45FE-9381-6AE1A8C117D5}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{7B162192-6E19-45FE-9381-6AE1A8C117D5}.Release|Any CPU.Build.0 = Release|Any CPU
+		{7B162192-6E19-45FE-9381-6AE1A8C117D5}.SingleImage|Any CPU.ActiveCfg = Release|Any CPU
+		{7B162192-6E19-45FE-9381-6AE1A8C117D5}.SingleImage|Any CPU.Build.0 = Release|Any CPU
+		{D18287F5-800B-4812-AC15-DD70FA50DD96}.CD_ROM|Any CPU.ActiveCfg = Release|Any CPU
+		{D18287F5-800B-4812-AC15-DD70FA50DD96}.CD_ROM|Any CPU.Build.0 = Release|Any CPU
 		{D18287F5-800B-4812-AC15-DD70FA50DD96}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
 		{D18287F5-800B-4812-AC15-DD70FA50DD96}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{D18287F5-800B-4812-AC15-DD70FA50DD96}.DVD-5|Any CPU.ActiveCfg = Debug|Any CPU
+		{D18287F5-800B-4812-AC15-DD70FA50DD96}.DVD-5|Any CPU.Build.0 = Debug|Any CPU
 		{D18287F5-800B-4812-AC15-DD70FA50DD96}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{D18287F5-800B-4812-AC15-DD70FA50DD96}.Release|Any CPU.Build.0 = Release|Any CPU
+		{D18287F5-800B-4812-AC15-DD70FA50DD96}.SingleImage|Any CPU.ActiveCfg = Release|Any CPU
+		{D18287F5-800B-4812-AC15-DD70FA50DD96}.SingleImage|Any CPU.Build.0 = Release|Any CPU
+		{BC25BAE5-DB04-4EC7-8B23-39F5C68AE39F}.CD_ROM|Any CPU.ActiveCfg = CD_ROM
+		{BC25BAE5-DB04-4EC7-8B23-39F5C68AE39F}.CD_ROM|Any CPU.Build.0 = CD_ROM
+		{BC25BAE5-DB04-4EC7-8B23-39F5C68AE39F}.Debug|Any CPU.ActiveCfg = SingleImage
+		{BC25BAE5-DB04-4EC7-8B23-39F5C68AE39F}.Debug|Any CPU.Build.0 = SingleImage
+		{BC25BAE5-DB04-4EC7-8B23-39F5C68AE39F}.DVD-5|Any CPU.ActiveCfg = DVD-5
+		{BC25BAE5-DB04-4EC7-8B23-39F5C68AE39F}.DVD-5|Any CPU.Build.0 = DVD-5
+		{BC25BAE5-DB04-4EC7-8B23-39F5C68AE39F}.Release|Any CPU.ActiveCfg = SingleImage
+		{BC25BAE5-DB04-4EC7-8B23-39F5C68AE39F}.SingleImage|Any CPU.ActiveCfg = SingleImage
+		{BC25BAE5-DB04-4EC7-8B23-39F5C68AE39F}.SingleImage|Any CPU.Build.0 = SingleImage
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
