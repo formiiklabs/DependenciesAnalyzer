@@ -46,6 +46,14 @@
       <HintPath>..\packages\LibGit2Sharp.0.24.0\lib\net40\LibGit2Sharp.dll</HintPath>
       <Private>True</Private>
     </Reference>
+    <Reference Include="MaterialDesignColors, Version=1.1.2.0, Culture=neutral, processorArchitecture=MSIL">
+      <HintPath>..\packages\MaterialDesignColors.1.1.2\lib\net45\MaterialDesignColors.dll</HintPath>
+      <Private>True</Private>
+    </Reference>
+    <Reference Include="MaterialDesignThemes.Wpf, Version=2.3.1.953, Culture=neutral, processorArchitecture=MSIL">
+      <HintPath>..\packages\MaterialDesignThemes.2.3.1.953\lib\net45\MaterialDesignThemes.Wpf.dll</HintPath>
+      <Private>True</Private>
+    </Reference>
     <Reference Include="Microsoft.Build, Version=14.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a, processorArchitecture=MSIL">
       <HintPath>..\packages\Microsoft.Build.14.3.0\lib\net45\Microsoft.Build.dll</HintPath>
       <Private>True</Private>
@@ -279,18 +287,15 @@
     <Analyzer Include="..\packages\Microsoft.CodeAnalysis.Analyzers.1.1.0\analyzers\dotnet\cs\Microsoft.CodeAnalysis.CSharp.Analyzers.dll" />
   </ItemGroup>
   <ItemGroup>
-    <Resource Include="Images\download-icon.png" />
-    <Resource Include="Images\folder-explorer-icon.png" />
-    <Resource Include="Images\internet-icon.png" />
-    <Resource Include="Images\play-normal-icon.png" />
-  </ItemGroup>
-  <ItemGroup>
     <Resource Include="monitor.ico" />
-    <Resource Include="Images\scan-icon.png" />
     <Resource Include="Images\monitor.ico" />
     <Content Include="Libraries\Microsoft.Msagl.dll" />
     <Content Include="Libraries\Microsoft.Msagl.Drawing.dll" />
     <Content Include="Libraries\Microsoft.Msagl.WpfGraphControl.dll" />
+  </ItemGroup>
+  <ItemGroup>
+    <Folder Include="Images\large\" />
+    <Folder Include="Images\small\" />
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <Target Name="EnsureNuGetPackageBuildImports" BeforeTargets="PrepareForBuild">

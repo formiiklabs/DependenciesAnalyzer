@@ -5,21 +5,29 @@
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
         xmlns:local="clr-namespace:Formiik.DependenciesAnalyzer"
         mc:Ignorable="d"
-        Title="Configuración de Repositorio Remto" 
+        Title="Configuration Remote Repository" 
         Height="235" Width="400" 
-        MinHeight="235" MinWidth="400" 
+        MinHeight="260" MinWidth="600" 
         ResizeMode="CanResizeWithGrip"
         ShowInTaskbar="False"
-        WindowStartupLocation="CenterScreen">
+        WindowStartupLocation="CenterScreen" 
+        xmlns:materialDesign="http://materialdesigninxaml.net/winfx/xaml/themes"
+        TextElement.Foreground="{DynamicResource MaterialDesignBody}"
+        TextElement.FontWeight="Regular"
+        TextElement.FontSize="13"
+        TextOptions.TextFormattingMode="Ideal"
+        TextOptions.TextRenderingMode="Auto"
+        Background="{DynamicResource MaterialDesignPaper}"
+        FontFamily="{DynamicResource MaterialDesignFont}">
     <Grid>
         <StackPanel Margin="10">
             <Label FontWeight="Bold">
-                Url del Repositorio:
+                Repository Url:
             </Label>
             <TextBox x:Name="TxtUrlRepo">
             </TextBox>
             <Label FontWeight="Bold">
-                Usuario:
+                User:
             </Label>
             <TextBox x:Name="TxtUsuario">
             </TextBox>
@@ -30,10 +38,10 @@
             </PasswordBox>
             <Button 
                 x:Name="BtnGuardarRemoteRepo" 
-                Width="150" Height="35" 
+                Width="200" Height="35" 
                 Margin="0,10,0,0" 
                 Click="BtnGuardarRemoteRepo_Click">
-                Guardar Configuración
+                Save Configuration
             </Button>
         </StackPanel>
     </Grid>

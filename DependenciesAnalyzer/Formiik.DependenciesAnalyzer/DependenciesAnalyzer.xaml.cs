@@ -21,12 +21,12 @@ using System.Windows.Media;
 
 namespace Formiik.DependenciesAnalyzer
 {
-    public partial class DependenciesAnalyzer : Window
+    public partial class DependenciesAnalyzer
     {
         #region Members
-        private RemoteRepo remoteRepo = null;
-        private List<Branch> remoteBranches = null;
-        private ObservableCollection<ComboBoxItem> itemsRemoteBranches = null;
+        private RemoteRepo remoteRepo;
+        private List<Branch> remoteBranches;
+        private readonly ObservableCollection<ComboBoxItem> itemsRemoteBranches;
         #endregion
 
         public DependenciesAnalyzer()
@@ -39,10 +39,10 @@ namespace Formiik.DependenciesAnalyzer
                 UtilsGit.CanonizeGitPath(Properties.Settings.Default.RepoPath);
 
             this.lblRemoteRepoUrl.Text =
-                string.IsNullOrEmpty(Properties.Settings.Default.RemoteRepoUrl) ? "(Sin Información)" : Properties.Settings.Default.RemoteRepoUrl;
+                string.IsNullOrEmpty(Properties.Settings.Default.RemoteRepoUrl) ? "(No Information)" : Properties.Settings.Default.RemoteRepoUrl;
 
             this.lblUserRemoteRepo.Text =
-                string.IsNullOrEmpty(Properties.Settings.Default.UserRemoteRepo) ? "(Sin Información)" : Properties.Settings.Default.UserRemoteRepo;
+                string.IsNullOrEmpty(Properties.Settings.Default.UserRemoteRepo) ? "(No Information)" : Properties.Settings.Default.UserRemoteRepo;
 
             this.GetRemoteBranches();
         }
@@ -74,13 +74,13 @@ namespace Formiik.DependenciesAnalyzer
             }
         }
 
-        private void RemoteRepo_RemoteRepoInfoEvent(string remoteRepo, string user, string password)
+        private void RemoteRepo_RemoteRepoInfoEvent(string remoteRepoParam, string user, string password)
         {
             while (string.IsNullOrEmpty(Properties.Settings.Default.RepoPath))
             {
                 System.Windows.MessageBox.Show(
-                    "No ha seleccionado una ruta de repositorio local.",
-                    "Información",
+                    "You have not selected a local repository path",
+                    "Information",
                     MessageBoxButton.OK,
                     MessageBoxImage.Exclamation);
 
@@ -91,14 +91,14 @@ namespace Formiik.DependenciesAnalyzer
             {
                 using (var gitActionsManager = new GitActionsManager())
                 {
-                    gitActionsManager.CloneRepository(user, password, Properties.Settings.Default.RepoPath, remoteRepo);
+                    gitActionsManager.CloneRepository(user, password, Properties.Settings.Default.RepoPath, remoteRepoParam);
                 }
 
-                this.SetRepository(remoteRepo, user, password);
+                this.SetRepository(remoteRepoParam, user, password);
 
                 System.Windows.MessageBox.Show(
-                    "Repositorio local configurado correctamente",
-                    "Información",
+                    "Local repository configured correctly",
+                    "Information",
                     MessageBoxButton.OK,
                     MessageBoxImage.Information);
             }
@@ -106,14 +106,14 @@ namespace Formiik.DependenciesAnalyzer
             {
                 if (ex.Message.Contains("exists and is not an empty directory"))
                 {
-                    this.SetRepository(remoteRepo, user, password);
+                    this.SetRepository(remoteRepoParam, user, password);
                 }
                 else
                 {
                     Debug.WriteLine(ex.Message);
 
                     System.Windows.MessageBox.Show(
-                        "Ocurrió un error al clonar el repositorio.",
+                        "An error occurred while cloning the repository",
                         "Error",
                         MessageBoxButton.OK,
                         MessageBoxImage.Error);
@@ -138,8 +138,8 @@ namespace Formiik.DependenciesAnalyzer
             this.GetRemoteBranches();
 
             System.Windows.MessageBox.Show(
-                "Repositorio local configurado correctamente",
-                "Información",
+                "Local repository configured correctly",
+                "Information",
                 MessageBoxButton.OK,
                 MessageBoxImage.Information);
         }
@@ -153,22 +153,24 @@ namespace Formiik.DependenciesAnalyzer
 
         private void SeleccionarRepoLocal()
         {
-            var folderPath = string.Empty;
-
-            FolderBrowserDialog folderBrowser = new FolderBrowserDialog();
-
-            folderBrowser.Description = "Seleccione la ruta del repositorio Git";
-
-            if (folderBrowser.ShowDialog() == System.Windows.Forms.DialogResult.OK)
+            var folderBrowser = new FolderBrowserDialog
             {
-                folderPath = folderBrowser.SelectedPath;
+                Description = @"Select the path of the Git repository"
+            };
 
-                Properties.Settings.Default.RepoPath = folderPath;
 
-                Properties.Settings.Default.Save();
-
-                this.lblPathRepo.Content = UtilsGit.CanonizeGitPath(folderPath);
+            if (folderBrowser.ShowDialog() != System.Windows.Forms.DialogResult.OK)
+            {
+                return;
             }
+
+            var folderPath = folderBrowser.SelectedPath;
+
+            Properties.Settings.Default.RepoPath = folderPath;
+
+            Properties.Settings.Default.Save();
+
+            this.lblPathRepo.Content = UtilsGit.CanonizeGitPath(folderPath);
         }
 
         private void GetRemoteBranches()
@@ -193,8 +195,9 @@ namespace Formiik.DependenciesAnalyzer
             catch (RepositoryNotFoundException)
             {
                 System.Windows.MessageBox.Show(
-                    string.Format("La ruta {0} no es un repositorio válido de trabajo Git.", Properties.Settings.Default.RepoPath),
-                    "Información",
+                    // ReSharper disable once UseStringInterpolation
+                    string.Format("The path {0} is not a valid Git repository", Properties.Settings.Default.RepoPath),
+                    "Information",
                     MessageBoxButton.OK,
                     MessageBoxImage.Information);
             }
@@ -203,7 +206,7 @@ namespace Formiik.DependenciesAnalyzer
                 Debug.WriteLine(exception.Message);
 
                 System.Windows.MessageBox.Show(
-                    "Ocurrió un error al obtener los remote branches.",
+                    "An error has been when get remote branches",
                     "Error",
                     MessageBoxButton.OK,
                     MessageBoxImage.Error);
@@ -227,23 +230,24 @@ namespace Formiik.DependenciesAnalyzer
                 }
 
                 System.Windows.MessageBox.Show(
-                    "Se ha hecho checkout exitosamente al branch.",
-                    "Información",
+                    "Success checkout",
+                    "Information",
                     MessageBoxButton.OK,
                     MessageBoxImage.None);
             }
             catch (NameConflictException)
             {
                 System.Windows.MessageBox.Show(
-                    string.Format("El brach seleccionado {0} ya está seleccionado.", selectedBranch),
-                    "Información",
+                    // ReSharper disable once UseStringInterpolation
+                    string.Format("The selected branch {0} is already selected", selectedBranch),
+                    "Information",
                     MessageBoxButton.OK,
                     MessageBoxImage.Asterisk);
             }
             catch (Exception)
             {
                 System.Windows.MessageBox.Show(
-                    "Ocurrió un error al hacer checkout al branch.",
+                    "An error occurred while checking the branch",
                     "Error",
                     MessageBoxButton.OK,
                     MessageBoxImage.Error);
@@ -263,7 +267,7 @@ namespace Formiik.DependenciesAnalyzer
                         Properties.Settings.Default.UserRemoteRepo);
 
                     System.Windows.MessageBox.Show(
-                        "Se ha hecho pull exitosamente a los cambios.",
+                        "Success Pull to the changes",
                         "Información",
                         MessageBoxButton.OK,
                         MessageBoxImage.None);
@@ -271,11 +275,11 @@ namespace Formiik.DependenciesAnalyzer
             }
             catch (Exception ex)
             {
-                if (ex.Message.Contains("There is no tracking information for the current branch."))
+                if (ex.Message.Contains("There is no tracking information for the current branch"))
                 {
                     System.Windows.MessageBox.Show(
-                        "Se ha hecho pull exitosamente a los cambios.",
-                        "Información",
+                        "Success pull request",
+                        "Information",
                         MessageBoxButton.OK,
                         MessageBoxImage.None);
                 }
@@ -284,7 +288,7 @@ namespace Formiik.DependenciesAnalyzer
                     Debug.WriteLine(ex.Message);
 
                     System.Windows.MessageBox.Show(
-                        "Ocurrió un error al hacer pull al branch seleccionado.",
+                        "An error occurred while pulling the selected branch",
                         "Error",
                         MessageBoxButton.OK,
                         MessageBoxImage.Error);
@@ -297,8 +301,6 @@ namespace Formiik.DependenciesAnalyzer
             this.stackModules.Children.Clear();
 
             this.treeViewRoot.Items.Clear();
-
-            var selectedBranch = string.Empty;
 
             try
             {
@@ -326,7 +328,7 @@ namespace Formiik.DependenciesAnalyzer
                     this.cmbRemoteBranches.Text :
                     Properties.Settings.Default.SelectedBranch;
 
-                selectedBranch = remoteBranch.Remove(0, 7);
+                var selectedBranch = remoteBranch.Remove(0, 7);
 
                 var data = new DataWorkerAnalyze
                 {
@@ -348,7 +350,7 @@ namespace Formiik.DependenciesAnalyzer
             catch (Exception)
             {
                 System.Windows.MessageBox.Show(
-                    "Ocurrió un error al intentar hacer el análisis del branch seleccionado.",
+                    "An error occurred when trying to analyze the selected branch",
                     "Error",
                     MessageBoxButton.OK,
                     MessageBoxImage.Error);
@@ -387,15 +389,15 @@ namespace Formiik.DependenciesAnalyzer
 
                 if (result.ModulesAffected.Any())
                 {
-                    this.lblModulosAfectados.Content = "Módulos Afectados:";
+                    this.lblModulosAfectados.Content = "Modules Affected:";
 
                     this.btnExportarTextoAfectados.Visibility = Visibility.Visible;
 
                     result.ModulesAffected.ForEach(moduleAffected =>
                     {
-                        TextBlock moduleAffectedBlock = new TextBlock();
+                        var moduleAffectedBlock = new TextBlock();
 
-                        Thickness margin = moduleAffectedBlock.Margin;
+                        var margin = moduleAffectedBlock.Margin;
 
                         margin.Left = 5;
 
@@ -407,24 +409,31 @@ namespace Formiik.DependenciesAnalyzer
 
                         moduleAffectedBlock.Margin = margin;
 
+                        // ReSharper disable once UseStringInterpolation
                         moduleAffectedBlock.Text = string.Format("{0}-{1}", moduleAffected.Description, moduleAffected.Action);
 
                         this.stackModules.Children.Add(moduleAffectedBlock);
                     });
                 }
 
-                this.lblArchivosModificados.Content = "Archivos Modificados";
+                this.lblArchivosModificados.Content = "Files Modified";
 
+                // ReSharper disable once UseStringInterpolation
                 this.txtRenamed.Text = string.Format("Renamed: {0}", result.FileSet.Renamed.Count);
 
+                // ReSharper disable once UseStringInterpolation
                 this.txtModified.Text = string.Format("Modified: {0}", result.FileSet.Modified.Count);
 
+                // ReSharper disable once UseStringInterpolation
                 this.txtAdded.Text = string.Format("Added: {0}", result.FileSet.Added.Count);
 
+                // ReSharper disable once UseStringInterpolation
                 this.txtDeleted.Text = string.Format("Deleted: {0}", result.FileSet.Deleted.Count);
 
+                // ReSharper disable once UseStringInterpolation
                 this.txtCopied.Text = string.Format("Copied: {0}", result.FileSet.Copied.Count);
 
+                // ReSharper disable once UseStringInterpolation
                 this.txtUpdateButUnmerged.Text = string.Format("Update But Unmerged: {0}", result.FileSet.UpdateButUnmerged.Count);
 
                 this.pgbIndeterminate.IsIndeterminate = false;
@@ -435,170 +444,183 @@ namespace Formiik.DependenciesAnalyzer
 
         private void TreeViewItem_Selected(object sender, RoutedEventArgs e)
         {
-            TreeViewItem item = e.OriginalSource as TreeViewItem;
+            var item = e.OriginalSource as TreeViewItem;
 
-            if (item != null)
+            if (item == null)
             {
-                if (item.Header.ToString().EndsWith(".cs (Added)") || item.Header.ToString().EndsWith(".cs (Modified)"))
+                return;
+            }
+
+            if (!item.Header.ToString().EndsWith(".cs (Added)") &&
+                !item.Header.ToString().EndsWith(".cs (Modified)"))
+            {
+                return;
+            }
+
+            var isAdded = false;
+
+            var isModified = false;
+
+            if (item.Header.ToString().EndsWith("(Added)"))
+            {
+                isAdded = true;
+            }
+
+            if (item.Header.ToString().EndsWith(".cs (Modified)"))
+            {
+                isAdded = false;
+
+                isModified = true;
+            }
+
+            var path = string.Empty;
+
+            ItemsControl parent;
+
+            do
+            {
+                parent = GetSelectedTreeViewItemParent(item);
+
+                if (parent == null)
                 {
-                    var isAdded = false;
+                    continue;
+                }
 
-                    var isModified = false;
+                var treeItem = parent as TreeViewItem;
 
-                    if (item.Header.ToString().EndsWith("(Added)"))
+                if (treeItem == null)
+                {
+                    break;
+                }
+
+                var val = treeItem.Header.ToString();
+
+                path = "\\" + val + path;
+
+                item = treeItem;
+            }
+            while (parent != null);
+
+            if (string.IsNullOrEmpty(path))
+            {
+                return;
+            }
+
+            var backgroundWorkerTree = new BackgroundWorker();
+
+            backgroundWorkerTree.DoWork += BackgroundWorkerTree_DoWork;
+
+            backgroundWorkerTree.RunWorkerCompleted += BackgroundWorkerTree_RunWorkerCompleted;
+
+            var solutionFiles = Directory.GetFiles(
+                Properties.Settings.Default.RepoPath, 
+                "*.sln", 
+                SearchOption.AllDirectories);
+
+            if (solutionFiles.Length <= 0)
+            {
+                return;
+            }
+
+            var solutionFile = solutionFiles[0];
+
+            if (isAdded)
+            {
+                var methodsAdded = new List<string>();
+
+                using (var gitActionsManager = new GitActionsManager())
+                {
+                    var workspace = MSBuildWorkspace.Create();
+
+                    workspace.WorkspaceFailed += Workspace_WorkspaceFailed;
+
+                    var solution = workspace.OpenSolutionAsync(solutionFile).Result;
+
+                    var result = gitActionsManager.GetListMethodsOfFile(
+                        Properties.Settings.Default.RepoPath,
+                        solution,
+                        path);
+
+                    workspace.CloseSolution();
+
+                    if (!result.Any())
                     {
-                        isAdded = true;
-
-                        isModified = !isAdded;
+                        return;
                     }
 
-                    if (item.Header.ToString().EndsWith(".cs (Modified)"))
+                    result.ForEach(r =>
                     {
-                        isAdded = false;
-
-                        isModified = !isAdded;
-                    }
-
-                    var path = string.Empty;
-
-                    ItemsControl parent = null;
-
-                    do
-                    {
-                        parent = GetSelectedTreeViewItemParent(item);
-
-                        if (parent != null)
+                        if (!methodsAdded.Any(x => x.Equals(r)))
                         {
-                            TreeViewItem treeItem = parent as TreeViewItem;
-
-                            if (treeItem == null)
-                            {
-                                break;
-                            }
-
-                            string val = treeItem.Header.ToString();
-
-                            path = "\\" + val + path;
-
-                            item = treeItem;
+                            methodsAdded.Add(r);
                         }
-                    }
-                    while (parent != null);
+                    });
 
-                    if (!string.IsNullOrEmpty(path))
+                    var data = new TreeFilter
                     {
-                        var backgroundWorkerTree = new BackgroundWorker();
+                        Methods = methodsAdded,
+                        RepoPath = Properties.Settings.Default.RepoPath,
+                        TreeFilterAction = TreeFilterActionEnum.Added
+                    };
 
-                        backgroundWorkerTree.DoWork += BackgroundWorkerTree_DoWork;
+                    this.treeViewRoot.IsEnabled = false;
 
-                        backgroundWorkerTree.RunWorkerCompleted += BackgroundWorkerTree_RunWorkerCompleted;
+                    this.pgbIndeterminate.IsIndeterminate = true;
 
-                        string[] solutionFiles = Directory.GetFiles(
-                            Properties.Settings.Default.RepoPath, 
-                            "*.sln", 
-                            SearchOption.AllDirectories);
+                    backgroundWorkerTree.RunWorkerAsync(data);
+                }
+            }
+            else if (isModified)
+            {
+                var methodsModified = new List<string>();
 
-                        if (solutionFiles.Length > 0)
-                        {
-                            var solutionFile = solutionFiles[0];
+                using (var gitActionsManager = new GitActionsManager())
+                {
+                    var remoteBranch = string.IsNullOrEmpty(Properties.Settings.Default.SelectedBranch) ?
+                        this.cmbRemoteBranches.Text :
+                        Properties.Settings.Default.SelectedBranch;
 
-                            if (isAdded)
-                            {
-                                var methodsAdded = new List<string>();
+                    var selectedBranch = remoteBranch.Remove(0, 7);
 
-                                using (var gitActionsManager = new GitActionsManager())
-                                {
-                                    var workspace = MSBuildWorkspace.Create();
+                    var workspace = MSBuildWorkspace.Create();
 
-                                    workspace.WorkspaceFailed += Workspace_WorkspaceFailed;
+                    workspace.WorkspaceFailed += Workspace_WorkspaceFailed;
 
-                                    var solution = workspace.OpenSolutionAsync(solutionFile).Result;
+                    var solution = workspace.OpenSolutionAsync(solutionFile).Result;
 
-                                    var result = gitActionsManager.GetListMethodsOfFile(
-                                        Properties.Settings.Default.RepoPath,
-                                        solution,
-                                        path);
+                    var result = gitActionsManager.GetListMethodsOfFileModified(
+                        Properties.Settings.Default.RepoPath,
+                        selectedBranch, 
+                        solution,
+                        path);
 
-                                    workspace.CloseSolution();
+                    workspace.CloseSolution();
 
-                                    if (result.Any())
-                                    {
-                                        result.ForEach(r =>
-                                        {
-                                            if (!methodsAdded.Any(x => x.Equals(r)))
-                                            {
-                                                methodsAdded.Add(r);
-                                            }
-                                        });
-
-                                        var data = new TreeFilter
-                                        {
-                                            Methods = methodsAdded,
-                                            RepoPath = Properties.Settings.Default.RepoPath,
-                                            TreeFilterAction = TreeFilterActionEnum.Added
-                                        };
-
-                                        this.treeViewRoot.IsEnabled = false;
-
-                                        this.pgbIndeterminate.IsIndeterminate = true;
-
-                                        backgroundWorkerTree.RunWorkerAsync(data);
-                                    }
-                                }
-                            }
-                            else if (isModified)
-                            {
-                                var methodsModified = new List<string>();
-
-                                using (var gitActionsManager = new GitActionsManager())
-                                {
-                                    var remoteBranch = string.IsNullOrEmpty(Properties.Settings.Default.SelectedBranch) ?
-                                        this.cmbRemoteBranches.Text :
-                                        Properties.Settings.Default.SelectedBranch;
-
-                                    var selectedBranch = remoteBranch.Remove(0, 7);
-
-                                    var workspace = MSBuildWorkspace.Create();
-
-                                    workspace.WorkspaceFailed += Workspace_WorkspaceFailed;
-
-                                    var solution = workspace.OpenSolutionAsync(solutionFile).Result;
-
-                                    var result = gitActionsManager.GetListMethodsOfFileModified(
-                                        Properties.Settings.Default.RepoPath,
-                                        selectedBranch, 
-                                        solution,
-                                        path);
-
-                                    workspace.CloseSolution();
-
-                                    if (result.Any())
-                                    {
-                                        result.ForEach(r =>
-                                        {
-                                            if (!methodsModified.Any(x => x.Equals(r)))
-                                            {
-                                                methodsModified.Add(r);
-                                            }
-                                        });
-
-                                        var data = new TreeFilter
-                                        {
-                                            Methods = methodsModified,
-                                            RepoPath = Properties.Settings.Default.RepoPath,
-                                            TreeFilterAction = TreeFilterActionEnum.Modified
-                                        };
-
-                                        this.treeViewRoot.IsEnabled = false;
-
-                                        this.pgbIndeterminate.IsIndeterminate = true;
-
-                                        backgroundWorkerTree.RunWorkerAsync(data);
-                                    }
-                                }
-                            }
-                        }
+                    if (!result.Any())
+                    {
+                        return;
                     }
+
+                    result.ForEach(r =>
+                    {
+                        if (!methodsModified.Any(x => x.Equals(r)))
+                        {
+                            methodsModified.Add(r);
+                        }
+                    });
+
+                    var data = new TreeFilter
+                    {
+                        Methods = methodsModified,
+                        RepoPath = Properties.Settings.Default.RepoPath,
+                        TreeFilterAction = TreeFilterActionEnum.Modified
+                    };
+
+                    this.treeViewRoot.IsEnabled = false;
+
+                    this.pgbIndeterminate.IsIndeterminate = true;
+
+                    backgroundWorkerTree.RunWorkerAsync(data);
                 }
             }
         }
@@ -617,51 +639,55 @@ namespace Formiik.DependenciesAnalyzer
 
                 var result = (List<Core.Entities.Node>)e.Result;
 
-                if (result.Any())
+                if (!result.Any())
                 {
-                    DockPanel graphViewerPanel = new DockPanel();
-
-                    GraphViewer graphViewer = new GraphViewer();
-
-                    graphViewerPanel.ClipToBounds = true;
-
-                    this.mainGrid.Children.Add(graphViewerPanel);
-
-                    graphViewer.BindToPanel(graphViewerPanel);
-
-                    Graph graph = new Graph();
-
-                    foreach (var node in result)
-                    {
-                        this.DrawGraph(node, ref graph);
-                    }
-
-                    graph.Attr.LayerDirection = LayerDirection.TB;
-
-                    graphViewer.Graph = graph;
-
-                    this.treeViewRoot.IsEnabled = true;
+                    return;
                 }
+
+                var graphViewerPanel = new DockPanel();
+
+                var graphViewer = new GraphViewer();
+
+                graphViewerPanel.ClipToBounds = true;
+
+                this.mainGrid.Children.Add(graphViewerPanel);
+
+                graphViewer.BindToPanel(graphViewerPanel);
+
+                var graph = new Graph();
+
+                foreach (var node in result)
+                {
+                    this.DrawGraph(node, ref graph);
+                }
+
+                graph.Attr.LayerDirection = LayerDirection.TB;
+
+                graphViewer.Graph = graph;
+
+                this.treeViewRoot.IsEnabled = true;
             }
         }
 
         private void DrawGraph(Core.Entities.Node node, ref Graph graph)
         {
-            if (node.Nodes.Any())
+            if (!node.Nodes.Any())
             {
-                foreach (var child in node.Nodes)
-                {
-                    graph.AddEdge(node.MethodName, child.MethodName);
+                return;
+            }
 
-                    foreach (var otherChild in node.Nodes)
-                    {
-                        this.DrawGraph(otherChild, ref graph);
-                    }
+            foreach (var child in node.Nodes)
+            {
+                graph.AddEdge(node.MethodName, child.MethodName);
+
+                foreach (var otherChild in node.Nodes)
+                {
+                    this.DrawGraph(otherChild, ref graph);
                 }
             }
         }
 
-        private void BackgroundWorkerTree_DoWork(object sender, DoWorkEventArgs e)
+        private static void BackgroundWorkerTree_DoWork(object sender, DoWorkEventArgs e)
         {
             var result = new List<Core.Entities.Node>();
 
@@ -671,7 +697,7 @@ namespace Formiik.DependenciesAnalyzer
             {
                 if (treeFilter.Methods.Any())
                 {
-                    string[] solutionFiles = Directory.GetFiles(
+                    var solutionFiles = Directory.GetFiles(
                         treeFilter.RepoPath,
                         "*.sln",
                         SearchOption.AllDirectories);
@@ -688,15 +714,7 @@ namespace Formiik.DependenciesAnalyzer
 
                             var solution = workspace.OpenSolutionAsync(solutionFile).Result;
 
-                            foreach (var mo in treeFilter.Methods)
-                            {
-                                var node = methodAnalyzer.Analyze(solution, mo);
-
-                                if (node != null)
-                                {
-                                    result.Add(node);
-                                }
-                            }
+                            result.AddRange(treeFilter.Methods.Select(mo => methodAnalyzer.Analyze(solution, mo)).Where(node => node != null));
 
                             workspace.CloseSolution();
                         }
@@ -707,129 +725,65 @@ namespace Formiik.DependenciesAnalyzer
             e.Result = result;
         }
 
-        private ItemsControl GetSelectedTreeViewItemParent(TreeViewItem item)
+        private static ItemsControl GetSelectedTreeViewItemParent(DependencyObject item)
         {
-            DependencyObject parent = VisualTreeHelper.GetParent(item);
+            var parent = VisualTreeHelper.GetParent(item);
 
             while (!(parent is TreeViewItem || parent is System.Windows.Controls.TreeView))
             {
-                parent = VisualTreeHelper.GetParent(parent);
+                if (parent != null)
+                {
+                    parent = VisualTreeHelper.GetParent(parent);
+                }
             }
 
             return parent as ItemsControl;
         }
 
-        private void BackgroundWorker_DoWork(object sender, DoWorkEventArgs e)
+        private static void BackgroundWorker_DoWork(object sender, DoWorkEventArgs e)
         {
             var arguments = (DataWorkerAnalyze)e.Argument;
 
             var modulesAffectedFinally = new List<Core.Entities.Component>();
 
-            string[] solutionFiles = Directory.GetFiles(
+            var solutionFiles = Directory.GetFiles(
                             arguments.RepoPath,
                             "*.sln",
                             SearchOption.AllDirectories);
 
-            if (solutionFiles.Length > 0)
+            if (solutionFiles.Length <= 0)
             {
-                var solutionFile = solutionFiles[0];
+                return;
+            }
 
-                using (var treeGraph = new TreeGraph())
-                {
-                    var fileSet = treeGraph.Build(arguments.RepoPath, arguments.SelectedBranch);
+            var solutionFile = solutionFiles[0];
 
-                    var treeNodes = treeGraph.TreeNodes;
+            using (var treeGraph = new TreeGraph())
+            {
+                var fileSet = treeGraph.Build(arguments.RepoPath, arguments.SelectedBranch);
+
+                var treeNodes = treeGraph.TreeNodes;
                     
-                    if (fileSet != null)
-                    {
-                        var methodsObserved = new List<string>();
+                if (fileSet != null)
+                {
+                    var methodsObserved = new List<string>();
                         
-                        if (fileSet.Modified.Any())
+                    if (fileSet.Modified.Any())
+                    {
+                        fileSet.Modified.ForEach(file =>
                         {
-                            fileSet.Modified.ForEach(file =>
+                            if (!file.StartsWith("/"))
                             {
-                                if (!file.StartsWith("/"))
-                                {
-                                    file = string.Format("/{0}", file);
-                                }
+                                // ReSharper disable once UseStringInterpolation
+                                file = string.Format("/{0}", file);
+                            }
 
-                                if (file.EndsWith(".cs"))
-                                {
-                                    using (var gitActionsManager = new GitActionsManager())
-                                    {
-                                        var workspace = MSBuildWorkspace.Create();
-
-                                        workspace.WorkspaceFailed += Workspace_WorkspaceFailed;
-
-                                        var solution = workspace.OpenSolutionAsync(solutionFile).Result;
-
-                                        var result = gitActionsManager.GetListMethodsOfFileModified(
-                                            arguments.RepoPath,
-                                            arguments.SelectedBranch,
-                                            solution,
-                                            file);
-
-                                        workspace.CloseSolution();
-
-                                        if (result.Any())
-                                        {
-                                            result.ForEach(r =>
-                                            {
-                                                if (!methodsObserved.Any(x => x.Equals(r)))
-                                                {
-                                                    methodsObserved.Add(r);
-                                                }
-                                            });
-                                        }
-                                    }
-                                }
-                            });
-                        }
-
-                        if (fileSet.Added.Any())
-                        {
-                            fileSet.Added.ForEach(file =>
+                            if (!file.EndsWith(".cs"))
                             {
-                                if (!file.StartsWith("/"))
-                                {
-                                    file = string.Format("/{0}", file);
-                                }
+                                return;
+                            }
 
-                                if (file.EndsWith(".cs"))
-                                {
-                                    using (var gitActionsManager = new GitActionsManager())
-                                    {
-                                        var workspace = MSBuildWorkspace.Create();
-
-                                        workspace.WorkspaceFailed += Workspace_WorkspaceFailed;
-
-                                        var solution = workspace.OpenSolutionAsync(solutionFile).Result;
-
-                                        var result = gitActionsManager.GetListMethodsOfFile(
-                                            arguments.RepoPath, 
-                                            solution,
-                                            file);
-
-                                        workspace.CloseSolution();
-
-                                        if (result.Any())
-                                        {
-                                            result.ForEach(r =>
-                                            {
-                                                if (!methodsObserved.Any(x => x.Equals(r)))
-                                                {
-                                                    methodsObserved.Add(r);
-                                                }
-                                            });
-                                        }
-                                    }
-                                }
-                            });
-                        }
-
-                        if (methodsObserved.Any())
-                        {
-                            using (var methodAnalyzer = new MethodAnalyzer())
+                            using (var gitActionsManager = new GitActionsManager())
                             {
                                 var workspace = MSBuildWorkspace.Create();
 
@@ -837,42 +791,118 @@ namespace Formiik.DependenciesAnalyzer
 
                                 var solution = workspace.OpenSolutionAsync(solutionFile).Result;
 
-                                foreach (var mo in methodsObserved)
-                                {
-                                    var node = methodAnalyzer.Analyze(solution, mo);
-
-                                    if (node != null)
-                                    {
-                                        var modulesAffected = new List<Core.Entities.Component>();
-
-                                        WalkNodes(node, ref modulesAffected);
-
-                                        if (modulesAffected.Any())
-                                        {
-                                            foreach (var moduleAffected in modulesAffected)
-                                            {
-                                                if (!modulesAffectedFinally.Any(x => x.Description.Equals(moduleAffected.Description) 
-                                                    && x.Action.Equals(moduleAffected.Action)))
-                                                {
-                                                    modulesAffectedFinally.Add(moduleAffected);
-                                                }
-                                            }
-                                        }
-                                    }
-                                }
+                                var result = gitActionsManager.GetListMethodsOfFileModified(
+                                    arguments.RepoPath,
+                                    arguments.SelectedBranch,
+                                    solution,
+                                    file);
 
                                 workspace.CloseSolution();
+
+                                if (result.Any())
+                                {
+                                    result.ForEach(r =>
+                                    {
+                                        if (!methodsObserved.Any(x => x.Equals(r)))
+                                        {
+                                            methodsObserved.Add(r);
+                                        }
+                                    });
+                                }
                             }
-                        }
+                        });
                     }
 
-                    e.Result = new ResultWorkerAnalyze
+                    if (fileSet.Added.Any())
                     {
-                        FileSet = fileSet,
-                        TreeNodes = treeNodes,
-                        ModulesAffected = modulesAffectedFinally
-                    };
+                        fileSet.Added.ForEach(file =>
+                        {
+                            if (!file.StartsWith("/"))
+                            {
+                                // ReSharper disable once UseStringInterpolation
+                                file = string.Format("/{0}", file);
+                            }
+
+                            if (!file.EndsWith(".cs"))
+                            {
+                                return;
+                            }
+
+                            using (var gitActionsManager = new GitActionsManager())
+                            {
+                                var workspace = MSBuildWorkspace.Create();
+
+                                workspace.WorkspaceFailed += Workspace_WorkspaceFailed;
+
+                                var solution = workspace.OpenSolutionAsync(solutionFile).Result;
+
+                                var result = gitActionsManager.GetListMethodsOfFile(
+                                    arguments.RepoPath, 
+                                    solution,
+                                    file);
+
+                                workspace.CloseSolution();
+
+                                if (result.Any())
+                                {
+                                    result.ForEach(r =>
+                                    {
+                                        if (!methodsObserved.Any(x => x.Equals(r)))
+                                        {
+                                            methodsObserved.Add(r);
+                                        }
+                                    });
+                                }
+                            }
+                        });
+                    }
+
+                    if (methodsObserved.Any())
+                    {
+                        using (var methodAnalyzer = new MethodAnalyzer())
+                        {
+                            var workspace = MSBuildWorkspace.Create();
+
+                            workspace.WorkspaceFailed += Workspace_WorkspaceFailed;
+
+                            var solution = workspace.OpenSolutionAsync(solutionFile).Result;
+
+                            foreach (var mo in methodsObserved)
+                            {
+                                var node = methodAnalyzer.Analyze(solution, mo);
+
+                                if (node == null)
+                                {
+                                    continue;
+                                }
+
+                                var modulesAffected = new List<Core.Entities.Component>();
+
+                                WalkNodes(node, ref modulesAffected);
+
+                                if (!modulesAffected.Any())
+                                {
+                                    continue;
+                                }
+
+                                foreach (var moduleAffected in modulesAffected.Where(moduleAffected => !modulesAffectedFinally.Any(x => x.Description.Equals(moduleAffected.Description) 
+                                                                                                                                        && x.Action.Equals(moduleAffected.Action))))
+                                {
+                                    modulesAffectedFinally.Add(moduleAffected);
+                                }
+                            }
+
+                            workspace.CloseSolution();
+                        }
+                    }
                 }
+
+                e.Result = new ResultWorkerAnalyze
+                {
+                    FileSet = fileSet,
+                    TreeNodes = treeNodes,
+                    ModulesAffected = modulesAffectedFinally
+                };
             }
         }
 
@@ -889,28 +919,35 @@ namespace Formiik.DependenciesAnalyzer
                 }
             }
 
-            if (node.Nodes.Any())
+            if (!node.Nodes.Any())
             {
-                foreach(var child in node.Nodes)
-                {
-                    WalkNodes(child, ref modulesAffected);
-                }
+                return;
+            }
+
+            foreach(var child in node.Nodes)
+            {
+                WalkNodes(child, ref modulesAffected);
             }
         }
 
         private void CreateNodeTreeView(
             Core.Entities.TreeNode treeNode,
-            System.Windows.Controls.TreeViewItem treeViewItemParent)
+            TreeViewItem treeViewItemParent)
         {
+            if (treeViewItemParent == null)
+            {
+                throw new ArgumentNullException(nameof(treeViewItemParent));
+            }
+
             if (treeNode.Nodes.Any())
             {
                 treeNode.Nodes.ForEach(n =>
                 {
-                    var treeViewItem = new TreeViewItem();
-
-                    treeViewItem.IsExpanded = true;
-
-                    treeViewItem.Header = n.Value;
+                    var treeViewItem = new TreeViewItem
+                    {
+                        IsExpanded = true,
+                        Header = n.Value
+                    };
 
                     treeViewItemParent.Items.Add(treeViewItem);
 
@@ -919,11 +956,11 @@ namespace Formiik.DependenciesAnalyzer
             }
             else
             {
-                var labelTreeViewItem = new System.Windows.Controls.Label();
-
-                labelTreeViewItem.FontWeight = FontWeights.SemiBold;
-
-                labelTreeViewItem.Content = treeNode.Value;
+                var labelTreeViewItem = new System.Windows.Controls.Label
+                {
+                    FontWeight = FontWeights.SemiBold,
+                    Content = treeNode.Value
+                };
 
                 switch (treeNode.StateFileGit)
                 {
@@ -959,7 +996,7 @@ namespace Formiik.DependenciesAnalyzer
 
         private void cmbRemoteBranches_SelectionChanged(object sender, SelectionChangedEventArgs e)
         {
-            Properties.Settings.Default.SelectedBranch = (this.cmbRemoteBranches.SelectedItem as ComboBoxItem).Content.ToString();
+            Properties.Settings.Default.SelectedBranch = ((ComboBoxItem) this.cmbRemoteBranches.SelectedItem).Content.ToString();
 
             Properties.Settings.Default.Save();
         }
@@ -968,20 +1005,20 @@ namespace Formiik.DependenciesAnalyzer
         {
             var selectedBranch = Properties.Settings.Default.SelectedBranch;
 
-            if (!string.IsNullOrEmpty(selectedBranch))
+            if (string.IsNullOrEmpty(selectedBranch))
             {
-                foreach (ComboBoxItem item in this.cmbRemoteBranches.Items)
-                {
-                    if (item.Content.ToString().Equals(selectedBranch, StringComparison.InvariantCultureIgnoreCase))
-                    {
-                        this.cmbRemoteBranches.SelectedValue = item;
-                        break;
-                    }
-                }
+                return;
+            }
+
+            foreach (var item in this.cmbRemoteBranches.Items.Cast<ComboBoxItem>().Where(item => item.Content.ToString().Equals(selectedBranch, StringComparison.InvariantCultureIgnoreCase)))
+            {
+                this.cmbRemoteBranches.SelectedValue = item;
+
+                break;
             }
         }
 
-        private void Workspace_WorkspaceFailed(object sender, WorkspaceDiagnosticEventArgs e)
+        private static void Workspace_WorkspaceFailed(object sender, WorkspaceDiagnosticEventArgs e)
         {
             Debug.WriteLine(e.Diagnostic.Message);
         }
@@ -990,7 +1027,7 @@ namespace Formiik.DependenciesAnalyzer
         {
             this.stackAllComponents.Children.Clear();
 
-            this.lblTotalComponents.Content = "Total de Componentes";
+            this.lblTotalComponents.Content = "Total Components";
 
             try
             {
@@ -1011,7 +1048,7 @@ namespace Formiik.DependenciesAnalyzer
             catch (Exception)
             {
                 System.Windows.MessageBox.Show(
-                    "Ocurrió un error al intentar obtener todos los componentes,", 
+                    "There was an error trying to get all the components", 
                     "Error",
                     MessageBoxButton.OK,
                     MessageBoxImage.Error);
@@ -1034,108 +1071,139 @@ namespace Formiik.DependenciesAnalyzer
 
                 var result = (List<Core.Entities.Component>)e.Result;
 
-                if (result.Any())
+                if (!result.Any())
                 {
-                    this.btnExportarTextoComponentes.Visibility = Visibility.Visible;
+                    return;
+                }
 
-                    this.stackAllComponents.Children.Clear();
+                this.btnExportarTextoComponentes.Visibility = Visibility.Visible;
 
-                    foreach (var item in result)
-                    {
-                        TextBlock moduleAffectedBlock = new TextBlock();
+                this.stackAllComponents.Children.Clear();
 
-                        Thickness margin = moduleAffectedBlock.Margin;
+                foreach (var item in result)
+                {
+                    var moduleAffectedBlock = new TextBlock();
 
-                        margin.Left = 5;
+                    var margin = moduleAffectedBlock.Margin;
 
-                        margin.Top = 5;
+                    margin.Left = 5;
 
-                        margin.Right = 5;
+                    margin.Top = 5;
 
-                        margin.Bottom = 5;
+                    margin.Right = 5;
 
-                        moduleAffectedBlock.Margin = margin;
+                    margin.Bottom = 5;
 
-                        moduleAffectedBlock.Text = string.Format("{0}-{1}", item.Description, item.Action);
+                    moduleAffectedBlock.Margin = margin;
 
-                        this.stackAllComponents.Children.Add(moduleAffectedBlock);
-                    }
+                    // ReSharper disable once UseStringInterpolation
+                    moduleAffectedBlock.Text = string.Format("{0}-{1}", item.Description, item.Action);
+
+                    this.stackAllComponents.Children.Add(moduleAffectedBlock);
                 }
             }
         }
 
-        private void BackgroundWorkerAllComponents_DoWork(object sender, DoWorkEventArgs e)
+        private static void BackgroundWorkerAllComponents_DoWork(object sender, DoWorkEventArgs e)
         {
             var repoPath = (string)e.Argument;
 
-            string[] solutionFiles = Directory.GetFiles(repoPath, "*.sln", SearchOption.AllDirectories);
+            var solutionFiles = Directory.GetFiles(repoPath, "*.sln", SearchOption.AllDirectories);
 
-            if (solutionFiles.Length > 0)
+            if (solutionFiles.Length <= 0)
             {
-                try
+                return;
+            }
+
+            try
+            {
+                var solutionFile = solutionFiles[0];
+
+                using (var gitActionsManager = new GitActionsManager())
                 {
-                    var solutionFile = solutionFiles[0];
+                    var workspace = MSBuildWorkspace.Create();
 
-                    using (var gitActionsManager = new GitActionsManager())
-                    {
-                        var workspace = MSBuildWorkspace.Create();
+                    workspace.WorkspaceFailed += Workspace_WorkspaceFailed;
 
-                        workspace.WorkspaceFailed += Workspace_WorkspaceFailed;
+                    var solution = workspace.OpenSolutionAsync(solutionFile).Result;
 
-                        var solution = workspace.OpenSolutionAsync(solutionFile).Result;
+                    var result = gitActionsManager.GetComponents(solution);
 
-                        var result = gitActionsManager.GetComponents(solution);
+                    workspace.CloseSolution();
 
-                        workspace.CloseSolution();
-
-                        e.Result = result;
-                    }
+                    e.Result = result;
                 }
-                catch (AggregateException aggregateException)
-                {
-                    Debug.WriteLine(aggregateException.Message);
-                }
+            }
+            catch (AggregateException aggregateException)
+            {
+                Debug.WriteLine(aggregateException.Message);
             }
         }
 
         private void btnExportarTextoComponentes_Click(object sender, RoutedEventArgs e)
         {
-            StringBuilder stringBuilder = new StringBuilder();
-            SaveFileDialog saveFileDialog = new SaveFileDialog();
-            saveFileDialog.Filter = "Text file|*.txt";
-            saveFileDialog.Title = "Exportar Texto";
-            saveFileDialog.ShowDialog();
-            
-            if (saveFileDialog.FileName != "")
-            {
-                foreach (var item in this.stackAllComponents.Children)
-                {
-                    stringBuilder.Append((item as TextBlock).Text);
-                    stringBuilder.Append(Environment.NewLine);
-                }
+            var stringBuilder = new StringBuilder();
 
-                File.WriteAllText(saveFileDialog.FileName, stringBuilder.ToString());
+            var saveFileDialog = new SaveFileDialog
+            {
+                Filter = @"Text file|*.txt",
+                Title = @"Export to Text Plain"
+            };
+
+            saveFileDialog.ShowDialog();
+
+            if (saveFileDialog.FileName == "")
+            {
+                return;
             }
+
+            foreach (var item in this.stackAllComponents.Children)
+            {
+                stringBuilder.Append(((TextBlock) item).Text);
+
+                stringBuilder.Append(Environment.NewLine);
+            }
+
+            File.WriteAllText(saveFileDialog.FileName, stringBuilder.ToString());
         }
 
         private void btnExportarTextoAfectados_Click(object sender, RoutedEventArgs e)
         {
-            StringBuilder stringBuilder = new StringBuilder();
-            SaveFileDialog saveFileDialog = new SaveFileDialog();
-            saveFileDialog.Filter = "Text file|*.txt";
-            saveFileDialog.Title = "Exportar Texto";
+            var stringBuilder = new StringBuilder();
+
+            var saveFileDialog = new SaveFileDialog
+            {
+                Filter = @"Text file|*.txt",
+                Title = @"Export to Text Plain"
+            };
+
             saveFileDialog.ShowDialog();
 
-            if (saveFileDialog.FileName != "")
+            if (saveFileDialog.FileName == "")
             {
-                foreach (var item in this.stackModules.Children)
-                {
-                    stringBuilder.Append((item as TextBlock).Text);
-                    stringBuilder.Append(Environment.NewLine);
-                }
-
-                File.WriteAllText(saveFileDialog.FileName, stringBuilder.ToString());
+                return;
             }
+
+            foreach (var item in this.stackModules.Children)
+            {
+                stringBuilder.Append(((TextBlock) item).Text);
+
+                stringBuilder.Append(Environment.NewLine);
+            }
+
+            File.WriteAllText(saveFileDialog.FileName, stringBuilder.ToString());
+        }
+
+        private void ButtonBase_OnClick(object sender, RoutedEventArgs e)
+        {
+            this.GetRemoteBranches();
+
+            /**
+            if (Directory.Exists(Properties.Settings.Default.RepoPath))
+            {
+                Directory.Delete(Properties.Settings.Default.RepoPath);
+            }
+            /**/
         }
     }
 }

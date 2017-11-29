@@ -1,13 +1,10 @@
-﻿using Formiik.DependenciesAnalyzer.Core.Entities;
-using Formiik.DependenciesAnalyzer.Core.Parser;
-using LibGit2Sharp;
-using LibGit2Sharp.Handlers;
-using Microsoft.CodeAnalysis;
-using Microsoft.CodeAnalysis.MSBuild;
-using System;
+﻿using System;
 using System.Collections.Generic;
 using System.Diagnostics;
 using System.Linq;
+using Formiik.DependenciesAnalyzer.Core.Entities;
+using LibGit2Sharp;
+using Microsoft.CodeAnalysis;
 
 namespace Formiik.DependenciesAnalyzer.Core
 {
@@ -20,10 +17,7 @@ namespace Formiik.DependenciesAnalyzer.Core
 
             using (var repo = new Repository(pathRepo))
             {
-                foreach (var branch in repo.Branches)
-                {
-                    branches.Add(branch);
-                }
+                branches.AddRange(repo.Branches);
             }
 
             return branches;
@@ -31,14 +25,18 @@ namespace Formiik.DependenciesAnalyzer.Core
 
         public void CloneRepository(string user, string password, string repoPath, string remoteRepo)
         {
-            var cloneOptions = new CloneOptions();
-
-            cloneOptions.CredentialsProvider = (_url, _user, _cred) =>
-            new UsernamePasswordCredentials
+            var cloneOptions = new CloneOptions
             {
-                Username = user,
-                Password = password
+                CredentialsProvider = delegate
+                {
+                    return new UsernamePasswordCredentials
+                    {
+                        Username = user,
+                        Password = password
+                    };
+                }
             };
+
 
             var localRepoPath = UtilsGit.CanonizeGitPath(repoPath);
 
@@ -51,7 +49,7 @@ namespace Formiik.DependenciesAnalyzer.Core
 
             using (var repo = new Repository(pathRepo))
             {
-                Branch remoteBranch = repo.Branches[branchName];
+                var remoteBranch = repo.Branches[branchName];
 
                 if (remoteBranch == null)
                 {
@@ -60,14 +58,14 @@ namespace Formiik.DependenciesAnalyzer.Core
 
                 try
                 {
-                    Branch newLocalBranch = repo.CreateBranch(onlyNameBranch, remoteBranch.Tip);
+                    var newLocalBranch = repo.CreateBranch(onlyNameBranch, remoteBranch.Tip);
 
                     repo.Branches.Update(newLocalBranch,
                         b => b.TrackedBranch = remoteBranch.CanonicalName);
 
-                    Branch trackingBranch = repo.Branches[onlyNameBranch];
+                    var trackingBranch = repo.Branches[onlyNameBranch];
 
-                    trackingBranch = Commands.Checkout(repo, trackingBranch);
+                    Commands.Checkout(repo, trackingBranch);
                 }
                 catch (NameConflictException)
                 {
@@ -80,17 +78,18 @@ namespace Formiik.DependenciesAnalyzer.Core
         {
             using (var repo = new Repository(pathRepo))
             {
-                PullOptions options = new PullOptions();
-
-                options.FetchOptions = new FetchOptions();
-
-                options.FetchOptions.CredentialsProvider = new CredentialsHandler(
-                    (url, usernameFromUrl, types) =>
-                        new UsernamePasswordCredentials()
-                        {
-                            Username = username,
-                            Password = password
-                        });
+                var options = new PullOptions
+                {
+                    FetchOptions = new FetchOptions
+                    {
+                        CredentialsProvider = (url, usernameFromUrl, types) =>
+                            new UsernamePasswordCredentials()
+                            {
+                                Username = username,
+                                Password = password
+                            }
+                    }
+                };
 
                 var signature = new Signature(username, email, new DateTimeOffset(DateTime.Now));
 
@@ -102,7 +101,7 @@ namespace Formiik.DependenciesAnalyzer.Core
         {
             using (var repo = new Repository(pathRepo))
             {
-                foreach (TreeEntryChanges c in repo.Diff.Compare<TreeChanges>(repo.Head.Tip.Tree, DiffTargets.Index | DiffTargets.WorkingDirectory))
+                foreach (var c in repo.Diff.Compare<TreeChanges>(repo.Head.Tip.Tree, DiffTargets.Index | DiffTargets.WorkingDirectory))
                 {
                     Debug.WriteLine(c);
                 }
@@ -111,33 +110,31 @@ namespace Formiik.DependenciesAnalyzer.Core
 
         public List<string> GetFilesChanged(string pathRepo, string branchName)
         {
-            ProcessStartInfo startInfo = new ProcessStartInfo("git.exe");
+            var startInfo = new ProcessStartInfo("git.exe")
+            {
+                WindowStyle = ProcessWindowStyle.Normal,
+                UseShellExecute = false,
+                WorkingDirectory = pathRepo,
+                RedirectStandardInput = true,
+                RedirectStandardOutput = true,
+                Arguments = $"checkout {branchName}"
+            };
 
-            startInfo.WindowStyle = ProcessWindowStyle.Normal;
-
-            startInfo.UseShellExecute = false;
-
-            startInfo.WorkingDirectory = pathRepo;
-
-            startInfo.RedirectStandardInput = true;
-
-            startInfo.RedirectStandardOutput = true;
-
-            startInfo.Arguments = string.Format("checkout {0}", branchName);
-
-            Process process = new Process();
-
-            process.StartInfo = startInfo;
+            var process = new Process
+            {
+                StartInfo = startInfo
+            };
 
             process.Start();
 
+            // ReSharper disable once UseStringInterpolation
             startInfo.Arguments = string.Format("diff --name-status origin/master...{0}", branchName);
 
             process.Start();
 
             var output = new List<string>();
 
-            string lineValue = process.StandardOutput.ReadLine();
+            var lineValue = process.StandardOutput.ReadLine();
 
             while (lineValue != null)
             {
@@ -145,8 +142,6 @@ namespace Formiik.DependenciesAnalyzer.Core
 
                 lineValue = process.StandardOutput.ReadLine();
             }
-
-            int val = output.Count();
 
             process.WaitForExit();
 
@@ -157,7 +152,7 @@ namespace Formiik.DependenciesAnalyzer.Core
         {
             var result = new List<string>();
 
-            var fullPathFile = string.Format("{0}{1}", pathRepo, pathFileRelative.Replace('/', '\\'));
+            // ReSharper disable once UseStringInterpolation
 
             using (var methodAnalyzer = new MethodAnalyzer())
             {
@@ -180,7 +175,7 @@ namespace Formiik.DependenciesAnalyzer.Core
 
         public List<Component> GetComponents(Solution solution)
         {
-            List<Component> components = null;
+            List<Component> components;
 
             using (var methodAnalyzer = new MethodAnalyzer())
             {
@@ -192,39 +187,37 @@ namespace Formiik.DependenciesAnalyzer.Core
 
         public List<string> GetListMethodsOfFileModified(string pathRepo, string branchName, Solution solution, string pathFileRelative)
         {
-            var fullPathFile = string.Format("{0}{1}", pathRepo, pathFileRelative.Replace('/', '\\')); 
-
             var result = new List<string>();
 
-            ProcessStartInfo startInfo = new ProcessStartInfo("git.exe");
+            var startInfo = new ProcessStartInfo("git.exe")
+            {
+                WindowStyle = ProcessWindowStyle.Normal,
+                UseShellExecute = false,
+                WorkingDirectory = pathRepo,
+                RedirectStandardInput = true,
+                RedirectStandardOutput = true,
+                // ReSharper disable once UseStringInterpolation
+                Arguments = string.Format("checkout {0}", branchName)
+            };
 
-            startInfo.WindowStyle = ProcessWindowStyle.Normal;
-
-            startInfo.UseShellExecute = false;
-
-            startInfo.WorkingDirectory = pathRepo;
-
-            startInfo.RedirectStandardInput = true;
-
-            startInfo.RedirectStandardOutput = true;
-
-            startInfo.Arguments = string.Format("checkout {0}", branchName);
-
-            Process process = new Process();
-
-            process.StartInfo = startInfo;
+            var process = new Process
+            {
+                StartInfo = startInfo
+            };
 
             process.Start();
 
             pathFileRelative = pathFileRelative.Replace("\\", "/");
 
+            // ReSharper disable once UseStringInterpolation
             startInfo.Arguments = string.Format("diff {0}:.{1} origin/master:.{2}", branchName, pathFileRelative, pathFileRelative);
 
             process.Start();
 
+            // ReSharper disable once CollectionNeverQueried.Local
             var output = new List<string>();
 
-            string lineValue = process.StandardOutput.ReadLine();
+            var lineValue = process.StandardOutput.ReadLine();
 
             while (lineValue != null)
             {
@@ -236,7 +229,7 @@ namespace Formiik.DependenciesAnalyzer.Core
                     {
                         var numberString = tokens.First().Remove(0, 4).Trim();
 
-                        int numberLine = 0;
+                        int numberLine;
 
                         if (int.TryParse(numberString, out numberLine))
                         {
@@ -258,8 +251,6 @@ namespace Formiik.DependenciesAnalyzer.Core
                 lineValue = process.StandardOutput.ReadLine();
             }
 
-            int val = output.Count();
-
             process.WaitForExit();
 
             return result;
@@ -268,13 +259,6 @@ namespace Formiik.DependenciesAnalyzer.Core
         public void Dispose()
         {
             GC.SuppressFinalize(this);
-        }
-        #endregion
-
-        #region Private Methods
-        private void Workspace_WorkspaceFailed(object sender, WorkspaceDiagnosticEventArgs e)
-        {
-            Debug.WriteLine(e.Diagnostic.Message);
         }
         #endregion
     }

@@ -3,7 +3,7 @@ using System.Windows;
 
 namespace Formiik.DependenciesAnalyzer
 {
-    public partial class RemoteRepo : Window
+    public partial class RemoteRepo
     {
         #region Events
         public event RemoteRepoInfoDelegate RemoteRepoInfoEvent;
