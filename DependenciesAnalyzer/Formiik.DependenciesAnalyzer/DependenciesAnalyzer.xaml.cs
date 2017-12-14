@@ -1196,14 +1196,31 @@ namespace Formiik.DependenciesAnalyzer
 
         private void ButtonBase_OnClick(object sender, RoutedEventArgs e)
         {
-            this.GetRemoteBranches();
-
-            /**
-            if (Directory.Exists(Properties.Settings.Default.RepoPath))
+            try
             {
-                Directory.Delete(Properties.Settings.Default.RepoPath);
+                Directory.Delete(Properties.Settings.Default.RepoPath, true);
+
+                Directory.CreateDirectory(Properties.Settings.Default.RepoPath);
+
+                using (var gitActionsManager = new GitActionsManager())
+                {
+                    gitActionsManager.CloneRepository(
+                        Properties.Settings.Default.UserRemoteRepo,
+                        Properties.Settings.Default.PasswordRemoteRepo,
+                        Properties.Settings.Default.RepoPath,
+                        Properties.Settings.Default.RemoteRepoUrl);
+                }
+
+                this.GetRemoteBranches();
             }
-            /**/
+            catch (Exception exception)
+            {
+                System.Windows.MessageBox.Show(
+                    "There was an error trying to refresh all branches.",
+                    "Error",
+                    MessageBoxButton.OK,
+                    MessageBoxImage.Error);
+            }
         }
     }
 }
