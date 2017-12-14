@@ -87,7 +87,7 @@
                             Margin="10,10,0,0" 
                             Label="Refresh Branches" 
                             HorizontalAlignment="Center" 
-                            Click="ButtonBase_OnClick">
+                            Click="Refresh_Click">
                         </RibbonButton>
                         <RibbonButton
                             x:Name="btnFetchCheckout" 

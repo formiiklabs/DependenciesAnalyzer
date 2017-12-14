@@ -95,12 +95,6 @@ namespace Formiik.DependenciesAnalyzer
                 }
 
                 this.SetRepository(remoteRepoParam, user, password);
-
-                System.Windows.MessageBox.Show(
-                    "Local repository configured correctly",
-                    "Information",
-                    MessageBoxButton.OK,
-                    MessageBoxImage.Information);
             }
             catch (Exception ex)
             {
@@ -177,6 +171,8 @@ namespace Formiik.DependenciesAnalyzer
         {
             try
             {
+                this.itemsRemoteBranches.Clear();
+
                 using (var gitActions = new GitActionsManager())
                 {
                     this.remoteBranches = gitActions.GetBranches(Properties.Settings.Default.RepoPath).Where(x => x.IsRemote).ToList();
@@ -1194,21 +1190,16 @@ namespace Formiik.DependenciesAnalyzer
             File.WriteAllText(saveFileDialog.FileName, stringBuilder.ToString());
         }
 
-        private void ButtonBase_OnClick(object sender, RoutedEventArgs e)
+        private void Refresh_Click(object sender, RoutedEventArgs e)
         {
             try
             {
-                Directory.Delete(Properties.Settings.Default.RepoPath, true);
-
-                Directory.CreateDirectory(Properties.Settings.Default.RepoPath);
-
                 using (var gitActionsManager = new GitActionsManager())
                 {
-                    gitActionsManager.CloneRepository(
+                    gitActionsManager.FetchUpdates(
+                        Properties.Settings.Default.RepoPath, 
                         Properties.Settings.Default.UserRemoteRepo,
-                        Properties.Settings.Default.PasswordRemoteRepo,
-                        Properties.Settings.Default.RepoPath,
-                        Properties.Settings.Default.RemoteRepoUrl);
+                        Properties.Settings.Default.PasswordRemoteRepo);
                 }
 
                 this.GetRemoteBranches();

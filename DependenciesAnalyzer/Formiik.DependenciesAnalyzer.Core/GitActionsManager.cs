@@ -5,6 +5,7 @@ using System.Linq;
 using Formiik.DependenciesAnalyzer.Core.Entities;
 using LibGit2Sharp;
 using Microsoft.CodeAnalysis;
+using LibGit2Sharp.Handlers;
 
 namespace Formiik.DependenciesAnalyzer.Core
 {
@@ -254,6 +255,32 @@ namespace Formiik.DependenciesAnalyzer.Core
             process.WaitForExit();
 
             return result;
+        }
+
+        public void FetchUpdates(string pathRepo, string username, string password)
+        {
+            string logMessage = "";
+
+            using (var repo = new Repository(pathRepo))
+            {
+                FetchOptions options = new FetchOptions();
+
+                options.CredentialsProvider = new CredentialsHandler((url, usernameFromUrl, types) =>
+                    new UsernamePasswordCredentials()
+                    {
+                        Username = username,
+                        Password = password
+                    });
+
+                foreach (Remote remote in repo.Network.Remotes)
+                {
+                    IEnumerable<string> refSpecs = remote.FetchRefSpecs.Select(x => x.Specification);
+
+                    Commands.Fetch(repo, remote.Name, refSpecs, options, logMessage);
+                }
+            }
+
+            Console.WriteLine(logMessage);
         }
 
         public void Dispose()

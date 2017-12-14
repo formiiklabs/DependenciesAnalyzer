@@ -78,3 +78,8 @@ C:\formiiklabs\DependenciesAnalyzer\DependenciesAnalyzer\Formiik.DependenciesAna
 C:\formiiklabs\DependenciesAnalyzer\DependenciesAnalyzer\Formiik.DependenciesAnalyzer\obj\Release\Formiik.DependenciesAnalyzer.csproj.GenerateResource.Cache
 C:\formiiklabs\DependenciesAnalyzer\DependenciesAnalyzer\Formiik.DependenciesAnalyzer\obj\Release\Formiik.DependenciesAnalyzer.exe
 C:\formiiklabs\DependenciesAnalyzer\DependenciesAnalyzer\Formiik.DependenciesAnalyzer\obj\Release\Formiik.DependenciesAnalyzer.pdb
+C:\formiiklabs\DependenciesAnalyzer\DependenciesAnalyzer\Formiik.DependenciesAnalyzer\bin\Release\MaterialDesignColors.dll
+C:\formiiklabs\DependenciesAnalyzer\DependenciesAnalyzer\Formiik.DependenciesAnalyzer\bin\Release\MaterialDesignThemes.Wpf.dll
+C:\formiiklabs\DependenciesAnalyzer\DependenciesAnalyzer\Formiik.DependenciesAnalyzer\bin\Release\MaterialDesignThemes.Wpf.pdb
+C:\formiiklabs\DependenciesAnalyzer\DependenciesAnalyzer\Formiik.DependenciesAnalyzer\bin\Release\MaterialDesignThemes.Wpf.xml
+C:\formiiklabs\DependenciesAnalyzer\DependenciesAnalyzer\Formiik.DependenciesAnalyzer\obj\Release\App.baml
