@@ -17,7 +17,8 @@
         TextOptions.TextFormattingMode="Ideal"
         TextOptions.TextRenderingMode="Auto"
         Background="{DynamicResource MaterialDesignPaper}"
-        FontFamily="{DynamicResource MaterialDesignFont}">
+        FontFamily="{DynamicResource MaterialDesignFont}" 
+        Icon="Images\monitor.ico">
     <Grid>
         <Grid.RowDefinitions>
             <RowDefinition Height="auto"></RowDefinition>
@@ -25,8 +26,14 @@
         </Grid.RowDefinitions>
         <Ribbon x:Name="RibbonTool" SelectedIndex="0">
             <Ribbon.ApplicationMenu>
-                <RibbonApplicationMenu KeyTip="F">
-                    <RibbonApplicationMenuItem Header="Exit"></RibbonApplicationMenuItem>
+                <RibbonApplicationMenu KeyTip="F" 
+                                       LargeImageSource="Images\large\app.png"
+                                       SmallImageSource="Images\small\app.png">
+                    <RibbonApplicationMenuItem 
+                        Header="Exit" 
+                        ImageSource="Images\exit.png" 
+                        Click="RibbonApplicationMenuItem_Click">
+                    </RibbonApplicationMenuItem>
                 </RibbonApplicationMenu>
             </Ribbon.ApplicationMenu>
             <RibbonTab Header="Configuration" KeyTip="C">
@@ -39,7 +46,9 @@
                             x:Name="btnSetRepository" 
                             Label="Set Remote Repository" 
                             HorizontalAlignment="Center" 
-                            Click="BtnSetRepository_Click">
+                            Click="BtnSetRepository_Click" 
+                            LargeImageSource="Images\large\set-remote-repository.png" 
+                            SmallImageSource="Images\small\set-remote-repository.png">
                         </RibbonButton>
                     </Grid>
                 </RibbonGroup>
@@ -57,7 +66,9 @@
                             Grid.RowSpan="2"
                             Label="Set Work Directory" 
                             HorizontalAlignment="Center"
-                            Click="BtnSeleccionarRepo_Click">
+                            Click="BtnSeleccionarRepo_Click" 
+                            LargeImageSource="Images\large\work-directory.png" 
+                            SmallImageSource="Images\small\work-directory.png">
                         </RibbonButton>
                     </Grid>
                 </RibbonGroup>
@@ -85,17 +96,21 @@
                             x:Name="btnRefresh" 
                             Grid.Column="1"  
                             Margin="10,10,0,0" 
-                            Label="Refresh Branches" 
+                            Label="Refresh" 
                             HorizontalAlignment="Center" 
-                            Click="Refresh_Click">
+                            Click="Refresh_Click" 
+                            LargeImageSource="Images\large\refresh.png" 
+                            SmallImageSource="Images\small\refresh.png">
                         </RibbonButton>
                         <RibbonButton
                             x:Name="btnFetchCheckout" 
                             Grid.Column="2" 
                             Margin="10,10,0,0"
-                            Label="Checkout Branch" 
+                            Label="Checkout" 
                             HorizontalAlignment="Center" 
-                            Click="BtnFetchCheckout_Click">
+                            Click="BtnFetchCheckout_Click" 
+                            LargeImageSource="Images\large\checkout.png" 
+                            SmallImageSource="Images\small\checkout.png">
                         </RibbonButton>
                     </Grid>
                 </RibbonGroup>
@@ -104,7 +119,9 @@
                         x:Name="btnPull"
                         Label="Pull Changes From Server" 
                         HorizontalAlignment="Center" 
-                        Click="BtnPull_Click">
+                        Click="BtnPull_Click" 
+                        LargeImageSource="Images\large\pull.png" 
+                        SmallImageSource="Images\small\pull.png">
                     </RibbonButton>
                 </RibbonGroup>
                 <RibbonGroup x:Name="Analyze" Header="Analyze">
@@ -112,7 +129,9 @@
                         x:Name="btnAnalyze" 
                         Label="Start Analysis"
                         HorizontalAlignment="Center" 
-                        Click="BtnAnalyze_Click" >
+                        Click="BtnAnalyze_Click" 
+                        LargeImageSource="Images\large\start.png" 
+                        SmallImageSource="Images\small\start.png">
                     </RibbonButton>
                 </RibbonGroup>
                 <RibbonGroup x:Name="Scan" Header="Scan">
@@ -121,7 +140,9 @@
                         Label="Scan All Components" 
                         ToolTip="Scan the solution for to found all components that can affect."
                         HorizontalAlignment="Center"
-                        Click="BtnScan_Click">
+                        Click="BtnScan_Click" 
+                        LargeImageSource="Images\large\scan.png" 
+                        SmallImageSource="Images\small\scan.png">
                     </RibbonButton>
                 </RibbonGroup>
             </RibbonTab>

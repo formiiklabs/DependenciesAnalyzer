@@ -304,14 +304,28 @@
   <ItemGroup>
     <Resource Include="monitor.ico" />
     <Resource Include="Images\monitor.ico" />
+    <Resource Include="Images\large\set-remote-repository.png" />
+    <Resource Include="Images\small\set-remote-repository.png" />
+    <Resource Include="Images\large\work-directory.png" />
+    <Resource Include="Images\small\work-directory.png" />
+    <Resource Include="Images\large\refresh.png" />
+    <Resource Include="Images\small\refresh.png" />
+    <Resource Include="Images\large\checkout.png" />
+    <Resource Include="Images\small\checkout.png" />
+    <Resource Include="Images\large\pull.png" />
+    <Resource Include="Images\small\pull.png" />
+    <Resource Include="Images\large\start.png" />
+    <Resource Include="Images\small\start.png" />
+    <Resource Include="Images\large\scan.png" />
+    <Resource Include="Images\small\scan.png" />
+    <Resource Include="Images\exit.png" />
+    <Resource Include="Images\large\app.png" />
+    <Resource Include="Images\small\app.png" />
     <Content Include="Libraries\Microsoft.Msagl.dll" />
     <Content Include="Libraries\Microsoft.Msagl.Drawing.dll" />
     <Content Include="Libraries\Microsoft.Msagl.WpfGraphControl.dll" />
   </ItemGroup>
-  <ItemGroup>
-    <Folder Include="Images\large\" />
-    <Folder Include="Images\small\" />
-  </ItemGroup>
+  <ItemGroup />
   <ItemGroup>
     <BootstrapperPackage Include=".NETFramework,Version=v4.6.1">
       <Visible>False</Visible>

@@ -111,7 +111,7 @@ namespace Formiik.DependenciesAnalyzer.Core
 
         public List<string> GetFilesChanged(string pathRepo, string branchName)
         {
-            var startInfo = new ProcessStartInfo(@"C:\Program Files\Git\git-bash.exe")
+            var startInfo = new ProcessStartInfo(@"C:\Program Files\Git\cmd\git.exe")
             {
                 WindowStyle = ProcessWindowStyle.Normal,
                 UseShellExecute = false,
@@ -190,7 +190,7 @@ namespace Formiik.DependenciesAnalyzer.Core
         {
             var result = new List<string>();
 
-            var startInfo = new ProcessStartInfo("git.exe")
+            var startInfo = new ProcessStartInfo(@"C:\Program Files\Git\cmd\git.exe")
             {
                 WindowStyle = ProcessWindowStyle.Normal,
                 UseShellExecute = false,

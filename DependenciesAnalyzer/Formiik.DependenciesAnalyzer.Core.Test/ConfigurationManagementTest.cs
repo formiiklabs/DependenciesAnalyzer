@@ -67,7 +67,7 @@ namespace Formiik.DependenciesAnalyzer.Test
         {
             var gitActionsManager = new GitActionsManager();
 
-            var repoPath = @"C:\Formiik2\formiik-backend";
+            var repoPath = @"C:\Analyzer";
 
             var archivosChanged = gitActionsManager.GetFilesChanged(repoPath, "DoublePersistentAndCalendar2");
 
@@ -101,13 +101,13 @@ namespace Formiik.DependenciesAnalyzer.Test
             {
                 var gitActionsManager = new GitActionsManager();
 
-                var repoPath = @"C:\Test";
+                var repoPath = @"C:\Analyzer";
 
                 var branchName = "TestBranchDepend";
 
                 var pathFileRelative = "/Mobiik.Popcorn/Infrastructure/Mobiik.Formiik.DataBasePersistence/GeofencePersistance.cs";
 
-                var solutionPath = @"C:\Test\Mobiik.Popcorn\Mobiik.Popcorn.sln";
+                var solutionPath = @"C:\Analyzer\Mobiik.Popcorn\Mobiik.Popcorn.sln";
 
                 var workspace = MSBuildWorkspace.Create();
 

@@ -167,11 +167,17 @@ namespace Formiik.DependenciesAnalyzer
             this.lblPathRepo.Content = UtilsGit.CanonizeGitPath(folderPath);
         }
 
-        private void GetRemoteBranches()
+        private bool GetRemoteBranches()
         {
+            var result = true;
+
             try
             {
-                this.itemsRemoteBranches.Clear();
+                try
+                {
+                    this.itemsRemoteBranches.Clear();
+                }
+                catch { }
 
                 using (var gitActions = new GitActionsManager())
                 {
@@ -196,6 +202,8 @@ namespace Formiik.DependenciesAnalyzer
                     "Information",
                     MessageBoxButton.OK,
                     MessageBoxImage.Information);
+
+                result = false;
             }
             catch (Exception exception)
             {
@@ -206,7 +214,11 @@ namespace Formiik.DependenciesAnalyzer
                     "Error",
                     MessageBoxButton.OK,
                     MessageBoxImage.Error);
+
+                result = false;
             }
+
+            return result;
         }
 
         private void BtnFetchCheckout_Click(object sender, RoutedEventArgs e)
@@ -1202,7 +1214,14 @@ namespace Formiik.DependenciesAnalyzer
                         Properties.Settings.Default.PasswordRemoteRepo);
                 }
 
-                this.GetRemoteBranches();
+                if (this.GetRemoteBranches())
+                {
+                    System.Windows.MessageBox.Show(
+                            "Branches updated succesfully from remote to local",
+                            "Information",
+                            MessageBoxButton.OK,
+                            MessageBoxImage.None);
+                }
             }
             catch (Exception exception)
             {
@@ -1211,7 +1230,14 @@ namespace Formiik.DependenciesAnalyzer
                     "Error",
                     MessageBoxButton.OK,
                     MessageBoxImage.Error);
+
+                Console.WriteLine(exception.Message);
             }
+        }
+
+        private void RibbonApplicationMenuItem_Click(object sender, RoutedEventArgs e)
+        {
+            System.Windows.Application.Current.Shutdown();
         }
     }
 }
