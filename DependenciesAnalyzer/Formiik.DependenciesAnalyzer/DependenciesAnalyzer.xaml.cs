@@ -197,8 +197,7 @@ namespace Formiik.DependenciesAnalyzer
             catch (RepositoryNotFoundException)
             {
                 System.Windows.MessageBox.Show(
-                    // ReSharper disable once UseStringInterpolation
-                    string.Format("The path {0} is not a valid Git repository", Properties.Settings.Default.RepoPath),
+                    "The path is not a valid Git repository",
                     "Information",
                     MessageBoxButton.OK,
                     MessageBoxImage.Information);
@@ -778,6 +777,12 @@ namespace Formiik.DependenciesAnalyzer
                         
                     if (fileSet.Modified.Any())
                     {
+                        var workspace = MSBuildWorkspace.Create();
+
+                        workspace.WorkspaceFailed += Workspace_WorkspaceFailed;
+
+                        var solution = workspace.OpenSolutionAsync(solutionFile).Result;
+
                         fileSet.Modified.ForEach(file =>
                         {
                             if (!file.StartsWith("/"))
@@ -793,19 +798,12 @@ namespace Formiik.DependenciesAnalyzer
 
                             using (var gitActionsManager = new GitActionsManager())
                             {
-                                var workspace = MSBuildWorkspace.Create();
-
-                                workspace.WorkspaceFailed += Workspace_WorkspaceFailed;
-
-                                var solution = workspace.OpenSolutionAsync(solutionFile).Result;
 
                                 var result = gitActionsManager.GetListMethodsOfFileModified(
                                     arguments.RepoPath,
                                     arguments.SelectedBranch,
                                     solution,
                                     file);
-
-                                workspace.CloseSolution();
 
                                 if (result.Any())
                                 {
@@ -819,10 +817,18 @@ namespace Formiik.DependenciesAnalyzer
                                 }
                             }
                         });
+
+                        workspace.CloseSolution();
                     }
 
                     if (fileSet.Added.Any())
                     {
+                        var workspace = MSBuildWorkspace.Create();
+
+                        workspace.WorkspaceFailed += Workspace_WorkspaceFailed;
+
+                        var solution = workspace.OpenSolutionAsync(solutionFile).Result;
+
                         fileSet.Added.ForEach(file =>
                         {
                             if (!file.StartsWith("/"))
@@ -838,18 +844,10 @@ namespace Formiik.DependenciesAnalyzer
 
                             using (var gitActionsManager = new GitActionsManager())
                             {
-                                var workspace = MSBuildWorkspace.Create();
-
-                                workspace.WorkspaceFailed += Workspace_WorkspaceFailed;
-
-                                var solution = workspace.OpenSolutionAsync(solutionFile).Result;
-
                                 var result = gitActionsManager.GetListMethodsOfFile(
                                     arguments.RepoPath, 
                                     solution,
                                     file);
-
-                                workspace.CloseSolution();
 
                                 if (result.Any())
                                 {
@@ -863,6 +861,8 @@ namespace Formiik.DependenciesAnalyzer
                                 }
                             }
                         });
+
+                        workspace.CloseSolution();
                     }
 
                     if (methodsObserved.Any())

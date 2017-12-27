@@ -118,6 +118,7 @@ namespace Formiik.DependenciesAnalyzer.Core
                 WorkingDirectory = pathRepo,
                 RedirectStandardInput = true,
                 RedirectStandardOutput = true,
+                CreateNoWindow = true,
                 Arguments = $"checkout {branchName}"
             };
 
@@ -129,7 +130,7 @@ namespace Formiik.DependenciesAnalyzer.Core
             process.Start();
 
             // ReSharper disable once UseStringInterpolation
-            startInfo.Arguments = string.Format("diff --name-status origin/master...{0}", branchName);
+            startInfo.Arguments = $"diff --name-status origin/master...{branchName}";
 
             process.Start();
 
@@ -197,8 +198,8 @@ namespace Formiik.DependenciesAnalyzer.Core
                 WorkingDirectory = pathRepo,
                 RedirectStandardInput = true,
                 RedirectStandardOutput = true,
-                // ReSharper disable once UseStringInterpolation
-                Arguments = string.Format("checkout {0}", branchName)
+                CreateNoWindow = true,
+                Arguments = $"checkout {branchName}"
             };
 
             var process = new Process
@@ -211,7 +212,7 @@ namespace Formiik.DependenciesAnalyzer.Core
             pathFileRelative = pathFileRelative.Replace("\\", "/");
 
             // ReSharper disable once UseStringInterpolation
-            startInfo.Arguments = string.Format("diff {0}:.{1} origin/master:.{2}", branchName, pathFileRelative, pathFileRelative);
+            startInfo.Arguments = $"diff {branchName}:.{pathFileRelative} origin/master:.{pathFileRelative}";
 
             process.Start();
 
