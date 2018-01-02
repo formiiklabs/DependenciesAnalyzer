@@ -10,9 +10,6 @@ EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Formiik.DependenciesAnalyzer", "Formiik.DependenciesAnalyzer\Formiik.DependenciesAnalyzer.csproj", "{D18287F5-800B-4812-AC15-DD70FA50DD96}"
 EndProject
 Project("{6141683F-8A12-4E36-9623-2EB02B2C2303}") = "Formiik.DependenciesAnalyzer.Installer", "Formiik.DependenciesAnalyzer.Installer\Formiik.DependenciesAnalyzer.Installer.isproj", "{BC25BAE5-DB04-4EC7-8B23-39F5C68AE39F}"
-	ProjectSection(ProjectDependencies) = postProject
-		{D18287F5-800B-4812-AC15-DD70FA50DD96} = {D18287F5-800B-4812-AC15-DD70FA50DD96}
-	EndProjectSection
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution

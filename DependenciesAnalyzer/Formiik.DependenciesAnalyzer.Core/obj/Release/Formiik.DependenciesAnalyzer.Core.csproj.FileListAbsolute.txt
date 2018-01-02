@@ -67,7 +67,6 @@ C:\formiiklabs\DependenciesAnalyzer\DependenciesAnalyzer\Formiik.DependenciesAna
 C:\formiiklabs\DependenciesAnalyzer\DependenciesAnalyzer\Formiik.DependenciesAnalyzer.Core\bin\Release\System.Composition.Runtime.xml
 C:\formiiklabs\DependenciesAnalyzer\DependenciesAnalyzer\Formiik.DependenciesAnalyzer.Core\bin\Release\System.Composition.TypedParts.xml
 C:\formiiklabs\DependenciesAnalyzer\DependenciesAnalyzer\Formiik.DependenciesAnalyzer.Core\bin\Release\System.Reflection.Metadata.xml
-C:\formiiklabs\DependenciesAnalyzer\DependenciesAnalyzer\Formiik.DependenciesAnalyzer.Core\obj\Release\Formiik.DependenciesAnalyzer.Core.csprojResolveAssemblyReference.cache
 C:\formiiklabs\DependenciesAnalyzer\DependenciesAnalyzer\Formiik.DependenciesAnalyzer.Core\obj\Release\Formiik.DependenciesAnalyzer.Core.Messages.resources
 C:\formiiklabs\DependenciesAnalyzer\DependenciesAnalyzer\Formiik.DependenciesAnalyzer.Core\obj\Release\Formiik.DependenciesAnalyzer.Core.csproj.GenerateResource.Cache
 C:\formiiklabs\DependenciesAnalyzer\DependenciesAnalyzer\Formiik.DependenciesAnalyzer.Core\obj\Release\Formiik.DependenciesAnalyzer.Core.dll
