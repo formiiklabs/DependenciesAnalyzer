@@ -340,6 +340,26 @@
 		<col def="S0">ISDotNetInstallerArgsUninstall</col>
 		<col def="S0">ISDotNetInstallerArgsRollback</col>
 		<row><td>Formiik.DependenciesAnalyzer.Primary_output</td><td>{3CB6CC1D-FFED-4480-9FEF-695F55070ADA}</td><td>INSTALLDIR</td><td>2</td><td/><td>formiik.dependenciesanalyzer</td><td>17</td><td/><td/><td/><td>/LogFile=</td><td>/LogFile=</td><td>/LogFile=</td><td>/LogFile=</td></row>
+		<row><td>Formiik.DependenciesAnalyzer.Primary_output1</td><td>{D2EBFAF3-8CFB-46C7-8DDC-07F57AAEB93C}</td><td>INSTALLDIR</td><td>2</td><td/><td>formiik.dependenciesanalyzer1</td><td>17</td><td/><td/><td/><td>/LogFile=</td><td>/LogFile=</td><td>/LogFile=</td><td>/LogFile=</td></row>
+		<row><td>ISX_DEFAULTCOMPONENT</td><td>{6AE2C021-CF7D-418B-982D-66A3768D30F8}</td><td>LIB</td><td>2</td><td/><td/><td>17</td><td/><td/><td/><td>/LogFile=</td><td>/LogFile=</td><td>/LogFile=</td><td>/LogFile=</td></row>
+		<row><td>ISX_DEFAULTCOMPONENT1</td><td>{26540B6A-E844-487F-BBE3-1D64C752B1D3}</td><td>LINUX</td><td>2</td><td/><td/><td>17</td><td/><td/><td/><td>/LogFile=</td><td>/LogFile=</td><td>/LogFile=</td><td>/LogFile=</td></row>
+		<row><td>ISX_DEFAULTCOMPONENT10</td><td>{2F6A5A1F-AE74-4969-9A82-BDE02D467CE9}</td><td>X86_641</td><td>2</td><td/><td/><td>17</td><td/><td/><td/><td>/LogFile=</td><td>/LogFile=</td><td>/LogFile=</td><td>/LogFile=</td></row>
+		<row><td>ISX_DEFAULTCOMPONENT11</td><td>{4ABED99E-CE3C-4B48-9EB1-B9ADF0B58A3D}</td><td>OSX1</td><td>2</td><td/><td/><td>17</td><td/><td/><td/><td>/LogFile=</td><td>/LogFile=</td><td>/LogFile=</td><td>/LogFile=</td></row>
+		<row><td>ISX_DEFAULTCOMPONENT12</td><td>{6977B8E2-8A2A-4B0B-9ADF-05223E059F06}</td><td>WIN321</td><td>2</td><td/><td/><td>17</td><td/><td/><td/><td>/LogFile=</td><td>/LogFile=</td><td>/LogFile=</td><td>/LogFile=</td></row>
+		<row><td>ISX_DEFAULTCOMPONENT13</td><td>{24450B8B-2703-4B0F-B080-4556BE7803BC}</td><td>X641</td><td>2</td><td/><td/><td>17</td><td/><td/><td/><td>/LogFile=</td><td>/LogFile=</td><td>/LogFile=</td><td>/LogFile=</td></row>
+		<row><td>ISX_DEFAULTCOMPONENT14</td><td>{97B56272-B28D-4919-924A-237318D3CB3D}</td><td>X861</td><td>2</td><td/><td/><td>17</td><td/><td/><td/><td>/LogFile=</td><td>/LogFile=</td><td>/LogFile=</td><td>/LogFile=</td></row>
+		<row><td>ISX_DEFAULTCOMPONENT2</td><td>{8E5A5A2D-ED1B-4615-982E-B7A02F9C9E90}</td><td>X86_64</td><td>2</td><td/><td/><td>17</td><td/><td/><td/><td>/LogFile=</td><td>/LogFile=</td><td>/LogFile=</td><td>/LogFile=</td></row>
+		<row><td>ISX_DEFAULTCOMPONENT3</td><td>{ED3C282E-BA73-4402-8811-26DCAC4B97E0}</td><td>OSX</td><td>2</td><td/><td/><td>17</td><td/><td/><td/><td>/LogFile=</td><td>/LogFile=</td><td>/LogFile=</td><td>/LogFile=</td></row>
+		<row><td>ISX_DEFAULTCOMPONENT4</td><td>{C6311AB3-9568-42AC-BAB0-E0897722FC13}</td><td>WIN32</td><td>2</td><td/><td/><td>17</td><td/><td/><td/><td>/LogFile=</td><td>/LogFile=</td><td>/LogFile=</td><td>/LogFile=</td></row>
+		<row><td>ISX_DEFAULTCOMPONENT5</td><td>{B5CE79D1-3C8F-49AE-ADC2-1A96824156B0}</td><td>X64</td><td>2</td><td/><td/><td>17</td><td/><td/><td/><td>/LogFile=</td><td>/LogFile=</td><td>/LogFile=</td><td>/LogFile=</td></row>
+		<row><td>ISX_DEFAULTCOMPONENT6</td><td>{AFCBE753-686B-4774-BE76-C39D98B7B58A}</td><td>X86</td><td>2</td><td/><td/><td>17</td><td/><td/><td/><td>/LogFile=</td><td>/LogFile=</td><td>/LogFile=</td><td>/LogFile=</td></row>
+		<row><td>ISX_DEFAULTCOMPONENT7</td><td>{09382BF8-A41F-455D-892B-7F387326D3AB}</td><td>INSTALLDIR</td><td>2</td><td/><td/><td>17</td><td/><td/><td/><td>/LogFile=</td><td>/LogFile=</td><td>/LogFile=</td><td>/LogFile=</td></row>
+		<row><td>ISX_DEFAULTCOMPONENT8</td><td>{9C4AFA6F-8AE8-45B5-8339-F8CF30337385}</td><td>LIB1</td><td>2</td><td/><td/><td>17</td><td/><td/><td/><td>/LogFile=</td><td>/LogFile=</td><td>/LogFile=</td><td>/LogFile=</td></row>
+		<row><td>ISX_DEFAULTCOMPONENT9</td><td>{8C8FB56C-BFAD-4DC1-895B-D3257D2EF821}</td><td>LINUX1</td><td>2</td><td/><td/><td>17</td><td/><td/><td/><td>/LogFile=</td><td>/LogFile=</td><td>/LogFile=</td><td>/LogFile=</td></row>
+		<row><td>git2_15e1193.dll</td><td>{3785A5D6-E0D7-4548-BF8C-70E957A70E97}</td><td>X64</td><td>2</td><td/><td>git2_15e1193.dll</td><td>17</td><td/><td/><td/><td>/LogFile=</td><td>/LogFile=</td><td>/LogFile=</td><td>/LogFile=</td></row>
+		<row><td>git2_15e1193.dll1</td><td>{2BF2CFDC-6546-4876-979D-2F361F47384C}</td><td>X86</td><td>2</td><td/><td>git2_15e1193.dll1</td><td>17</td><td/><td/><td/><td>/LogFile=</td><td>/LogFile=</td><td>/LogFile=</td><td>/LogFile=</td></row>
+		<row><td>git2_15e1193.dll2</td><td>{9EB8306D-6DCF-417B-B0D7-EE48D1A432D4}</td><td>X641</td><td>2</td><td/><td>git2_15e1193.dll2</td><td>17</td><td/><td/><td/><td>/LogFile=</td><td>/LogFile=</td><td>/LogFile=</td><td>/LogFile=</td></row>
+		<row><td>git2_15e1193.dll3</td><td>{35B708FA-84D7-4644-A0F4-1F93DFD65C99}</td><td>X861</td><td>2</td><td/><td>git2_15e1193.dll3</td><td>17</td><td/><td/><td/><td>/LogFile=</td><td>/LogFile=</td><td>/LogFile=</td><td>/LogFile=</td></row>
 	</table>
 
 	<table name="Condition">
@@ -1049,6 +1069,44 @@
 		<col key="yes" def="s72">Directory_</col>
 		<col key="yes" def="s72">Component_</col>
 		<row><td>INSTALLDIR</td><td>Formiik.DependenciesAnalyzer.Primary_output</td></row>
+		<row><td>INSTALLDIR</td><td>Formiik.DependenciesAnalyzer.Primary_output1</td></row>
+		<row><td>INSTALLDIR</td><td>ISX_DEFAULTCOMPONENT</td></row>
+		<row><td>INSTALLDIR</td><td>ISX_DEFAULTCOMPONENT1</td></row>
+		<row><td>INSTALLDIR</td><td>ISX_DEFAULTCOMPONENT10</td></row>
+		<row><td>INSTALLDIR</td><td>ISX_DEFAULTCOMPONENT11</td></row>
+		<row><td>INSTALLDIR</td><td>ISX_DEFAULTCOMPONENT12</td></row>
+		<row><td>INSTALLDIR</td><td>ISX_DEFAULTCOMPONENT13</td></row>
+		<row><td>INSTALLDIR</td><td>ISX_DEFAULTCOMPONENT14</td></row>
+		<row><td>INSTALLDIR</td><td>ISX_DEFAULTCOMPONENT2</td></row>
+		<row><td>INSTALLDIR</td><td>ISX_DEFAULTCOMPONENT3</td></row>
+		<row><td>INSTALLDIR</td><td>ISX_DEFAULTCOMPONENT4</td></row>
+		<row><td>INSTALLDIR</td><td>ISX_DEFAULTCOMPONENT5</td></row>
+		<row><td>INSTALLDIR</td><td>ISX_DEFAULTCOMPONENT6</td></row>
+		<row><td>INSTALLDIR</td><td>ISX_DEFAULTCOMPONENT7</td></row>
+		<row><td>INSTALLDIR</td><td>ISX_DEFAULTCOMPONENT8</td></row>
+		<row><td>INSTALLDIR</td><td>ISX_DEFAULTCOMPONENT9</td></row>
+		<row><td>INSTALLDIR</td><td>git2_15e1193.dll</td></row>
+		<row><td>INSTALLDIR</td><td>git2_15e1193.dll1</td></row>
+		<row><td>INSTALLDIR</td><td>git2_15e1193.dll2</td></row>
+		<row><td>INSTALLDIR</td><td>git2_15e1193.dll3</td></row>
+		<row><td>LIB</td><td>ISX_DEFAULTCOMPONENT</td></row>
+		<row><td>LIB1</td><td>ISX_DEFAULTCOMPONENT8</td></row>
+		<row><td>LINUX</td><td>ISX_DEFAULTCOMPONENT1</td></row>
+		<row><td>LINUX1</td><td>ISX_DEFAULTCOMPONENT9</td></row>
+		<row><td>OSX</td><td>ISX_DEFAULTCOMPONENT3</td></row>
+		<row><td>OSX1</td><td>ISX_DEFAULTCOMPONENT11</td></row>
+		<row><td>WIN32</td><td>ISX_DEFAULTCOMPONENT4</td></row>
+		<row><td>WIN321</td><td>ISX_DEFAULTCOMPONENT12</td></row>
+		<row><td>X64</td><td>ISX_DEFAULTCOMPONENT5</td></row>
+		<row><td>X64</td><td>git2_15e1193.dll</td></row>
+		<row><td>X641</td><td>ISX_DEFAULTCOMPONENT13</td></row>
+		<row><td>X641</td><td>git2_15e1193.dll2</td></row>
+		<row><td>X86</td><td>ISX_DEFAULTCOMPONENT6</td></row>
+		<row><td>X86</td><td>git2_15e1193.dll1</td></row>
+		<row><td>X861</td><td>ISX_DEFAULTCOMPONENT14</td></row>
+		<row><td>X861</td><td>git2_15e1193.dll3</td></row>
+		<row><td>X86_64</td><td>ISX_DEFAULTCOMPONENT2</td></row>
+		<row><td>X86_641</td><td>ISX_DEFAULTCOMPONENT10</td></row>
 	</table>
 
 	<table name="CustomAction">
@@ -1145,10 +1203,16 @@
 		<row><td>ISMyCompanyDir</td><td>ProgramFilesFolder</td><td>MYCOMP~1|My Company Name</td><td/><td>0</td><td/></row>
 		<row><td>ISMyProductDir</td><td>ISMyCompanyDir</td><td>MYPROD~1|My Product Name</td><td/><td>0</td><td/></row>
 		<row><td>ISYourDataBaseDir</td><td>INSTALLDIR</td><td>Database</td><td/><td>0</td><td/></row>
+		<row><td>LIB</td><td>DATABASEDIR</td><td>lib</td><td/><td>0</td><td/></row>
+		<row><td>LIB1</td><td>INSTALLDIR</td><td>lib</td><td/><td>0</td><td/></row>
+		<row><td>LINUX</td><td>LIB</td><td>linux</td><td/><td>0</td><td/></row>
+		<row><td>LINUX1</td><td>LIB1</td><td>linux</td><td/><td>0</td><td/></row>
 		<row><td>LocalAppDataFolder</td><td>TARGETDIR</td><td>.:LocalA~1|LocalAppData</td><td/><td>0</td><td/></row>
 		<row><td>MY_PRODUCT_NAME</td><td>FORMIIK</td><td>MYPROD~1|My Product Name</td><td/><td>0</td><td/></row>
 		<row><td>MyPicturesFolder</td><td>TARGETDIR</td><td>.:MyPict~1|MyPictures</td><td/><td>0</td><td/></row>
 		<row><td>NetHoodFolder</td><td>TARGETDIR</td><td>.:NetHood</td><td/><td>0</td><td/></row>
+		<row><td>OSX</td><td>LIB</td><td>osx</td><td/><td>0</td><td/></row>
+		<row><td>OSX1</td><td>LIB1</td><td>osx</td><td/><td>0</td><td/></row>
 		<row><td>PersonalFolder</td><td>TARGETDIR</td><td>.:Personal</td><td/><td>0</td><td/></row>
 		<row><td>PrimaryVolumePath</td><td>TARGETDIR</td><td>.:Primar~1|PrimaryVolumePath</td><td/><td>0</td><td/></row>
 		<row><td>PrintHoodFolder</td><td>TARGETDIR</td><td>.:PRINTH~1|PrintHood</td><td/><td>0</td><td/></row>
@@ -1166,8 +1230,16 @@
 		<row><td>TempFolder</td><td>TARGETDIR</td><td>.:Temp</td><td/><td>0</td><td/></row>
 		<row><td>TemplateFolder</td><td>TARGETDIR</td><td>.:ShellNew</td><td/><td>0</td><td/></row>
 		<row><td>USERPROFILE</td><td>TARGETDIR</td><td>.:USERPR~1|UserProfile</td><td/><td>0</td><td/></row>
+		<row><td>WIN32</td><td>LIB</td><td>win32</td><td/><td>0</td><td/></row>
+		<row><td>WIN321</td><td>LIB1</td><td>win32</td><td/><td>0</td><td/></row>
 		<row><td>WindowsFolder</td><td>TARGETDIR</td><td>.:Windows</td><td/><td>0</td><td/></row>
 		<row><td>WindowsVolume</td><td>TARGETDIR</td><td>.:WinRoot</td><td/><td>0</td><td/></row>
+		<row><td>X64</td><td>WIN32</td><td>x64</td><td/><td>0</td><td/></row>
+		<row><td>X641</td><td>WIN321</td><td>x64</td><td/><td>0</td><td/></row>
+		<row><td>X86</td><td>WIN32</td><td>x86</td><td/><td>0</td><td/></row>
+		<row><td>X861</td><td>WIN321</td><td>x86</td><td/><td>0</td><td/></row>
+		<row><td>X86_64</td><td>LINUX</td><td>x86_64</td><td/><td>0</td><td/></row>
+		<row><td>X86_641</td><td>LINUX1</td><td>x86_64</td><td/><td>0</td><td/></row>
 		<row><td>depend_1_dependencies_analyzer</td><td>formiik</td><td>DEPEND~1|Dependencies Analyzer</td><td/><td>1</td><td/></row>
 		<row><td>formiik</td><td>ProgramMenuFolder</td><td>Formiik</td><td/><td>1</td><td/></row>
 	</table>
@@ -1862,6 +1934,26 @@
 		<col key="yes" def="s38">Feature_</col>
 		<col key="yes" def="s72">Component_</col>
 		<row><td>AlwaysInstall</td><td>Formiik.DependenciesAnalyzer.Primary_output</td></row>
+		<row><td>AlwaysInstall</td><td>Formiik.DependenciesAnalyzer.Primary_output1</td></row>
+		<row><td>AlwaysInstall</td><td>ISX_DEFAULTCOMPONENT</td></row>
+		<row><td>AlwaysInstall</td><td>ISX_DEFAULTCOMPONENT1</td></row>
+		<row><td>AlwaysInstall</td><td>ISX_DEFAULTCOMPONENT10</td></row>
+		<row><td>AlwaysInstall</td><td>ISX_DEFAULTCOMPONENT11</td></row>
+		<row><td>AlwaysInstall</td><td>ISX_DEFAULTCOMPONENT12</td></row>
+		<row><td>AlwaysInstall</td><td>ISX_DEFAULTCOMPONENT13</td></row>
+		<row><td>AlwaysInstall</td><td>ISX_DEFAULTCOMPONENT14</td></row>
+		<row><td>AlwaysInstall</td><td>ISX_DEFAULTCOMPONENT2</td></row>
+		<row><td>AlwaysInstall</td><td>ISX_DEFAULTCOMPONENT3</td></row>
+		<row><td>AlwaysInstall</td><td>ISX_DEFAULTCOMPONENT4</td></row>
+		<row><td>AlwaysInstall</td><td>ISX_DEFAULTCOMPONENT5</td></row>
+		<row><td>AlwaysInstall</td><td>ISX_DEFAULTCOMPONENT6</td></row>
+		<row><td>AlwaysInstall</td><td>ISX_DEFAULTCOMPONENT7</td></row>
+		<row><td>AlwaysInstall</td><td>ISX_DEFAULTCOMPONENT8</td></row>
+		<row><td>AlwaysInstall</td><td>ISX_DEFAULTCOMPONENT9</td></row>
+		<row><td>AlwaysInstall</td><td>git2_15e1193.dll</td></row>
+		<row><td>AlwaysInstall</td><td>git2_15e1193.dll1</td></row>
+		<row><td>AlwaysInstall</td><td>git2_15e1193.dll2</td></row>
+		<row><td>AlwaysInstall</td><td>git2_15e1193.dll3</td></row>
 	</table>
 
 	<table name="File">
@@ -1877,6 +1969,20 @@
 		<col def="I4">ISAttributes</col>
 		<col def="S72">ISComponentSubFolder_</col>
 		<row><td>formiik.dependenciesanalyzer</td><td>Formiik.DependenciesAnalyzer.Primary_output</td><td>Formiik.DependenciesAnalyzer.Primary output</td><td>0</td><td/><td/><td/><td>1</td><td>&lt;Formiik.DependenciesAnalyzer&gt;|Built</td><td>3</td><td/></row>
+		<row><td>formiik.dependenciesanalyzer1</td><td>Formiik.DependenciesAnalyzer.Primary_output1</td><td>Formiik.DependenciesAnalyzer.Primary output</td><td>0</td><td/><td/><td/><td>1</td><td>&lt;Formiik.DependenciesAnalyzer&gt;|Built</td><td>3</td><td/></row>
+		<row><td>git2_15e1193.dll</td><td>git2_15e1193.dll</td><td>GIT2-1~1.DLL|git2-15e1193.dll</td><td>0</td><td/><td/><td/><td>1</td><td>C:\formiiklabs\DependenciesAnalyzer\DependenciesAnalyzer\Formiik.DependenciesAnalyzer\bin\Release\lib\win32\x64\git2-15e1193.dll</td><td>1</td><td/></row>
+		<row><td>git2_15e1193.dll1</td><td>git2_15e1193.dll1</td><td>GIT2-1~1.DLL|git2-15e1193.dll</td><td>0</td><td/><td/><td/><td>1</td><td>C:\formiiklabs\DependenciesAnalyzer\DependenciesAnalyzer\Formiik.DependenciesAnalyzer\bin\Release\lib\win32\x86\git2-15e1193.dll</td><td>1</td><td/></row>
+		<row><td>git2_15e1193.dll2</td><td>git2_15e1193.dll2</td><td>GIT2-1~1.DLL|git2-15e1193.dll</td><td>0</td><td/><td/><td/><td>1</td><td>C:\formiiklabs\DependenciesAnalyzer\DependenciesAnalyzer\Formiik.DependenciesAnalyzer\bin\Release\lib\win32\x64\git2-15e1193.dll</td><td>1</td><td/></row>
+		<row><td>git2_15e1193.dll3</td><td>git2_15e1193.dll3</td><td>GIT2-1~1.DLL|git2-15e1193.dll</td><td>0</td><td/><td/><td/><td>1</td><td>C:\formiiklabs\DependenciesAnalyzer\DependenciesAnalyzer\Formiik.DependenciesAnalyzer\bin\Release\lib\win32\x86\git2-15e1193.dll</td><td>1</td><td/></row>
+		<row><td>git2_15e1193.pdb</td><td>ISX_DEFAULTCOMPONENT5</td><td>GIT2-1~1.PDB|git2-15e1193.pdb</td><td>0</td><td/><td/><td/><td>1</td><td>C:\formiiklabs\DependenciesAnalyzer\DependenciesAnalyzer\Formiik.DependenciesAnalyzer\bin\Release\lib\win32\x64\git2-15e1193.pdb</td><td>1</td><td/></row>
+		<row><td>git2_15e1193.pdb1</td><td>ISX_DEFAULTCOMPONENT6</td><td>GIT2-1~1.PDB|git2-15e1193.pdb</td><td>0</td><td/><td/><td/><td>1</td><td>C:\formiiklabs\DependenciesAnalyzer\DependenciesAnalyzer\Formiik.DependenciesAnalyzer\bin\Release\lib\win32\x86\git2-15e1193.pdb</td><td>1</td><td/></row>
+		<row><td>git2_15e1193.pdb2</td><td>ISX_DEFAULTCOMPONENT13</td><td>GIT2-1~1.PDB|git2-15e1193.pdb</td><td>0</td><td/><td/><td/><td>1</td><td>C:\formiiklabs\DependenciesAnalyzer\DependenciesAnalyzer\Formiik.DependenciesAnalyzer\bin\Release\lib\win32\x64\git2-15e1193.pdb</td><td>1</td><td/></row>
+		<row><td>git2_15e1193.pdb3</td><td>ISX_DEFAULTCOMPONENT14</td><td>GIT2-1~1.PDB|git2-15e1193.pdb</td><td>0</td><td/><td/><td/><td>1</td><td>C:\formiiklabs\DependenciesAnalyzer\DependenciesAnalyzer\Formiik.DependenciesAnalyzer\bin\Release\lib\win32\x86\git2-15e1193.pdb</td><td>1</td><td/></row>
+		<row><td>libgit2_15e1193.dylib</td><td>ISX_DEFAULTCOMPONENT3</td><td>LIBGIT~1.DYL|libgit2-15e1193.dylib</td><td>0</td><td/><td/><td/><td>1</td><td>C:\formiiklabs\DependenciesAnalyzer\DependenciesAnalyzer\Formiik.DependenciesAnalyzer\bin\Release\lib\osx\libgit2-15e1193.dylib</td><td>1</td><td/></row>
+		<row><td>libgit2_15e1193.dylib1</td><td>ISX_DEFAULTCOMPONENT11</td><td>LIBGIT~1.DYL|libgit2-15e1193.dylib</td><td>0</td><td/><td/><td/><td>1</td><td>C:\formiiklabs\DependenciesAnalyzer\DependenciesAnalyzer\Formiik.DependenciesAnalyzer\bin\Release\lib\osx\libgit2-15e1193.dylib</td><td>1</td><td/></row>
+		<row><td>libgit2_15e1193.so</td><td>ISX_DEFAULTCOMPONENT2</td><td>LIBGIT~1.SO|libgit2-15e1193.so</td><td>0</td><td/><td/><td/><td>1</td><td>C:\formiiklabs\DependenciesAnalyzer\DependenciesAnalyzer\Formiik.DependenciesAnalyzer\bin\Release\lib\linux\x86_64\libgit2-15e1193.so</td><td>1</td><td/></row>
+		<row><td>libgit2_15e1193.so1</td><td>ISX_DEFAULTCOMPONENT10</td><td>LIBGIT~1.SO|libgit2-15e1193.so</td><td>0</td><td/><td/><td/><td>1</td><td>C:\formiiklabs\DependenciesAnalyzer\DependenciesAnalyzer\Formiik.DependenciesAnalyzer\bin\Release\lib\linux\x86_64\libgit2-15e1193.so</td><td>1</td><td/></row>
+		<row><td>libgit2sharp.dll.config</td><td>ISX_DEFAULTCOMPONENT7</td><td>LIBGIT~1.CON|LibGit2Sharp.dll.config</td><td>0</td><td/><td/><td/><td>1</td><td>C:\formiiklabs\DependenciesAnalyzer\DependenciesAnalyzer\Formiik.DependenciesAnalyzer\bin\Release\LibGit2Sharp.dll.config</td><td>1</td><td/></row>
 	</table>
 
 	<table name="FileSFPCatalog">
@@ -2019,6 +2125,26 @@
 		<col def="S0">HTTPLocation</col>
 		<col def="S0">Miscellaneous</col>
 		<row><td>Formiik.DependenciesAnalyzer.Primary_output</td><td/><td/><td>_5FDFC2E1_DDBA_4A9C_8A00_E7248B2CAB91_FILTER</td><td/><td/><td/><td/></row>
+		<row><td>Formiik.DependenciesAnalyzer.Primary_output1</td><td/><td/><td>_AAF60DA7_0885_40D9_B643_1E2485B8A9F5_FILTER</td><td/><td/><td/><td/></row>
+		<row><td>ISX_DEFAULTCOMPONENT</td><td/><td/><td>_FD1A8BF2_1386_4DDA_B6C8_9D502AFDE59A_FILTER</td><td/><td/><td/><td/></row>
+		<row><td>ISX_DEFAULTCOMPONENT1</td><td/><td/><td>_5DF52FA0_5E9B_4892_82B9_6C98FEFD7228_FILTER</td><td/><td/><td/><td/></row>
+		<row><td>ISX_DEFAULTCOMPONENT10</td><td/><td/><td>_35632983_1F09_419C_9138_F8C899BC0BEE_FILTER</td><td/><td/><td/><td/></row>
+		<row><td>ISX_DEFAULTCOMPONENT11</td><td/><td/><td>_5DC6AD8B_17E1_400C_9E2E_76DFCE257DE3_FILTER</td><td/><td/><td/><td/></row>
+		<row><td>ISX_DEFAULTCOMPONENT12</td><td/><td/><td>_A83C3636_7544_4035_9797_8FB998F9ED7D_FILTER</td><td/><td/><td/><td/></row>
+		<row><td>ISX_DEFAULTCOMPONENT13</td><td/><td/><td>_8FFA5D71_DDE5_4767_9131_C13BB7F7F3DB_FILTER</td><td/><td/><td/><td/></row>
+		<row><td>ISX_DEFAULTCOMPONENT14</td><td/><td/><td>_97EF8754_13C3_40BF_9EB1_B856522C7CDA_FILTER</td><td/><td/><td/><td/></row>
+		<row><td>ISX_DEFAULTCOMPONENT2</td><td/><td/><td>_BF27898E_EE0B_4AB4_8339_7CE4B797D6FF_FILTER</td><td/><td/><td/><td/></row>
+		<row><td>ISX_DEFAULTCOMPONENT3</td><td/><td/><td>_BC71F83E_E5B6_42B0_8EF5_1C67ACEF81FC_FILTER</td><td/><td/><td/><td/></row>
+		<row><td>ISX_DEFAULTCOMPONENT4</td><td/><td/><td>_42398AA7_74D8_4B6A_AA14_5F8CE45446B1_FILTER</td><td/><td/><td/><td/></row>
+		<row><td>ISX_DEFAULTCOMPONENT5</td><td/><td/><td>_D5911006_ED5D_48CC_9B16_75655DB9CD99_FILTER</td><td/><td/><td/><td/></row>
+		<row><td>ISX_DEFAULTCOMPONENT6</td><td/><td/><td>_7F635E27_9BA2_41DB_888B_141F1869D15A_FILTER</td><td/><td/><td/><td/></row>
+		<row><td>ISX_DEFAULTCOMPONENT7</td><td/><td/><td>_F728F98A_C84F_47DD_AAFC_5019C0390A13_FILTER</td><td/><td/><td/><td/></row>
+		<row><td>ISX_DEFAULTCOMPONENT8</td><td/><td/><td>_CFAACC73_B42E_4A90_AE5D_4FE416C45647_FILTER</td><td/><td/><td/><td/></row>
+		<row><td>ISX_DEFAULTCOMPONENT9</td><td/><td/><td>_E1059DC6_0FA2_4A20_9BA2_F8699DCC267F_FILTER</td><td/><td/><td/><td/></row>
+		<row><td>git2_15e1193.dll</td><td/><td/><td>_E22FA0DB_31DF_4D9D_AB08_0B6D9BE535F8_FILTER</td><td/><td/><td/><td/></row>
+		<row><td>git2_15e1193.dll1</td><td/><td/><td>_38A0D491_E4DF_48B9_8B04_FC32077BE4C2_FILTER</td><td/><td/><td/><td/></row>
+		<row><td>git2_15e1193.dll2</td><td/><td/><td>_3C15570B_0A8E_4EF7_ABEE_81F642FF7EC1_FILTER</td><td/><td/><td/><td/></row>
+		<row><td>git2_15e1193.dll3</td><td/><td/><td>_EFA8DA8A_AE0F_49A1_9DE5_A4047A1F92D9_FILTER</td><td/><td/><td/><td/></row>
 	</table>
 
 	<table name="ISCustomActionReference">
@@ -2610,7 +2736,7 @@
 		<col def="I2">Encoded</col>
 		<col def="S0">Comment</col>
 		<col def="I4">TimeStamp</col>
-		<row><td>COMPANY_NAME</td><td>1034</td><td>Nombre de su organización</td><td>0</td><td/><td>-307934805</td></row>
+		<row><td>COMPANY_NAME</td><td>1034</td><td>Nombre de su organización</td><td>0</td><td/><td>279362605</td></row>
 		<row><td>DN_AlwaysInstall</td><td>1034</td><td>Instalar siempre</td><td>0</td><td/><td>-307908213</td></row>
 		<row><td>IDPROP_EXPRESS_LAUNCH_CONDITION_COLOR</td><td>1034</td><td>La configuración de colores de su sistema no es adecuada para ejecutar [ProductName].</td><td>0</td><td/><td>-307908213</td></row>
 		<row><td>IDPROP_EXPRESS_LAUNCH_CONDITION_DOTNETVERSION45FULL</td><td>1034</td><td>Microsoft .NET Framework 4.5 Full package or greater needs to be installed for this installation to continue.</td><td>0</td><td/><td>-307908213</td></row>
@@ -3713,8 +3839,8 @@
 		<row><td>IDS__TargetReq_DESC_RAM</td><td>1034</td><td>La cantidad de RAM no es la adecuada para ejecutar [ProductName].</td><td>0</td><td/><td>-307908213</td></row>
 		<row><td>IDS__TargetReq_DESC_RESOLUTION</td><td>1034</td><td>La resolución de pantalla no es la adecuada para ejecutar [ProductName].</td><td>0</td><td/><td>-307908213</td></row>
 		<row><td>ID_STRING1</td><td>1034</td><td/><td>0</td><td/><td>-307908213</td></row>
-		<row><td>ID_STRING2</td><td>1034</td><td>http://www.Nombredesuorganización.com</td><td>0</td><td/><td>-307934805</td></row>
-		<row><td>ID_STRING3</td><td>1034</td><td>Nombre de su organización</td><td>0</td><td/><td>-307934805</td></row>
+		<row><td>ID_STRING2</td><td>1034</td><td>http://www.Nombredesuorganización.com</td><td>0</td><td/><td>279362605</td></row>
+		<row><td>ID_STRING3</td><td>1034</td><td>Nombre de su organización</td><td>0</td><td/><td>279362605</td></row>
 		<row><td>ID_STRING4</td><td>1034</td><td>Launch |Built</td><td>0</td><td/><td>-307908213</td></row>
 		<row><td>IIDS_UITEXT_FeatureUninstalled</td><td>1034</td><td>Este componente no se instalará.</td><td>0</td><td/><td>-307908213</td></row>
 	</table>

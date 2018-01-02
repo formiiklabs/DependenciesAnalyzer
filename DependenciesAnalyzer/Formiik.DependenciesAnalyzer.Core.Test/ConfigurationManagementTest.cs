@@ -69,7 +69,12 @@ namespace Formiik.DependenciesAnalyzer.Test
 
             var repoPath = @"C:\Analyzer";
 
-            var archivosChanged = gitActionsManager.GetFilesChanged(repoPath, "DoublePersistentAndCalendar2");
+            var gitPath = @"C:\Program Files\Git\cmd\git.exe";
+
+            var archivosChanged = gitActionsManager.GetFilesChanged(
+                repoPath, 
+                "TestForBranchDepend",
+                gitPath);
 
             Assert.IsNotNull(archivosChanged);
         }
@@ -81,9 +86,11 @@ namespace Formiik.DependenciesAnalyzer.Test
 
             var repoPath = @"C:\Formiik2\formiik-backend";
 
-            var branchName = "DoublePersistentAndCalendar2";
+            var branchName = "TestForBranchDepend";
 
-            treeGraph.Build(repoPath, branchName);
+            var gitPath = @"C:\Program Files\Git\cmd\git.exe";
+
+            treeGraph.Build(repoPath, branchName, gitPath);
 
             Assert.IsTrue(true);
         }
@@ -109,13 +116,20 @@ namespace Formiik.DependenciesAnalyzer.Test
 
                 var solutionPath = @"C:\Analyzer\Mobiik.Popcorn\Mobiik.Popcorn.sln";
 
+                var gitPath = @"C:\Program Files\Git\cmd\git.exe";
+
                 var workspace = MSBuildWorkspace.Create();
 
                 workspace.WorkspaceFailed += Workspace_WorkspaceFailed;
 
                 var solution = workspace.OpenSolutionAsync(solutionPath).Result;
 
-                var methods = gitActionsManager.GetListMethodsOfFileModified(repoPath, branchName, solution, pathFileRelative);
+                var methods = gitActionsManager.GetListMethodsOfFileModified(
+                    repoPath, 
+                    branchName, 
+                    solution, 
+                    pathFileRelative, 
+                    gitPath);
 
                 Assert.IsTrue(true);
             }

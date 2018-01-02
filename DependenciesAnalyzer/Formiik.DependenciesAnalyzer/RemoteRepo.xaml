@@ -7,7 +7,7 @@
         mc:Ignorable="d"
         Title="Configuration Remote Repository" 
         Height="235" Width="400" 
-        MinHeight="260" MinWidth="600" 
+        MinHeight="350" MinWidth="600" 
         ResizeMode="CanResizeWithGrip"
         ShowInTaskbar="False"
         WindowStartupLocation="CenterScreen" 
@@ -31,6 +31,18 @@
             </Label>
             <TextBox x:Name="TxtUsuario">
             </TextBox>
+            <Label FontWeight="Bold">
+                Path Git Executable:
+            </Label>
+            <TextBox x:Name="TxtPathGit" IsReadOnly="True">
+            </TextBox>
+            <Button
+                x:Name="BtnSelectPathGit"
+                Margin="0,10,0,0" 
+                Click="BtnSelectPathGit_Click" 
+                Width="200">
+                Select Path Git Executable
+            </Button>
             <Label FontWeight="Bold">
                 Password:
             </Label>

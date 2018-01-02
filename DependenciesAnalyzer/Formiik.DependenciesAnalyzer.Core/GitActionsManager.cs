@@ -109,9 +109,9 @@ namespace Formiik.DependenciesAnalyzer.Core
             }
         }
 
-        public List<string> GetFilesChanged(string pathRepo, string branchName)
+        public List<string> GetFilesChanged(string pathRepo, string branchName, string gitPath)
         {
-            var startInfo = new ProcessStartInfo(@"C:\Program Files\Git\cmd\git.exe")
+            var startInfo = new ProcessStartInfo(gitPath)
             {
                 WindowStyle = ProcessWindowStyle.Normal,
                 UseShellExecute = false,
@@ -187,11 +187,16 @@ namespace Formiik.DependenciesAnalyzer.Core
             return components;
         }
 
-        public List<string> GetListMethodsOfFileModified(string pathRepo, string branchName, Solution solution, string pathFileRelative)
+        public List<string> GetListMethodsOfFileModified(
+            string pathRepo, 
+            string branchName, 
+            Solution solution, 
+            string pathFileRelative,
+            string pathGit)
         {
             var result = new List<string>();
 
-            var startInfo = new ProcessStartInfo(@"C:\Program Files\Git\cmd\git.exe")
+            var startInfo = new ProcessStartInfo(pathGit)
             {
                 WindowStyle = ProcessWindowStyle.Normal,
                 UseShellExecute = false,

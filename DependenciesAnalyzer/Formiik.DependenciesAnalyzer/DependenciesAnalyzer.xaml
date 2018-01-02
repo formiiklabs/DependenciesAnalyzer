@@ -150,6 +150,11 @@
         <DockPanel Grid.Row="1">
             <StackPanel DockPanel.Dock="Left" Width="200" Background="WhiteSmoke">
                 <Label FontWeight="Bold" Margin="10,0,0,0">
+                    Path Git Executable:
+                </Label>
+                <TextBlock x:Name="lblPathGit" TextWrapping="WrapWithOverflow" Margin="10,0,0,10">
+                </TextBlock>
+                <Label FontWeight="Bold" Margin="10,0,0,0">
                     Url Remote Repository:
                 </Label>
                 <TextBlock x:Name="lblRemoteRepoUrl" TextWrapping="WrapWithOverflow" Margin="10,0,0,10">

@@ -82,5 +82,17 @@ namespace Formiik.DependenciesAnalyzer.Properties {
                 this["SelectedBranch"] = value;
             }
         }
+        
+        [global::System.Configuration.UserScopedSettingAttribute()]
+        [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
+        [global::System.Configuration.DefaultSettingValueAttribute("")]
+        public string PathGit {
+            get {
+                return ((string)(this["PathGit"]));
+            }
+            set {
+                this["PathGit"] = value;
+            }
+        }
     }
 }

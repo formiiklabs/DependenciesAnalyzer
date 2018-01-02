@@ -5,5 +5,7 @@
         public string SelectedBranch { get; set; }
 
         public string RepoPath { get; set; }
+
+        public string GitPath { get; set; }
     }
 }

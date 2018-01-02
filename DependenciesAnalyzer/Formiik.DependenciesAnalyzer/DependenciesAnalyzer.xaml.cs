@@ -44,6 +44,9 @@ namespace Formiik.DependenciesAnalyzer
             this.lblUserRemoteRepo.Text =
                 string.IsNullOrEmpty(Properties.Settings.Default.UserRemoteRepo) ? "(No Information)" : Properties.Settings.Default.UserRemoteRepo;
 
+            this.lblPathGit.Text =
+                string.IsNullOrEmpty(Properties.Settings.Default.PathGit) ? "(No Information)" : Properties.Settings.Default.PathGit;
+
             this.GetRemoteBranches();
         }
 
@@ -74,8 +77,18 @@ namespace Formiik.DependenciesAnalyzer
             }
         }
 
-        private void RemoteRepo_RemoteRepoInfoEvent(string remoteRepoParam, string user, string password)
+        private void RemoteRepo_RemoteRepoInfoEvent(
+            string remoteRepoParam, 
+            string user, 
+            string password,
+            string gitPath)
         {
+            Properties.Settings.Default.PathGit = gitPath;
+
+            lblPathGit.Text = Properties.Settings.Default.PathGit;
+
+            Properties.Settings.Default.Save();
+
             while (string.IsNullOrEmpty(Properties.Settings.Default.RepoPath))
             {
                 System.Windows.MessageBox.Show(
@@ -340,15 +353,13 @@ namespace Formiik.DependenciesAnalyzer
                 var data = new DataWorkerAnalyze
                 {
                     RepoPath = Properties.Settings.Default.RepoPath,
-
-                    SelectedBranch = selectedBranch
+                    SelectedBranch = selectedBranch,
+                    GitPath = Properties.Settings.Default.PathGit
                 };
 
                 this.btnAnalyze.IsEnabled = false;
 
                 this.btnExportarTextoAfectados.Visibility = Visibility.Collapsed;
-
-                this.btnExportarTextoComponentes.Visibility = Visibility.Collapsed;
 
                 this.pgbIndeterminate.IsIndeterminate = true;
 
@@ -599,7 +610,8 @@ namespace Formiik.DependenciesAnalyzer
                         Properties.Settings.Default.RepoPath,
                         selectedBranch, 
                         solution,
-                        path);
+                        path, 
+                        Properties.Settings.Default.PathGit);
 
                     workspace.CloseSolution();
 
@@ -767,7 +779,10 @@ namespace Formiik.DependenciesAnalyzer
 
             using (var treeGraph = new TreeGraph())
             {
-                var fileSet = treeGraph.Build(arguments.RepoPath, arguments.SelectedBranch);
+                var fileSet = treeGraph.Build(
+                    arguments.RepoPath, 
+                    arguments.SelectedBranch,
+                    arguments.GitPath);
 
                 var treeNodes = treeGraph.TreeNodes;
                     
@@ -803,7 +818,8 @@ namespace Formiik.DependenciesAnalyzer
                                     arguments.RepoPath,
                                     arguments.SelectedBranch,
                                     solution,
-                                    file);
+                                    file, 
+                                    arguments.GitPath);
 
                                 if (result.Any())
                                 {
@@ -1044,8 +1060,6 @@ namespace Formiik.DependenciesAnalyzer
                 backgroundWorkerAllComponents.DoWork += BackgroundWorkerAllComponents_DoWork;
 
                 backgroundWorkerAllComponents.RunWorkerCompleted += BackgroundWorkerAllComponents_RunWorkerCompleted;
-
-                this.btnExportarTextoAfectados.Visibility = Visibility.Collapsed;
 
                 this.btnExportarTextoComponentes.Visibility = Visibility.Collapsed;
 

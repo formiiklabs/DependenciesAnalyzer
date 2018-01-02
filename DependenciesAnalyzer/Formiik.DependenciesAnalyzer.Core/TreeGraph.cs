@@ -22,13 +22,13 @@ namespace Formiik.DependenciesAnalyzer.Core
         #endregion
 
         #region Public Methods
-        public FilesSet Build(string repoPath, string branch)
+        public FilesSet Build(string repoPath, string branch, string gitPath)
         {
             var fileSet = new FilesSet();
 
             var filesGit = new List<FileGit>();
 
-            var filesChanged = this.GitActionsManager.GetFilesChanged(repoPath, branch);
+            var filesChanged = this.GitActionsManager.GetFilesChanged(repoPath, branch, gitPath);
 
             if (filesChanged.Any())
             {
