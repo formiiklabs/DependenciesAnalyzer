@@ -16,6 +16,7 @@ using System.Linq;
 using System.Text;
 using System.Windows;
 using System.Windows.Controls;
+using System.Windows.Controls.Ribbon;
 using System.Windows.Forms;
 using System.Windows.Media;
 
@@ -204,7 +205,13 @@ namespace Formiik.DependenciesAnalyzer
                         });
                     });
 
-                    this.cmbRemoteBranches.ItemsSource = this.itemsRemoteBranches;
+                    foreach (var item in this.itemsRemoteBranches)
+                    {
+                        this.remoteBranchesCategory.Items.Add(new RibbonGalleryItem
+                        {
+                            Content = item.Content
+                        });
+                    }
                 }
             }
             catch (RepositoryNotFoundException)
@@ -239,9 +246,9 @@ namespace Formiik.DependenciesAnalyzer
 
             try
             {
-                selectedBranch = 
-                    string.IsNullOrEmpty(Properties.Settings.Default.SelectedBranch) ? 
-                    this.cmbRemoteBranches.Text : 
+                selectedBranch =
+                    string.IsNullOrEmpty(Properties.Settings.Default.SelectedBranch) ?
+                    ((RibbonGalleryItem)this.remoteBranchesGallery.SelectedItem).Content.ToString() :
                     Properties.Settings.Default.SelectedBranch;
 
                 using (var gitActions = new GitActionsManager())
@@ -345,7 +352,7 @@ namespace Formiik.DependenciesAnalyzer
                 backgroundWorker.RunWorkerCompleted += BackgroundWorker_RunWorkerCompleted;
 
                 var remoteBranch = string.IsNullOrEmpty(Properties.Settings.Default.SelectedBranch) ?
-                    this.cmbRemoteBranches.Text :
+                    ((RibbonGalleryItem)this.remoteBranchesGallery.SelectedItem).Content.ToString() :
                     Properties.Settings.Default.SelectedBranch;
 
                 var selectedBranch = remoteBranch.Remove(0, 7);
@@ -595,7 +602,7 @@ namespace Formiik.DependenciesAnalyzer
                 using (var gitActionsManager = new GitActionsManager())
                 {
                     var remoteBranch = string.IsNullOrEmpty(Properties.Settings.Default.SelectedBranch) ?
-                        this.cmbRemoteBranches.Text :
+                        ((RibbonGalleryItem)this.remoteBranchesGallery.SelectedItem).Content.ToString() :
                         Properties.Settings.Default.SelectedBranch;
 
                     var selectedBranch = remoteBranch.Remove(0, 7);
@@ -1020,7 +1027,7 @@ namespace Formiik.DependenciesAnalyzer
 
         private void cmbRemoteBranches_SelectionChanged(object sender, SelectionChangedEventArgs e)
         {
-            Properties.Settings.Default.SelectedBranch = ((ComboBoxItem) this.cmbRemoteBranches.SelectedItem).Content.ToString();
+            Properties.Settings.Default.SelectedBranch = ((RibbonGalleryItem)this.remoteBranchesGallery.SelectedItem).Content.ToString();
 
             Properties.Settings.Default.Save();
         }
@@ -1034,10 +1041,9 @@ namespace Formiik.DependenciesAnalyzer
                 return;
             }
 
-            foreach (var item in this.cmbRemoteBranches.Items.Cast<ComboBoxItem>().Where(item => item.Content.ToString().Equals(selectedBranch, StringComparison.InvariantCultureIgnoreCase)))
+            foreach (var item in this.remoteBranchesCategory.Items.Cast<RibbonGalleryItem>().Where(item => item.Content.ToString().Equals(selectedBranch, StringComparison.InvariantCultureIgnoreCase)))
             {
-                this.cmbRemoteBranches.SelectedValue = item;
-
+                this.remoteBranchesGallery.SelectedItem = item;
                 break;
             }
         }
@@ -1252,6 +1258,22 @@ namespace Formiik.DependenciesAnalyzer
         private void RibbonApplicationMenuItem_Click(object sender, RoutedEventArgs e)
         {
             System.Windows.Application.Current.Shutdown();
+        }
+
+        private void remoteBranches_SelectionChanged(object sender, RoutedPropertyChangedEventArgs<object> e)
+        {
+            RibbonGallery source = e.OriginalSource as RibbonGallery;
+
+            if (source == null)
+            {
+                return;
+            }
+
+            var selectedValue = ((RibbonGalleryItem)source.SelectedItem).Content.ToString();
+
+            Properties.Settings.Default.SelectedBranch = selectedValue;
+
+            Properties.Settings.Default.Save();
         }
     }
 }
