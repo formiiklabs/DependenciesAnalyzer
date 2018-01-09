@@ -27,12 +27,16 @@ namespace Formiik.DependenciesAnalyzer
         #region Members
         private RemoteRepo remoteRepo;
         private List<Branch> remoteBranches;
+        private bool isStartAnalysis = false;
         private readonly ObservableCollection<ComboBoxItem> itemsRemoteBranches;
+        private BackgroundWorker backgroundWorkerAnalysis = new BackgroundWorker();
         #endregion
 
         public DependenciesAnalyzer()
         {
             InitializeComponent();
+
+            this.btnStopAnalysis.IsEnabled = false;
 
             this.itemsRemoteBranches = new ObservableCollection<ComboBoxItem>();
 
@@ -48,7 +52,18 @@ namespace Formiik.DependenciesAnalyzer
             this.lblPathGit.Text =
                 string.IsNullOrEmpty(Properties.Settings.Default.PathGit) ? "(No Information)" : Properties.Settings.Default.PathGit;
 
-            this.GetRemoteBranches();
+            if (!string.IsNullOrEmpty(Properties.Settings.Default.RepoPath))
+            {
+                this.GetRemoteBranches();
+            }
+            else
+            {
+                this.btnRefresh.IsEnabled = false;
+                this.btnFetchCheckout.IsEnabled = false;
+                this.btnPull.IsEnabled = false;
+                this.btnAnalyze.IsEnabled = false;
+                this.Scan.IsEnabled = false;
+            }
         }
 
         private void BtnSeleccionarRepo_Click(object sender, RoutedEventArgs e)
@@ -91,10 +106,11 @@ namespace Formiik.DependenciesAnalyzer
             Properties.Settings.Default.Save();
 
             while (string.IsNullOrEmpty(Properties.Settings.Default.RepoPath)
-                || !Directory.Exists(Properties.Settings.Default.RepoPath))
+                || !Directory.Exists(Properties.Settings.Default.RepoPath)
+                || !this.IsDirectoryEmpty(Properties.Settings.Default.RepoPath))
             {
                 System.Windows.MessageBox.Show(
-                    "You have not selected a valid local repository path",
+                    "You have not selected a valid empty local repository path",
                     "Information",
                     MessageBoxButton.OK,
                     MessageBoxImage.Exclamation);
@@ -164,11 +180,11 @@ namespace Formiik.DependenciesAnalyzer
 
             btnSetRepository.IsEnabled = true;
             btnSeleccionarRepo.IsEnabled = true;
-            btnRefresh.IsEnabled = true;
-            btnFetchCheckout.IsEnabled = true;
-            btnPull.IsEnabled = true;
-            btnAnalyze.IsEnabled = true;
-            btnScan.IsEnabled = true;
+            btnRefresh.IsEnabled = false;
+            btnFetchCheckout.IsEnabled = false;
+            btnPull.IsEnabled = false;
+            btnAnalyze.IsEnabled = false;
+            btnScan.IsEnabled = false;
         }
 
         private void BackgroundWorkerClone_DoWork(object sender, DoWorkEventArgs e)
@@ -228,13 +244,14 @@ namespace Formiik.DependenciesAnalyzer
 
             this.lblUserRemoteRepo.Text = user;
 
-            this.GetRemoteBranches();
-
-            System.Windows.MessageBox.Show(
-                "Local repository configured correctly",
-                "Information",
-                MessageBoxButton.OK,
-                MessageBoxImage.Information);
+            if (this.GetRemoteBranches())
+            {
+                System.Windows.MessageBox.Show(
+                    "Local repository configured correctly",
+                    "Information",
+                    MessageBoxButton.OK,
+                    MessageBoxImage.Information);
+            }
         }
 
         protected override void OnClosed(EventArgs e)
@@ -255,6 +272,84 @@ namespace Formiik.DependenciesAnalyzer
             if (folderBrowser.ShowDialog() != System.Windows.Forms.DialogResult.OK)
             {
                 return;
+            }
+
+            var isEmpty = this.IsDirectoryEmpty(folderBrowser.SelectedPath);
+
+            if (!isEmpty)
+            {
+                System.Windows.MessageBox.Show(
+                    "The selected folder must be empty",
+                    "Error",
+                    MessageBoxButton.OK,
+                    MessageBoxImage.Error);
+
+                this.SeleccionarRepoLocal();
+            }
+            else
+            {
+                System.Windows.MessageBox.Show(
+                    "We will proceed to clone the repository for get the branches from the server",
+                    "Warning",
+                    MessageBoxButton.OK,
+                    MessageBoxImage.Warning);
+
+                if (!string.IsNullOrEmpty(Properties.Settings.Default.PasswordRemoteRepo) &&
+                    !string.IsNullOrEmpty(Properties.Settings.Default.RemoteRepoUrl) &&
+                    !string.IsNullOrEmpty(Properties.Settings.Default.UserRemoteRepo))
+                {
+                    var backgroundWorkerClone = new BackgroundWorker();
+
+                    backgroundWorkerClone.DoWork += BackgroundWorkerClone_DoWork;
+
+                    backgroundWorkerClone.RunWorkerCompleted += BackgroundWorkerClone_RunWorkerCompleted;
+
+                    var input = new DataCloneRepositoryEntity
+                    {
+                        Password = Properties.Settings.Default.PasswordRemoteRepo,
+                        RepositoryPath = folderBrowser.SelectedPath,
+                        RepositoryRemote = Properties.Settings.Default.RemoteRepoUrl,
+                        User = Properties.Settings.Default.UserRemoteRepo
+                    };
+
+                    this.pgbIndeterminate.IsIndeterminate = true;
+
+                    this.btnSetRepository.IsEnabled = false;
+                    this.btnSeleccionarRepo.IsEnabled = false;
+                    this.btnRefresh.IsEnabled = false;
+                    this.btnFetchCheckout.IsEnabled = false;
+                    this.btnPull.IsEnabled = false;
+                    this.btnAnalyze.IsEnabled = false;
+                    this.btnScan.IsEnabled = false;
+
+                    backgroundWorkerClone.RunWorkerAsync(input);
+                }
+                else
+                {
+                    System.Windows.MessageBox.Show(
+                        "You need configure the parameters of the remote repository", 
+                        "Warning", MessageBoxButton.OK, 
+                        MessageBoxImage.Warning);
+
+                    if (this.remoteRepo == null)
+                    {
+                        this.remoteRepo = new RemoteRepo();
+
+                        this.remoteRepo.RemoteRepoInfoEvent += RemoteRepo_RemoteRepoInfoEvent;
+
+                        this.remoteRepo.Closed += (a, b) => this.remoteRepo = null;
+
+                        this.remoteRepo.Show();
+
+                        this.remoteRepo.Focus();
+                    }
+                    else
+                    {
+                        this.remoteRepo.Show();
+
+                        this.remoteRepo.Focus();
+                    }
+                }
             }
 
             var folderPath = folderBrowser.SelectedPath;
@@ -302,10 +397,21 @@ namespace Formiik.DependenciesAnalyzer
             catch (RepositoryNotFoundException)
             {
                 System.Windows.MessageBox.Show(
-                    "The path is not a valid Git repository",
+                    "The path is not a valid Git repository, select other and try again.",
                     "Information",
                     MessageBoxButton.OK,
                     MessageBoxImage.Information);
+
+                Properties.Settings.Default.RepoPath = string.Empty;
+                Properties.Settings.Default.Save();
+
+                this.lblPathRepo.Content = string.Empty;
+
+                this.btnRefresh.IsEnabled = false;
+                this.btnFetchCheckout.IsEnabled = false;
+                this.btnPull.IsEnabled = false;
+                this.btnAnalyze.IsEnabled = false;
+                this.btnScan.IsEnabled = false;
 
                 result = false;
             }
@@ -416,25 +522,29 @@ namespace Formiik.DependenciesAnalyzer
 
             try
             {
+                if (!string.IsNullOrEmpty(Properties.Settings.Default.SelectedBranch))
+                {
+                    using (var gitActions = new GitActionsManager())
+                    {
+                        gitActions.FetchAndCheckout(Properties.Settings.Default.RepoPath, Properties.Settings.Default.SelectedBranch);
+                    }
+                }
+            }
+            catch { }
+
+            try
+            {
                 this.lblArchivosModificados.Content = string.Empty;
-
                 this.txtRenamed.Text = string.Empty;
-
                 this.txtModified.Text = string.Empty;
-
                 this.txtAdded.Text = string.Empty;
-
                 this.txtDeleted.Text = string.Empty;
-
                 this.txtCopied.Text = string.Empty;
-
                 this.txtUpdateButUnmerged.Text = string.Empty;
 
-                var backgroundWorker = new BackgroundWorker();
-
-                backgroundWorker.DoWork += BackgroundWorker_DoWork;
-
-                backgroundWorker.RunWorkerCompleted += BackgroundWorker_RunWorkerCompleted;
+                backgroundWorkerAnalysis.WorkerSupportsCancellation = true;
+                backgroundWorkerAnalysis.DoWork += BackgroundWorker_DoWork;
+                backgroundWorkerAnalysis.RunWorkerCompleted += BackgroundWorker_RunWorkerCompleted;
 
                 var remoteBranch = string.IsNullOrEmpty(Properties.Settings.Default.SelectedBranch) ?
                     ((RibbonGalleryItem)this.remoteBranchesGallery.SelectedItem).Content.ToString() :
@@ -455,7 +565,18 @@ namespace Formiik.DependenciesAnalyzer
 
                 this.pgbIndeterminate.IsIndeterminate = true;
 
-                backgroundWorker.RunWorkerAsync(data);
+                this.isStartAnalysis = true;
+
+                this.btnSetRepository.IsEnabled = false;
+                this.btnSeleccionarRepo.IsEnabled = false;
+                this.btnRefresh.IsEnabled = false;
+                this.btnFetchCheckout.IsEnabled = false;
+                this.btnPull.IsEnabled = false;
+                this.btnAnalyze.IsEnabled = false;
+                this.btnStopAnalysis.IsEnabled = true;
+                this.btnScan.IsEnabled = false;
+
+                backgroundWorkerAnalysis.RunWorkerAsync(data);
             }
             catch (Exception)
             {
@@ -469,6 +590,11 @@ namespace Formiik.DependenciesAnalyzer
 
         private void BackgroundWorker_RunWorkerCompleted(object sender, RunWorkerCompletedEventArgs e)
         {
+            this.isStartAnalysis = false;
+
+            this.btnAnalyze.IsEnabled = true;
+            this.btnStopAnalysis.IsEnabled = false;
+
             if (e.Error != null)
             {
             }
@@ -542,8 +668,15 @@ namespace Formiik.DependenciesAnalyzer
 
                 this.pgbIndeterminate.IsIndeterminate = false;
             }
-
+            
+            this.btnSetRepository.IsEnabled = true;
+            this.btnSeleccionarRepo.IsEnabled = true;
+            this.btnRefresh.IsEnabled = true;
+            this.btnFetchCheckout.IsEnabled = true;
+            this.btnPull.IsEnabled = true;
             this.btnAnalyze.IsEnabled = true;
+            this.btnStopAnalysis.IsEnabled = false;
+            this.btnScan.IsEnabled = true;
         }
 
         private void TreeViewItem_Selected(object sender, RoutedEventArgs e)
@@ -1116,7 +1249,13 @@ namespace Formiik.DependenciesAnalyzer
 
             if (string.IsNullOrEmpty(selectedBranch))
             {
-                return;
+                this.btnRefresh.IsEnabled = false;
+                this.btnFetchCheckout.IsEnabled = false;
+                this.btnPull.IsEnabled = false;
+                this.btnAnalyze.IsEnabled = false;
+                this.btnScan.IsEnabled = false;
+
+                 return;
             }
 
             foreach (var item in this.remoteBranchesCategory.Items.Cast<RibbonGalleryItem>().Where(item => item.Content.ToString().Equals(selectedBranch, StringComparison.InvariantCultureIgnoreCase)))
@@ -1347,11 +1486,46 @@ namespace Formiik.DependenciesAnalyzer
                 return;
             }
 
+            this.btnRefresh.IsEnabled = true;
+            this.btnFetchCheckout.IsEnabled = true;
+            this.btnPull.IsEnabled = true;
+            this.btnAnalyze.IsEnabled = true;
+            this.btnScan.IsEnabled = true;
+
             var selectedValue = ((RibbonGalleryItem)source.SelectedItem).Content.ToString();
 
             Properties.Settings.Default.SelectedBranch = selectedValue;
 
             Properties.Settings.Default.Save();
+        }
+
+        private bool IsDirectoryEmpty(string path)
+        {
+            return !Directory.EnumerateFileSystemEntries(path).Any();
+        }
+
+        private void btnStopAnalysis_Click(object sender, RoutedEventArgs e)
+        {
+            if (this.isStartAnalysis)
+            {
+                if (!this.backgroundWorkerAnalysis.CancellationPending)
+                {
+                    this.backgroundWorkerAnalysis.CancelAsync();
+
+                    this.btnSetRepository.IsEnabled = true;
+                    this.btnSeleccionarRepo.IsEnabled = true;
+                    this.btnRefresh.IsEnabled = true;
+                    this.btnFetchCheckout.IsEnabled = true;
+                    this.btnPull.IsEnabled = true;
+                    this.btnAnalyze.IsEnabled = true;
+                    this.btnStopAnalysis.IsEnabled = false;
+                    this.Scan.IsEnabled = true;
+
+                    this.isStartAnalysis = false;
+
+                    this.pgbIndeterminate.IsIndeterminate = false;
+                }
+            }
         }
     }
 }

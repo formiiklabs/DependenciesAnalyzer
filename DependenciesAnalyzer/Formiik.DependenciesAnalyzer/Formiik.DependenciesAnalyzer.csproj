@@ -323,6 +323,8 @@
     <Resource Include="Images\exit.png" />
     <Resource Include="Images\large\app.png" />
     <Resource Include="Images\small\app.png" />
+    <Resource Include="Images\large\stop.png" />
+    <Resource Include="Images\small\stop.png" />
     <Content Include="Libraries\Microsoft.Msagl.dll" />
     <Content Include="Libraries\Microsoft.Msagl.Drawing.dll" />
     <Content Include="Libraries\Microsoft.Msagl.WpfGraphControl.dll" />

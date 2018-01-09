@@ -133,6 +133,14 @@
                         LargeImageSource="Images\large\start.png" 
                         SmallImageSource="Images\small\start.png">
                     </RibbonButton>
+                    <RibbonButton 
+                        x:Name="btnStopAnalysis" 
+                        Label="Stop Analysis"
+                        HorizontalAlignment="Center" 
+                        Click="btnStopAnalysis_Click"
+                        LargeImageSource="Images\large\stop.png" 
+                        SmallImageSource="Images\small\stop.png">
+                    </RibbonButton>
                 </RibbonGroup>
                 <RibbonGroup x:Name="Scan" Header="Scan">
                     <RibbonButton
