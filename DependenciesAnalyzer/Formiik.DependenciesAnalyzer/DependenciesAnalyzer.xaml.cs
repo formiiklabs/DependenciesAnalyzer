@@ -90,10 +90,11 @@ namespace Formiik.DependenciesAnalyzer
 
             Properties.Settings.Default.Save();
 
-            while (string.IsNullOrEmpty(Properties.Settings.Default.RepoPath))
+            while (string.IsNullOrEmpty(Properties.Settings.Default.RepoPath)
+                || !Directory.Exists(Properties.Settings.Default.RepoPath))
             {
                 System.Windows.MessageBox.Show(
-                    "You have not selected a local repository path",
+                    "You have not selected a valid local repository path",
                     "Information",
                     MessageBoxButton.OK,
                     MessageBoxImage.Exclamation);
@@ -101,25 +102,56 @@ namespace Formiik.DependenciesAnalyzer
                 this.SeleccionarRepoLocal();
             }
 
-            try
-            {
-                using (var gitActionsManager = new GitActionsManager())
-                {
-                    gitActionsManager.CloneRepository(user, password, Properties.Settings.Default.RepoPath, remoteRepoParam);
-                }
+            btnSetRepository.IsEnabled = false;
+            btnSeleccionarRepo.IsEnabled = false;
+            btnRefresh.IsEnabled = false;
+            btnFetchCheckout.IsEnabled = false;
+            btnPull.IsEnabled = false;
+            btnAnalyze.IsEnabled = false;
+            btnScan.IsEnabled = false;
 
-                this.SetRepository(remoteRepoParam, user, password);
-            }
-            catch (Exception ex)
+            var backgroundWorkerClone = new BackgroundWorker();
+
+            backgroundWorkerClone.DoWork += BackgroundWorkerClone_DoWork;
+
+            backgroundWorkerClone.RunWorkerCompleted += BackgroundWorkerClone_RunWorkerCompleted;
+
+            var input = new DataCloneRepositoryEntity
             {
-                if (ex.Message.Contains("exists and is not an empty directory"))
+                Password = password,
+                RepositoryPath = Properties.Settings.Default.RepoPath,
+                RepositoryRemote = remoteRepoParam,
+                User = user
+            };
+
+            this.pgbIndeterminate.IsIndeterminate = true;
+
+            backgroundWorkerClone.RunWorkerAsync(input);
+        }
+
+        private void BackgroundWorkerClone_RunWorkerCompleted(object sender, RunWorkerCompletedEventArgs e)
+        {
+            if (e.Error != null)
+            {
+                System.Windows.MessageBox.Show(
+                    "An error occurred while cloning the repository", 
+                    "Error", 
+                    MessageBoxButton.OK, 
+                    MessageBoxImage.Error);
+            }
+            else
+            {
+                var result = (ResultCloneRepositoryEntity)e.Result;
+
+                if (result.IsSetRepository)
                 {
-                    this.SetRepository(remoteRepoParam, user, password);
+                    this.SetRepository(
+                        result.RepositoryRemote, 
+                        result.User, 
+                        result.Password);
                 }
                 else
                 {
-                    Debug.WriteLine(ex.Message);
-
                     System.Windows.MessageBox.Show(
                         "An error occurred while cloning the repository",
                         "Error",
@@ -127,6 +159,59 @@ namespace Formiik.DependenciesAnalyzer
                         MessageBoxImage.Error);
                 }
             }
+
+            this.pgbIndeterminate.IsIndeterminate = false;
+
+            btnSetRepository.IsEnabled = true;
+            btnSeleccionarRepo.IsEnabled = true;
+            btnRefresh.IsEnabled = true;
+            btnFetchCheckout.IsEnabled = true;
+            btnPull.IsEnabled = true;
+            btnAnalyze.IsEnabled = true;
+            btnScan.IsEnabled = true;
+        }
+
+        private void BackgroundWorkerClone_DoWork(object sender, DoWorkEventArgs e)
+        {
+            var arguments = (DataCloneRepositoryEntity)e.Argument;
+
+            var result = new ResultCloneRepositoryEntity();
+
+            try
+            {
+                using (var gitActionsManager = new GitActionsManager())
+                {
+                    gitActionsManager.CloneRepository(
+                        arguments.User,
+                        arguments.Password,
+                        arguments.RepositoryPath,
+                        arguments.RepositoryRemote);
+                }
+
+                result.IsSetRepository = true;
+            }
+            catch (Exception exception)
+            {
+                if (exception.Message.Contains("exists and is not an empty directory"))
+                {
+                    result.IsSetRepository = true;
+                }
+                else
+                {
+                    Debug.WriteLine(exception.Message);
+
+                    result.IsSetRepository = false;
+                }
+            }
+
+            if (result.IsSetRepository)
+            {
+                result.Password = arguments.Password;
+                result.RepositoryRemote = arguments.RepositoryRemote;
+                result.User = arguments.User;
+            }
+
+            e.Result = result;
         }
 
         private void SetRepository(string urlRemoteRepo, string user, string password)
@@ -435,7 +520,7 @@ namespace Formiik.DependenciesAnalyzer
                         moduleAffectedBlock.Margin = margin;
 
                         // ReSharper disable once UseStringInterpolation
-                        moduleAffectedBlock.Text = string.Format("{0}-{1}", moduleAffected.Description, moduleAffected.Action);
+                        moduleAffectedBlock.Text = $"{moduleAffected.Description}-{moduleAffected.Action}";
 
                         this.stackModules.Children.Add(moduleAffectedBlock);
                     });
@@ -443,23 +528,17 @@ namespace Formiik.DependenciesAnalyzer
 
                 this.lblArchivosModificados.Content = "Files Modified";
 
-                // ReSharper disable once UseStringInterpolation
-                this.txtRenamed.Text = string.Format("Renamed: {0}", result.FileSet.Renamed.Count);
-
-                // ReSharper disable once UseStringInterpolation
-                this.txtModified.Text = string.Format("Modified: {0}", result.FileSet.Modified.Count);
-
-                // ReSharper disable once UseStringInterpolation
-                this.txtAdded.Text = string.Format("Added: {0}", result.FileSet.Added.Count);
-
-                // ReSharper disable once UseStringInterpolation
-                this.txtDeleted.Text = string.Format("Deleted: {0}", result.FileSet.Deleted.Count);
-
-                // ReSharper disable once UseStringInterpolation
-                this.txtCopied.Text = string.Format("Copied: {0}", result.FileSet.Copied.Count);
-
-                // ReSharper disable once UseStringInterpolation
-                this.txtUpdateButUnmerged.Text = string.Format("Update But Unmerged: {0}", result.FileSet.UpdateButUnmerged.Count);
+                this.txtRenamed.Text = $"Renamed: {result.FileSet.Renamed.Count}";
+                
+                this.txtModified.Text = $"Modified: {result.FileSet.Modified.Count}";
+                
+                this.txtAdded.Text = $"Added: {result.FileSet.Added.Count}";
+                
+                this.txtDeleted.Text = $"Deleted: {result.FileSet.Deleted.Count}";
+                
+                this.txtCopied.Text = $"Copied: {result.FileSet.Copied.Count}";
+                
+                this.txtUpdateButUnmerged.Text = $"Update But Unmerged: {result.FileSet.UpdateButUnmerged.Count}";
 
                 this.pgbIndeterminate.IsIndeterminate = false;
             }
@@ -476,8 +555,7 @@ namespace Formiik.DependenciesAnalyzer
                 return;
             }
 
-            if (!item.Header.ToString().EndsWith(".cs (Added)") &&
-                !item.Header.ToString().EndsWith(".cs (Modified)"))
+            if (!item.Header.ToString().EndsWith(".cs (Added)") && !item.Header.ToString().EndsWith(".cs (Modified)"))
             {
                 return;
             }

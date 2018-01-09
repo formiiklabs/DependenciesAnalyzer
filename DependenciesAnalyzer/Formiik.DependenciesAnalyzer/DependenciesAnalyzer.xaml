@@ -84,7 +84,7 @@
                         </Grid.RowDefinitions>
                         <StackPanel>
                             <Label>Select a Branch:</Label>
-                            <RibbonComboBox SelectionBoxWidth="200" VerticalAlignment="Center" IsTextSearchEnabled="True" IsTextSearchCaseSensitive="False">
+                            <RibbonComboBox x:Name="rbncmbRemoteBranches" SelectionBoxWidth="200" VerticalAlignment="Center" IsTextSearchEnabled="True" IsTextSearchCaseSensitive="False">
                                 <RibbonGallery x:Name="remoteBranchesGallery"   
                                                SelectionChanged="remoteBranches_SelectionChanged" Height="200">
                                     <RibbonGalleryCategory x:Name="remoteBranchesCategory">

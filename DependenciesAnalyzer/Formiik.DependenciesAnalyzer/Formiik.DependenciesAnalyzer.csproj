@@ -237,7 +237,9 @@
       <Generator>MSBuild:Compile</Generator>
       <SubType>Designer</SubType>
     </ApplicationDefinition>
+    <Compile Include="Entities\DataCloneRepositoryEntity.cs" />
     <Compile Include="Entities\DataWorkerAnalyze.cs" />
+    <Compile Include="Entities\ResultCloneRepositoryEntity.cs" />
     <Compile Include="Entities\ResultWorkerAnalyze.cs" />
     <Compile Include="Entities\TreeFilter.cs" />
     <Compile Include="RemoteRepo.xaml.cs">
