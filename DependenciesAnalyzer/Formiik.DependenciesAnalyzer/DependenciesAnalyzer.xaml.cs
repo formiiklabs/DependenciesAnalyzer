@@ -603,9 +603,19 @@ namespace Formiik.DependenciesAnalyzer
 
             if (e.Error != null)
             {
+                System.Windows.MessageBox.Show(
+                    "There was an error trying to analyze the branch selected.",
+                    "Error",
+                    MessageBoxButton.OK,
+                    MessageBoxImage.Error);
             }
             else if (e.Cancelled)
             {
+                System.Windows.MessageBox.Show(
+                    "The process for get to analyze the solution has been stopped.",
+                    "Warning",
+                    MessageBoxButton.OK,
+                    MessageBoxImage.Warning);
             }
             else
             {
@@ -650,8 +660,7 @@ namespace Formiik.DependenciesAnalyzer
                         margin.Bottom = 5;
 
                         moduleAffectedBlock.Margin = margin;
-
-                        // ReSharper disable once UseStringInterpolation
+                        
                         moduleAffectedBlock.Text = $"{moduleAffected.Description}-{moduleAffected.Action}";
 
                         this.stackModules.Children.Add(moduleAffectedBlock);
@@ -872,9 +881,19 @@ namespace Formiik.DependenciesAnalyzer
         {
             if (e.Error != null)
             {
+                System.Windows.MessageBox.Show(
+                    "There was an error trying to get the working tree.",
+                    "Error",
+                    MessageBoxButton.OK,
+                    MessageBoxImage.Error);
             }
             else if (e.Cancelled)
             {
+                System.Windows.MessageBox.Show(
+                    "The process for get the working tree has been stopped.",
+                    "Warning",
+                    MessageBoxButton.OK,
+                    MessageBoxImage.Warning);
             }
             else
             {
@@ -1292,6 +1311,14 @@ namespace Formiik.DependenciesAnalyzer
 
                 this.btnExportarTextoComponentes.Visibility = Visibility.Collapsed;
 
+                this.btnSetRepository.IsEnabled = false;
+                this.btnSeleccionarRepo.IsEnabled = false;
+                this.btnRefresh.IsEnabled = false;
+                this.btnFetchCheckout.IsEnabled = false;
+                this.btnPull.IsEnabled = false;
+                this.btnAnalyze.IsEnabled = false;
+                this.btnScan.IsEnabled = false;
+
                 backgroundWorkerAllComponents.RunWorkerAsync(Properties.Settings.Default.RepoPath);
 
                 this.pgbIndeterminate.IsIndeterminate = true;
@@ -1308,6 +1335,14 @@ namespace Formiik.DependenciesAnalyzer
 
         private void BackgroundWorkerAllComponents_RunWorkerCompleted(object sender, RunWorkerCompletedEventArgs e)
         {
+            this.btnSetRepository.IsEnabled = true;
+            this.btnSeleccionarRepo.IsEnabled = true;
+            this.btnRefresh.IsEnabled = true;
+            this.btnFetchCheckout.IsEnabled = true;
+            this.btnPull.IsEnabled = true;
+            this.btnAnalyze.IsEnabled = true;
+            this.btnScan.IsEnabled = true;
+
             if (e.Error != null)
             {
             }
