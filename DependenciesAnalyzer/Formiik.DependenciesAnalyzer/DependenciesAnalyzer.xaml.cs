@@ -1519,7 +1519,7 @@ namespace Formiik.DependenciesAnalyzer
                     this.btnPull.IsEnabled = true;
                     this.btnAnalyze.IsEnabled = true;
                     this.btnStopAnalysis.IsEnabled = false;
-                    this.Scan.IsEnabled = true;
+                    this.btnScan.IsEnabled = true;
 
                     this.isStartAnalysis = false;
 
