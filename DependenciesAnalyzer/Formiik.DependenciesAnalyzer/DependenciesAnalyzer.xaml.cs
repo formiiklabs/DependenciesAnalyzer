@@ -1045,7 +1045,6 @@ namespace Formiik.DependenciesAnalyzer
                         {
                             if (!file.StartsWith("/"))
                             {
-                                // ReSharper disable once UseStringInterpolation
                                 file = string.Format("/{0}", file);
                             }
 
@@ -1092,7 +1091,6 @@ namespace Formiik.DependenciesAnalyzer
                         {
                             if (!file.StartsWith("/"))
                             {
-                                // ReSharper disable once UseStringInterpolation
                                 file = string.Format("/{0}", file);
                             }
 
@@ -1345,9 +1343,19 @@ namespace Formiik.DependenciesAnalyzer
 
             if (e.Error != null)
             {
+                System.Windows.MessageBox.Show(
+                    "There was an error trying to analyze the branch selected.",
+                    "Error",
+                    MessageBoxButton.OK,
+                    MessageBoxImage.Error);
             }
             else if (e.Cancelled)
             {
+                System.Windows.MessageBox.Show(
+                    "The process for analyze the selected branch has been stopped.",
+                    "Warning",
+                    MessageBoxButton.OK,
+                    MessageBoxImage.Warning);
             }
             else
             {
