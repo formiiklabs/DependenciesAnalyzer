@@ -29,7 +29,7 @@ namespace Formiik.DependenciesAnalyzer
         private List<Branch> remoteBranches;
         private bool isStartAnalysis = false;
         private readonly ObservableCollection<ComboBoxItem> itemsRemoteBranches;
-        private BackgroundWorker backgroundWorkerAnalysis = new BackgroundWorker();
+        private BackgroundWorker backgroundWorkerAnalysis = null;
         #endregion
 
         public DependenciesAnalyzer()
@@ -542,8 +542,14 @@ namespace Formiik.DependenciesAnalyzer
                 this.txtCopied.Text = string.Empty;
                 this.txtUpdateButUnmerged.Text = string.Empty;
 
+                backgroundWorkerAnalysis = new BackgroundWorker();
+
                 backgroundWorkerAnalysis.WorkerSupportsCancellation = true;
+                
+                backgroundWorkerAnalysis.DoWork -= BackgroundWorker_DoWork;
                 backgroundWorkerAnalysis.DoWork += BackgroundWorker_DoWork;
+
+                backgroundWorkerAnalysis.RunWorkerCompleted -= BackgroundWorker_RunWorkerCompleted;
                 backgroundWorkerAnalysis.RunWorkerCompleted += BackgroundWorker_RunWorkerCompleted;
 
                 var remoteBranch = string.IsNullOrEmpty(Properties.Settings.Default.SelectedBranch) ?
@@ -1341,7 +1347,6 @@ namespace Formiik.DependenciesAnalyzer
 
                     moduleAffectedBlock.Margin = margin;
 
-                    // ReSharper disable once UseStringInterpolation
                     moduleAffectedBlock.Text = string.Format("{0}-{1}", item.Description, item.Action);
 
                     this.stackAllComponents.Children.Add(moduleAffectedBlock);
