@@ -180,11 +180,39 @@ namespace Formiik.DependenciesAnalyzer
 
             btnSetRepository.IsEnabled = true;
             btnSeleccionarRepo.IsEnabled = true;
-            btnRefresh.IsEnabled = false;
-            btnFetchCheckout.IsEnabled = false;
-            btnPull.IsEnabled = false;
-            btnAnalyze.IsEnabled = false;
-            btnScan.IsEnabled = false;
+            btnRefresh.IsEnabled = true;
+            btnFetchCheckout.IsEnabled = true;
+            btnPull.IsEnabled = true;
+            btnAnalyze.IsEnabled = true;
+            btnScan.IsEnabled = true;
+
+            if (!string.IsNullOrEmpty(Properties.Settings.Default.SelectedBranch))
+            {
+                foreach (var item in remoteBranchesGallery.Items)
+                {
+                    foreach (var subItem in ((RibbonGalleryCategory)item).Items)
+                    {
+                        if (((RibbonGalleryItem)subItem).Content.ToString() == Properties.Settings.Default.SelectedBranch)
+                        {
+                            remoteBranchesGallery.SelectedItem = ((RibbonGalleryItem)subItem);
+
+                            btnRefresh.IsEnabled = true;
+                            btnFetchCheckout.IsEnabled = true;
+                            btnPull.IsEnabled = true;
+                            btnAnalyze.IsEnabled = true;
+                            btnScan.IsEnabled = true;
+                        }
+                    }
+                }
+            }
+            else
+            {
+                btnRefresh.IsEnabled = true;
+                btnFetchCheckout.IsEnabled = false;
+                btnPull.IsEnabled = false;
+                btnAnalyze.IsEnabled = false;
+                btnScan.IsEnabled = true;
+            }
         }
 
         private void BackgroundWorkerClone_DoWork(object sender, DoWorkEventArgs e)
@@ -437,10 +465,36 @@ namespace Formiik.DependenciesAnalyzer
 
             try
             {
-                selectedBranch =
-                    string.IsNullOrEmpty(Properties.Settings.Default.SelectedBranch) ?
-                    ((RibbonGalleryItem)this.remoteBranchesGallery.SelectedItem).Content.ToString() :
-                    Properties.Settings.Default.SelectedBranch;
+                selectedBranch = ((RibbonGalleryItem)this.remoteBranchesGallery.SelectedItem).Content.ToString();
+
+                if (string.IsNullOrEmpty(selectedBranch))
+                {
+                    selectedBranch = Properties.Settings.Default.SelectedBranch;
+
+                    if (string.IsNullOrEmpty(selectedBranch))
+                    {
+                        System.Windows.MessageBox.Show(
+                            "You must select a branch.",
+                            "Error",
+                            MessageBoxButton.OK,
+                            MessageBoxImage.Error);
+
+                        return;
+                    }
+                    else
+                    {
+                        foreach (var item in remoteBranchesGallery.Items)
+                        {
+                            foreach (var subItem in ((RibbonGalleryCategory)item).Items)
+                            {
+                                if (((RibbonGalleryItem)subItem).Content.ToString() == selectedBranch)
+                                {
+                                    remoteBranchesGallery.SelectedItem = ((RibbonGalleryItem)subItem);
+                                }
+                            }
+                        }
+                    }
+                }
 
                 using (var gitActions = new GitActionsManager())
                 {
@@ -476,6 +530,37 @@ namespace Formiik.DependenciesAnalyzer
         {
             try
             {
+                var selectedBranch = ((RibbonGalleryItem)this.remoteBranchesGallery.SelectedItem).Content.ToString();
+
+                if (string.IsNullOrEmpty(selectedBranch))
+                {
+                    selectedBranch = Properties.Settings.Default.SelectedBranch;
+
+                    if (string.IsNullOrEmpty(selectedBranch))
+                    {
+                        System.Windows.MessageBox.Show(
+                            "You must select a branch.",
+                            "Error",
+                            MessageBoxButton.OK,
+                            MessageBoxImage.Error);
+
+                        return;
+                    }
+                    else
+                    {
+                        foreach (var item in remoteBranchesGallery.Items)
+                        {
+                            foreach (var subItem in ((RibbonGalleryCategory)item).Items)
+                            {
+                                if (((RibbonGalleryItem)subItem).Content.ToString() == selectedBranch)
+                                {
+                                    remoteBranchesGallery.SelectedItem = ((RibbonGalleryItem)subItem);
+                                }
+                            }
+                        }
+                    }
+                }
+
                 using (var gitActions = new GitActionsManager())
                 {
                     gitActions.PullChanges(
@@ -516,6 +601,37 @@ namespace Formiik.DependenciesAnalyzer
 
         private void BtnAnalyze_Click(object sender, RoutedEventArgs e)
         {
+            var selectedBranch = ((RibbonGalleryItem)this.remoteBranchesGallery.SelectedItem).Content.ToString();
+
+            if (string.IsNullOrEmpty(selectedBranch))
+            {
+                selectedBranch = Properties.Settings.Default.SelectedBranch;
+
+                if (string.IsNullOrEmpty(selectedBranch))
+                {
+                    System.Windows.MessageBox.Show(
+                        "You must select a branch.",
+                        "Error",
+                        MessageBoxButton.OK,
+                        MessageBoxImage.Error);
+
+                    return;
+                }
+                else
+                {
+                    foreach (var item in remoteBranchesGallery.Items)
+                    {
+                        foreach (var subItem in ((RibbonGalleryCategory)item).Items)
+                        {
+                            if (((RibbonGalleryItem)subItem).Content.ToString() == selectedBranch)
+                            {
+                                remoteBranchesGallery.SelectedItem = ((RibbonGalleryItem)subItem);
+                            }
+                        }
+                    }
+                }
+            }
+
             this.stackModules.Children.Clear();
 
             this.treeViewRoot.Items.Clear();
@@ -556,7 +672,7 @@ namespace Formiik.DependenciesAnalyzer
                     ((RibbonGalleryItem)this.remoteBranchesGallery.SelectedItem).Content.ToString() :
                     Properties.Settings.Default.SelectedBranch;
 
-                var selectedBranch = remoteBranch.Remove(0, 7);
+                selectedBranch = remoteBranch.Remove(0, 7);
 
                 var data = new DataWorkerAnalyze
                 {
@@ -573,6 +689,7 @@ namespace Formiik.DependenciesAnalyzer
 
                 this.isStartAnalysis = true;
 
+                this.remoteBranchesCategory.IsEnabled = false;
                 this.btnSetRepository.IsEnabled = false;
                 this.btnSeleccionarRepo.IsEnabled = false;
                 this.btnRefresh.IsEnabled = false;
@@ -597,7 +714,6 @@ namespace Formiik.DependenciesAnalyzer
         private void BackgroundWorker_RunWorkerCompleted(object sender, RunWorkerCompletedEventArgs e)
         {
             this.isStartAnalysis = false;
-
             this.btnAnalyze.IsEnabled = true;
             this.btnStopAnalysis.IsEnabled = false;
 
@@ -626,15 +742,10 @@ namespace Formiik.DependenciesAnalyzer
                     result.TreeNodes.ForEach(n =>
                     {
                         var treeViewItem = new TreeViewItem();
-
                         treeViewItem.Selected += TreeViewItem_Selected;
-
                         treeViewItem.IsExpanded = true;
-
                         treeViewItem.Header = n.Value;
-
                         treeViewRoot.Items.Add(treeViewItem);
-
                         this.CreateNodeTreeView(n, treeViewItem);
                     });
                 }
@@ -642,48 +753,33 @@ namespace Formiik.DependenciesAnalyzer
                 if (result.ModulesAffected.Any())
                 {
                     this.lblModulosAfectados.Content = "Modules Affected:";
-
                     this.btnExportarTextoAfectados.Visibility = Visibility.Visible;
 
                     result.ModulesAffected.ForEach(moduleAffected =>
                     {
                         var moduleAffectedBlock = new TextBlock();
-
                         var margin = moduleAffectedBlock.Margin;
-
                         margin.Left = 5;
-
                         margin.Top = 5;
-
                         margin.Right = 5;
-
                         margin.Bottom = 5;
-
                         moduleAffectedBlock.Margin = margin;
-                        
                         moduleAffectedBlock.Text = $"{moduleAffected.Description}-{moduleAffected.Action}";
-
                         this.stackModules.Children.Add(moduleAffectedBlock);
                     });
                 }
 
                 this.lblArchivosModificados.Content = "Files Modified";
-
                 this.txtRenamed.Text = $"Renamed: {result.FileSet.Renamed.Count}";
-                
                 this.txtModified.Text = $"Modified: {result.FileSet.Modified.Count}";
-                
                 this.txtAdded.Text = $"Added: {result.FileSet.Added.Count}";
-                
                 this.txtDeleted.Text = $"Deleted: {result.FileSet.Deleted.Count}";
-                
                 this.txtCopied.Text = $"Copied: {result.FileSet.Copied.Count}";
-                
                 this.txtUpdateButUnmerged.Text = $"Update But Unmerged: {result.FileSet.UpdateButUnmerged.Count}";
-
                 this.pgbIndeterminate.IsIndeterminate = false;
             }
-            
+
+            this.remoteBranchesCategory.IsEnabled = true;
             this.btnSetRepository.IsEnabled = true;
             this.btnSeleccionarRepo.IsEnabled = true;
             this.btnRefresh.IsEnabled = true;
@@ -1527,24 +1623,40 @@ namespace Formiik.DependenciesAnalyzer
 
         private void remoteBranches_SelectionChanged(object sender, RoutedPropertyChangedEventArgs<object> e)
         {
-            RibbonGallery source = e.OriginalSource as RibbonGallery;
-
-            if (source == null)
+            if (!this.isStartAnalysis)
             {
-                return;
+                RibbonGallery source = e.OriginalSource as RibbonGallery;
+
+                if (source == null)
+                {
+                    return;
+                }
+
+                var selectedValue = ((RibbonGalleryItem)source.SelectedItem).Content.ToString();
+
+                if (!string.IsNullOrEmpty(selectedValue))
+                {
+                    this.btnRefresh.IsEnabled = true;
+                    this.btnFetchCheckout.IsEnabled = true;
+                    this.btnPull.IsEnabled = true;
+                    this.btnAnalyze.IsEnabled = true;
+                    this.btnScan.IsEnabled = true;
+
+                    Properties.Settings.Default.SelectedBranch = selectedValue;
+                }
+                else
+                {
+                    this.btnRefresh.IsEnabled = true;
+                    this.btnFetchCheckout.IsEnabled = false;
+                    this.btnPull.IsEnabled = false;
+                    this.btnAnalyze.IsEnabled = false;
+                    this.btnScan.IsEnabled = true;
+
+                    Properties.Settings.Default.SelectedBranch = string.Empty;
+                }
+
+                Properties.Settings.Default.Save();
             }
-
-            this.btnRefresh.IsEnabled = true;
-            this.btnFetchCheckout.IsEnabled = true;
-            this.btnPull.IsEnabled = true;
-            this.btnAnalyze.IsEnabled = true;
-            this.btnScan.IsEnabled = true;
-
-            var selectedValue = ((RibbonGalleryItem)source.SelectedItem).Content.ToString();
-
-            Properties.Settings.Default.SelectedBranch = selectedValue;
-
-            Properties.Settings.Default.Save();
         }
 
         private bool IsDirectoryEmpty(string path)
@@ -1560,6 +1672,7 @@ namespace Formiik.DependenciesAnalyzer
                 {
                     this.backgroundWorkerAnalysis.CancelAsync();
 
+                    this.remoteBranchesCategory.IsEnabled = true;
                     this.btnSetRepository.IsEnabled = true;
                     this.btnSeleccionarRepo.IsEnabled = true;
                     this.btnRefresh.IsEnabled = true;
