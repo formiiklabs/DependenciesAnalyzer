@@ -107,7 +107,8 @@ namespace Formiik.DependenciesAnalyzer
 
             while (string.IsNullOrEmpty(Properties.Settings.Default.RepoPath)
                 || !Directory.Exists(Properties.Settings.Default.RepoPath)
-                || !this.IsDirectoryEmpty(Properties.Settings.Default.RepoPath))
+                || (!this.IsDirectoryEmpty(Properties.Settings.Default.RepoPath)
+                && !this.ContainsGitDirectory(Properties.Settings.Default.RepoPath)))
             {
                 System.Windows.MessageBox.Show(
                     "You have not selected a valid empty local repository path",
@@ -302,7 +303,8 @@ namespace Formiik.DependenciesAnalyzer
                 return;
             }
 
-            var isEmpty = this.IsDirectoryEmpty(folderBrowser.SelectedPath);
+            var isEmpty = (this.IsDirectoryEmpty(folderBrowser.SelectedPath) && 
+                !this.ContainsGitDirectory(folderBrowser.SelectedPath));
 
             if (!isEmpty)
             {
@@ -1661,7 +1663,16 @@ namespace Formiik.DependenciesAnalyzer
 
         private bool IsDirectoryEmpty(string path)
         {
+            string[] subdirectoryEntries = Directory.GetDirectories(path);
+
             return !Directory.EnumerateFileSystemEntries(path).Any();
+        }
+
+        private bool ContainsGitDirectory(string path)
+        {
+            var result = Directory.GetDirectories(path).ToList().Where(x => x.Contains(".git")).Any();
+
+            return result;
         }
 
         private void btnStopAnalysis_Click(object sender, RoutedEventArgs e)
