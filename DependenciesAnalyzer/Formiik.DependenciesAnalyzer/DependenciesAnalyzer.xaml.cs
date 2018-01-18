@@ -1406,14 +1406,15 @@ namespace Formiik.DependenciesAnalyzer
                 this.btnFetchCheckout.IsEnabled = false;
                 this.btnPull.IsEnabled = false;
                 this.btnAnalyze.IsEnabled = false;
-                this.btnScan.IsEnabled = false;
+                this.btnScan.IsEnabled = true;
 
-                 return;
+                return;
             }
 
             foreach (var item in this.remoteBranchesCategory.Items.Cast<RibbonGalleryItem>().Where(item => item.Content.ToString().Equals(selectedBranch, StringComparison.InvariantCultureIgnoreCase)))
             {
                 this.remoteBranchesGallery.SelectedItem = item;
+
                 break;
             }
         }
@@ -1675,6 +1676,8 @@ namespace Formiik.DependenciesAnalyzer
 
         private void remoteBranches_SelectionChanged(object sender, RoutedPropertyChangedEventArgs<object> e)
         {
+            this.btnScan.IsEnabled = true;
+
             if (!this.isStartAnalysis)
             {
                 RibbonGallery source = e.OriginalSource as RibbonGallery;
