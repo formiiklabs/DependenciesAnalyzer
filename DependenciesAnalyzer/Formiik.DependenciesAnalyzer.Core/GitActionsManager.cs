@@ -38,7 +38,6 @@ namespace Formiik.DependenciesAnalyzer.Core
                 }
             };
 
-
             var localRepoPath = UtilsGit.CanonizeGitPath(repoPath);
 
             Repository.Clone(remoteRepo, localRepoPath, cloneOptions);

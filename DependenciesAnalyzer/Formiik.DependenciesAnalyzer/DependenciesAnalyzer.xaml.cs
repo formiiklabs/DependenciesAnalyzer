@@ -620,7 +620,22 @@ namespace Formiik.DependenciesAnalyzer
 
         private void BtnAnalyze_Click(object sender, RoutedEventArgs e)
         {
-            var selectedBranch = ((RibbonGalleryItem)this.remoteBranchesGallery.SelectedItem).Content.ToString();
+            string selectedBranch = string.Empty;
+
+            try
+            {
+                selectedBranch = ((RibbonGalleryItem)this.remoteBranchesGallery.SelectedItem).Content.ToString();
+            }
+            catch (NullReferenceException)
+            {
+                System.Windows.MessageBox.Show(
+                    "You must select a branch.",
+                    "Error",
+                    MessageBoxButton.OK,
+                    MessageBoxImage.Error);
+
+                return;
+            }
 
             if (string.IsNullOrEmpty(selectedBranch))
             {
@@ -1410,6 +1425,8 @@ namespace Formiik.DependenciesAnalyzer
 
         private void BtnScan_Click(object sender, RoutedEventArgs e)
         {
+            this.isStartAnalysis = true;
+
             this.stackAllComponents.Children.Clear();
 
             this.lblTotalComponents.Content = "Total Components";
@@ -1424,6 +1441,7 @@ namespace Formiik.DependenciesAnalyzer
 
                 this.btnExportarTextoComponentes.Visibility = Visibility.Collapsed;
 
+                this.remoteBranchesCategory.IsEnabled = false;
                 this.btnSetRepository.IsEnabled = false;
                 this.btnSeleccionarRepo.IsEnabled = false;
                 this.btnRefresh.IsEnabled = false;
@@ -1448,6 +1466,8 @@ namespace Formiik.DependenciesAnalyzer
 
         private void BackgroundWorkerAllComponents_RunWorkerCompleted(object sender, RunWorkerCompletedEventArgs e)
         {
+            this.isStartAnalysis = false;
+
             this.btnSetRepository.IsEnabled = true;
             this.btnSeleccionarRepo.IsEnabled = true;
             this.btnRefresh.IsEnabled = true;
@@ -1510,6 +1530,8 @@ namespace Formiik.DependenciesAnalyzer
                     this.stackAllComponents.Children.Add(moduleAffectedBlock);
                 }
             }
+
+            this.remoteBranchesCategory.IsEnabled = true;
         }
 
         private static void BackgroundWorkerAllComponents_DoWork(object sender, DoWorkEventArgs e)
