@@ -169,11 +169,22 @@ namespace Formiik.DependenciesAnalyzer
                 }
                 else
                 {
-                    System.Windows.MessageBox.Show(
-                        "An error occurred while cloning the repository",
-                        "Error",
-                        MessageBoxButton.OK,
-                        MessageBoxImage.Error);
+                    if (string.IsNullOrEmpty(result.Message))
+                    {
+                        System.Windows.MessageBox.Show(
+                            "An error occurred while cloning the repository",
+                            "Error",
+                            MessageBoxButton.OK,
+                            MessageBoxImage.Error);
+                    }
+                    else
+                    {
+                        System.Windows.MessageBox.Show(
+                            result.Message,
+                            "Invalid User or Invalid Password",
+                            MessageBoxButton.OK,
+                            MessageBoxImage.Error);
+                    }
                 }
             }
 
@@ -240,6 +251,12 @@ namespace Formiik.DependenciesAnalyzer
                 if (exception.Message.Contains("exists and is not an empty directory"))
                 {
                     result.IsSetRepository = true;
+                }
+                else if (exception.Message.Contains("too many redirects or authentication replays"))
+                {
+                    result.IsSetRepository = false;
+
+                    result.Message = "We have invalid account or invalid password for connect with the server, please check your information";
                 }
                 else
                 {
@@ -1608,11 +1625,22 @@ namespace Formiik.DependenciesAnalyzer
             }
             catch (Exception exception)
             {
-                System.Windows.MessageBox.Show(
-                    "There was an error trying to refresh all branches.",
-                    "Error",
-                    MessageBoxButton.OK,
-                    MessageBoxImage.Error);
+                if (exception.Message.Equals("too many redirects or authentication replays"))
+                {
+                    System.Windows.MessageBox.Show(
+                            "We have invalid account or invalid password for connect with the server, please check your information",
+                            "Invalid User or Invalid Password",
+                            MessageBoxButton.OK,
+                            MessageBoxImage.Error);
+                }
+                else
+                {
+                    System.Windows.MessageBox.Show(
+                        "There was an error trying to refresh all branches.",
+                        "Error",
+                        MessageBoxButton.OK,
+                        MessageBoxImage.Error);
+                }
 
                 Console.WriteLine(exception.Message);
             }
