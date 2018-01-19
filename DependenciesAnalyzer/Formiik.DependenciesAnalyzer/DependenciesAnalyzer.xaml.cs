@@ -68,6 +68,10 @@ namespace Formiik.DependenciesAnalyzer
 
         private void BtnSeleccionarRepo_Click(object sender, RoutedEventArgs e)
         {
+            this.isStartAnalysis = true;
+
+            this.remoteBranchesCategory.IsEnabled = false;
+
             this.SeleccionarRepoLocal();
         }
 
@@ -99,6 +103,10 @@ namespace Formiik.DependenciesAnalyzer
             string password,
             string gitPath)
         {
+            this.isStartAnalysis = true;
+
+            this.rbncmbRemoteBranches.IsEnabled = false;
+
             Properties.Settings.Default.PathGit = gitPath;
 
             lblPathGit.Text = Properties.Settings.Default.PathGit;
@@ -148,6 +156,12 @@ namespace Formiik.DependenciesAnalyzer
 
         private void BackgroundWorkerClone_RunWorkerCompleted(object sender, RunWorkerCompletedEventArgs e)
         {
+            this.isStartAnalysis = false;
+
+            this.remoteBranchesCategory.IsEnabled = true;
+
+            this.btnScan.IsEnabled = true;
+
             if (e.Error != null)
             {
                 System.Windows.MessageBox.Show(
@@ -292,6 +306,8 @@ namespace Formiik.DependenciesAnalyzer
 
             if (this.GetRemoteBranches())
             {
+                this.btnScan.IsEnabled = true;
+
                 System.Windows.MessageBox.Show(
                     "Local repository configured correctly",
                     "Information",
@@ -373,11 +389,6 @@ namespace Formiik.DependenciesAnalyzer
                 }
                 else
                 {
-                    System.Windows.MessageBox.Show(
-                        "You need configure the parameters of the remote repository", 
-                        "Warning", MessageBoxButton.OK, 
-                        MessageBoxImage.Warning);
-
                     if (this.remoteRepo == null)
                     {
                         this.remoteRepo = new RemoteRepo();
@@ -529,7 +540,6 @@ namespace Formiik.DependenciesAnalyzer
             catch (NameConflictException)
             {
                 System.Windows.MessageBox.Show(
-                    // ReSharper disable once UseStringInterpolation
                     string.Format("The selected branch {0} is already selected", selectedBranch),
                     "Information",
                     MessageBoxButton.OK,
@@ -747,6 +757,8 @@ namespace Formiik.DependenciesAnalyzer
 
         private void BackgroundWorker_RunWorkerCompleted(object sender, RunWorkerCompletedEventArgs e)
         {
+            this.btnScan.IsEnabled = true;
+
             this.isStartAnalysis = false;
             this.btnAnalyze.IsEnabled = true;
             this.btnStopAnalysis.IsEnabled = false;
@@ -1676,8 +1688,6 @@ namespace Formiik.DependenciesAnalyzer
 
         private void remoteBranches_SelectionChanged(object sender, RoutedPropertyChangedEventArgs<object> e)
         {
-            this.btnScan.IsEnabled = true;
-
             if (!this.isStartAnalysis)
             {
                 RibbonGallery source = e.OriginalSource as RibbonGallery;
@@ -1711,6 +1721,10 @@ namespace Formiik.DependenciesAnalyzer
                 }
 
                 Properties.Settings.Default.Save();
+            }
+            else
+            {
+                this.btnScan.IsEnabled = false;
             }
         }
 
