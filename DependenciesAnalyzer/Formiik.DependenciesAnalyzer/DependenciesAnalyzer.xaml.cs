@@ -47,7 +47,6 @@ namespace Formiik.DependenciesAnalyzer
             //Properties.Settings.Default.PathGit = string.Empty;
             //Properties.Settings.Default.PasswordRemoteRepo = string.Empty;
             //Properties.Settings.Default.SelectedBranch = string.Empty;
-
             //Properties.Settings.Default.Save();
             //#endif
 
@@ -73,7 +72,7 @@ namespace Formiik.DependenciesAnalyzer
                 this.btnFetchCheckout.IsEnabled = false;
                 this.btnPull.IsEnabled = false;
                 this.btnAnalyze.IsEnabled = false;
-                this.Scan.IsEnabled = false;
+                this.btnScan.IsEnabled = false;
             }
         }
 
@@ -237,7 +236,6 @@ namespace Formiik.DependenciesAnalyzer
                             btnFetchCheckout.IsEnabled = true;
                             btnPull.IsEnabled = true;
                             btnAnalyze.IsEnabled = true;
-                            btnScan.IsEnabled = true;
                         }
                     }
                 }
@@ -248,8 +246,9 @@ namespace Formiik.DependenciesAnalyzer
                 btnFetchCheckout.IsEnabled = false;
                 btnPull.IsEnabled = false;
                 btnAnalyze.IsEnabled = false;
-                btnScan.IsEnabled = true;
             }
+
+            btnScan.IsEnabled = true;
         }
 
         private void BackgroundWorkerClone_DoWork(object sender, DoWorkEventArgs e)
@@ -303,6 +302,8 @@ namespace Formiik.DependenciesAnalyzer
 
         private void SetRepository(string urlRemoteRepo, string user, string password)
         {
+            this.btnScan.IsEnabled = true;
+
             Properties.Settings.Default.RemoteRepoUrl = urlRemoteRepo;
 
             Properties.Settings.Default.UserRemoteRepo = user;
@@ -317,10 +318,8 @@ namespace Formiik.DependenciesAnalyzer
 
             if (this.GetRemoteBranches())
             {
-                this.btnScan.IsEnabled = true;
-
                 System.Windows.MessageBox.Show(
-                    "Local repository configured correctly",
+                    "Local repository configured correctly 2",
                     "Information",
                     MessageBoxButton.OK,
                     MessageBoxImage.Information);
@@ -1421,6 +1420,8 @@ namespace Formiik.DependenciesAnalyzer
 
         private void Window_Loaded(object sender, RoutedEventArgs e)
         {
+            this.btnScan.IsEnabled = false;
+
             var selectedBranch = Properties.Settings.Default.SelectedBranch;
 
             if (string.IsNullOrEmpty(selectedBranch))
@@ -1429,7 +1430,7 @@ namespace Formiik.DependenciesAnalyzer
                 this.btnFetchCheckout.IsEnabled = false;
                 this.btnPull.IsEnabled = false;
                 this.btnAnalyze.IsEnabled = false;
-                this.btnScan.IsEnabled = true;
+                this.btnScan.IsEnabled = false;
 
                 return;
             }
