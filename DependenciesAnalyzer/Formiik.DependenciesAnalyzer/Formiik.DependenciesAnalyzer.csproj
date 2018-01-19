@@ -237,6 +237,7 @@
       <Generator>MSBuild:Compile</Generator>
       <SubType>Designer</SubType>
     </ApplicationDefinition>
+    <Compile Include="Entities\DataCheckOutEntity.cs" />
     <Compile Include="Entities\DataCloneRepositoryEntity.cs" />
     <Compile Include="Entities\DataWorkerAnalyze.cs" />
     <Compile Include="Entities\ResultCloneRepositoryEntity.cs" />

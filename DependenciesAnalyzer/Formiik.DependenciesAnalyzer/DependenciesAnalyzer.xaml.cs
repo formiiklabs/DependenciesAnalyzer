@@ -536,16 +536,19 @@ namespace Formiik.DependenciesAnalyzer
                     }
                 }
 
-                using (var gitActions = new GitActionsManager())
-                {
-                    gitActions.FetchAndCheckout(Properties.Settings.Default.RepoPath, selectedBranch);
-                }
+                var backgroundWorkerCheckout = new BackgroundWorker();
 
-                System.Windows.MessageBox.Show(
-                    "Success checkout",
-                    "Information",
-                    MessageBoxButton.OK,
-                    MessageBoxImage.None);
+                backgroundWorkerCheckout.DoWork += BackgroundWorkerCheckout_DoWork;
+
+                backgroundWorkerCheckout.RunWorkerCompleted += BackgroundWorkerCheckout_RunWorkerCompleted;
+
+                var input = new DataCheckOutEntity
+                {
+                    RepositoryPath = Properties.Settings.Default.RepoPath,
+                    BranchSelected = selectedBranch
+                };
+
+                backgroundWorkerCheckout.RunWorkerAsync(input);
             }
             catch (NameConflictException)
             {
@@ -562,6 +565,44 @@ namespace Formiik.DependenciesAnalyzer
                     "Error",
                     MessageBoxButton.OK,
                     MessageBoxImage.Error);
+            }
+        }
+
+        private void BackgroundWorkerCheckout_RunWorkerCompleted(object sender, RunWorkerCompletedEventArgs e)
+        {
+            if (e.Error != null)
+            {
+                System.Windows.MessageBox.Show(
+                    "There was an error while trying to checkout to the branch.", 
+                    "Error", 
+                    MessageBoxButton.OK, 
+                    MessageBoxImage.Error);
+            }
+            else if (e.Cancelled)
+            {
+                System.Windows.MessageBox.Show(
+                    "The process for checkout the branch has been stopped.",
+                    "Warning",
+                    MessageBoxButton.OK,
+                    MessageBoxImage.Warning);
+            }
+            else
+            {
+                System.Windows.MessageBox.Show(
+                "Success checkout",
+                "Information",
+                MessageBoxButton.OK,
+                MessageBoxImage.Information);
+            }
+        }
+
+        private void BackgroundWorkerCheckout_DoWork(object sender, DoWorkEventArgs e)
+        {
+            var arguments = (DataCheckOutEntity)e.Argument;
+
+            using (var gitActions = new GitActionsManager())
+            {
+                gitActions.FetchAndCheckout(arguments.RepositoryPath, arguments.BranchSelected);
             }
         }
 
