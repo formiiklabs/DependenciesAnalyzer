@@ -40,6 +40,17 @@ namespace Formiik.DependenciesAnalyzer
 
             this.itemsRemoteBranches = new ObservableCollection<ComboBoxItem>();
 
+            #if DEBUG
+            //Properties.Settings.Default.RepoPath = string.Empty;
+            //Properties.Settings.Default.RemoteRepoUrl = string.Empty;
+            //Properties.Settings.Default.UserRemoteRepo = string.Empty;
+            //Properties.Settings.Default.PathGit = string.Empty;
+            //Properties.Settings.Default.PasswordRemoteRepo = string.Empty;
+            //Properties.Settings.Default.SelectedBranch = string.Empty;
+
+            //Properties.Settings.Default.Save();
+            #endif
+
             this.lblPathRepo.Content =
                 UtilsGit.CanonizeGitPath(Properties.Settings.Default.RepoPath);
 
@@ -105,7 +116,7 @@ namespace Formiik.DependenciesAnalyzer
         {
             this.isStartAnalysis = true;
 
-            this.rbncmbRemoteBranches.IsEnabled = false;
+            this.remoteBranchesCategory.IsEnabled = false;
 
             Properties.Settings.Default.PathGit = gitPath;
 
