@@ -763,6 +763,9 @@ namespace Formiik.DependenciesAnalyzer
                 backgroundWorkerAnalysis.RunWorkerCompleted -= BackgroundWorker_RunWorkerCompleted;
                 backgroundWorkerAnalysis.RunWorkerCompleted += BackgroundWorker_RunWorkerCompleted;
 
+                backgroundWorkerAnalysis.Disposed += BackgroundWorkerAnalysis_Disposed;
+                backgroundWorkerAnalysis.Disposed -= BackgroundWorkerAnalysis_Disposed;
+
                 var remoteBranch = string.IsNullOrEmpty(Properties.Settings.Default.SelectedBranch) ?
                     ((RibbonGalleryItem)this.remoteBranchesGallery.SelectedItem).Content.ToString() :
                     Properties.Settings.Default.SelectedBranch;
@@ -806,6 +809,15 @@ namespace Formiik.DependenciesAnalyzer
             }
         }
 
+        private void BackgroundWorkerAnalysis_Disposed(object sender, EventArgs e)
+        {
+            System.Windows.MessageBox.Show(
+                    "Disposed",
+                    "Information",
+                    MessageBoxButton.OK,
+                    MessageBoxImage.Information);
+        }
+
         private void BackgroundWorker_RunWorkerCompleted(object sender, RunWorkerCompletedEventArgs e)
         {
             this.btnScan.IsEnabled = true;
@@ -817,7 +829,7 @@ namespace Formiik.DependenciesAnalyzer
             if (e.Error != null)
             {
                 System.Windows.MessageBox.Show(
-                    "There was an error trying to analyze the branch selected.",
+                    "Wait a brief time (1 minute) for try again start the analysis.",
                     "Error",
                     MessageBoxButton.OK,
                     MessageBoxImage.Error);
