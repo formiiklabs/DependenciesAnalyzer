@@ -202,6 +202,10 @@
                                 <ColumnDefinition Width="*" />
                                 <ColumnDefinition Width="auto" />
                                 <ColumnDefinition Width="*" />
+                                <ColumnDefinition Width="auto" />
+                                <ColumnDefinition Width="*" />
+                                <ColumnDefinition Width="auto" />
+                                <ColumnDefinition Width="*" />
                             </Grid.ColumnDefinitions>
                         </Grid>
                     </ItemsPanelTemplate>
@@ -232,6 +236,18 @@
                 <Separator Grid.Column="11" />
                 <StatusBarItem Grid.Column="12">
                     <TextBlock x:Name="txtUpdateButUnmerged" />
+                </StatusBarItem>
+                <Separator Grid.Column="13" />
+                <StatusBarItem Grid.Column="14">
+                    <Button x:Name="Less" Click="Less_Click">
+                        Zoom -
+                    </Button>
+                </StatusBarItem>
+                <Separator Grid.Column="15" />
+                <StatusBarItem Grid.Column="16">
+                    <Button x:Name="More" Click="More_Click">
+                        Zoom +
+                    </Button>
                 </StatusBarItem>
             </StatusBar>
             <Grid>

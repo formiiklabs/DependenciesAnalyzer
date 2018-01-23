@@ -30,6 +30,9 @@ namespace Formiik.DependenciesAnalyzer
         private bool isStartAnalysis = false;
         private readonly ObservableCollection<ComboBoxItem> itemsRemoteBranches;
         private BackgroundWorker backgroundWorkerAnalysis = null;
+        private GraphViewer graphViewer = null;
+        private double identityZoom = 1.0;
+        private double factorZoom = 0.1;
         #endregion
 
         public DependenciesAnalyzer()
@@ -319,7 +322,7 @@ namespace Formiik.DependenciesAnalyzer
             if (this.GetRemoteBranches())
             {
                 System.Windows.MessageBox.Show(
-                    "Local repository configured correctly 2",
+                    "Local repository configured correctly",
                     "Information",
                     MessageBoxButton.OK,
                     MessageBoxImage.Information);
@@ -570,6 +573,8 @@ namespace Formiik.DependenciesAnalyzer
 
         private void BackgroundWorkerCheckout_RunWorkerCompleted(object sender, RunWorkerCompletedEventArgs e)
         {
+            this.btnAnalyze.IsEnabled = true;
+
             if (e.Error != null)
             {
                 System.Windows.MessageBox.Show(
@@ -681,6 +686,9 @@ namespace Formiik.DependenciesAnalyzer
 
         private void BtnAnalyze_Click(object sender, RoutedEventArgs e)
         {
+            this.Less.IsEnabled = false;
+            this.More.IsEnabled = false;
+
             string selectedBranch = string.Empty;
 
             try
@@ -1084,6 +1092,9 @@ namespace Formiik.DependenciesAnalyzer
 
         private void BackgroundWorkerTree_RunWorkerCompleted(object sender, RunWorkerCompletedEventArgs e)
         {
+            this.Less.IsEnabled = true;
+            this.More.IsEnabled = true;
+
             if (e.Error != null)
             {
                 System.Windows.MessageBox.Show(
@@ -1113,7 +1124,7 @@ namespace Formiik.DependenciesAnalyzer
 
                 var graphViewerPanel = new DockPanel();
 
-                var graphViewer = new GraphViewer();
+                graphViewer = new GraphViewer();
 
                 graphViewerPanel.ClipToBounds = true;
 
@@ -1474,6 +1485,8 @@ namespace Formiik.DependenciesAnalyzer
         private void Window_Loaded(object sender, RoutedEventArgs e)
         {
             this.btnScan.IsEnabled = false;
+            this.Less.IsEnabled = false;
+            this.More.IsEnabled = false;
 
             var selectedBranch = Properties.Settings.Default.SelectedBranch;
 
@@ -1769,7 +1782,7 @@ namespace Formiik.DependenciesAnalyzer
                     this.btnRefresh.IsEnabled = true;
                     this.btnFetchCheckout.IsEnabled = true;
                     this.btnPull.IsEnabled = true;
-                    this.btnAnalyze.IsEnabled = true;
+                    this.btnAnalyze.IsEnabled = false;
                     this.btnScan.IsEnabled = true;
 
                     Properties.Settings.Default.SelectedBranch = selectedValue;
@@ -1830,6 +1843,20 @@ namespace Formiik.DependenciesAnalyzer
                     this.pgbIndeterminate.IsIndeterminate = false;
                 }
             }
+        }
+
+        private void Less_Click(object sender, RoutedEventArgs e)
+        {
+            identityZoom -= factorZoom;
+
+            this.graphViewer.ZoomAbout(identityZoom, new Point(0, 0));
+        }
+
+        private void More_Click(object sender, RoutedEventArgs e)
+        {
+            identityZoom += factorZoom;
+
+            this.graphViewer.ZoomAbout(identityZoom, new Point(0, 0));
         }
     }
 }
