@@ -147,6 +147,8 @@ namespace Formiik.DependenciesAnalyzer
             btnPull.IsEnabled = false;
             btnAnalyze.IsEnabled = false;
             btnScan.IsEnabled = false;
+            this.Less.IsEnabled = false;
+            this.More.IsEnabled = false;
 
             var backgroundWorkerClone = new BackgroundWorker();
 
@@ -397,6 +399,8 @@ namespace Formiik.DependenciesAnalyzer
                     this.btnPull.IsEnabled = false;
                     this.btnAnalyze.IsEnabled = false;
                     this.btnScan.IsEnabled = false;
+                    this.Less.IsEnabled = false;
+                    this.More.IsEnabled = false;
 
                     backgroundWorkerClone.RunWorkerAsync(input);
                 }
@@ -551,6 +555,18 @@ namespace Formiik.DependenciesAnalyzer
                     BranchSelected = selectedBranch
                 };
 
+                this.btnSetRepository.IsEnabled = false;
+                this.btnSeleccionarRepo.IsEnabled = false;
+                this.remoteBranchesCategory.IsEnabled = false;
+                this.btnRefresh.IsEnabled = false;
+                this.btnFetchCheckout.IsEnabled = false;
+                this.btnPull.IsEnabled = false;
+                this.btnAnalyze.IsEnabled = false;
+                this.btnStopAnalysis.IsEnabled = false;
+                this.btnScan.IsEnabled = false;
+                this.Less.IsEnabled = false;
+                this.More.IsEnabled = false;
+
                 backgroundWorkerCheckout.RunWorkerAsync(input);
             }
             catch (NameConflictException)
@@ -599,6 +615,16 @@ namespace Formiik.DependenciesAnalyzer
                 MessageBoxButton.OK,
                 MessageBoxImage.Information);
             }
+
+            this.btnSetRepository.IsEnabled = true;
+            this.btnSeleccionarRepo.IsEnabled = true;
+            this.remoteBranchesCategory.IsEnabled = true;
+            this.btnRefresh.IsEnabled = true;
+            this.btnFetchCheckout.IsEnabled = true;
+            this.btnPull.IsEnabled = true;
+            this.btnAnalyze.IsEnabled = true;
+            this.btnStopAnalysis.IsEnabled = true;
+            this.btnScan.IsEnabled = true;
         }
 
         private void BackgroundWorkerCheckout_DoWork(object sender, DoWorkEventArgs e)
@@ -613,6 +639,9 @@ namespace Formiik.DependenciesAnalyzer
 
         private void BtnPull_Click(object sender, RoutedEventArgs e)
         {
+            this.Less.IsEnabled = false;
+            this.More.IsEnabled = false;
+
             try
             {
                 var selectedBranch = ((RibbonGalleryItem)this.remoteBranchesGallery.SelectedItem).Content.ToString();
@@ -760,6 +789,8 @@ namespace Formiik.DependenciesAnalyzer
                 this.txtDeleted.Text = string.Empty;
                 this.txtCopied.Text = string.Empty;
                 this.txtUpdateButUnmerged.Text = string.Empty;
+                this.Less.IsEnabled = false;
+                this.More.IsEnabled = false;
 
                 backgroundWorkerAnalysis = new BackgroundWorker();
 
@@ -787,17 +818,15 @@ namespace Formiik.DependenciesAnalyzer
                     GitPath = Properties.Settings.Default.PathGit
                 };
 
-                this.btnAnalyze.IsEnabled = false;
-
                 this.btnExportarTextoAfectados.Visibility = Visibility.Collapsed;
 
                 this.pgbIndeterminate.IsIndeterminate = true;
 
                 this.isStartAnalysis = true;
-
-                this.remoteBranchesCategory.IsEnabled = false;
+                
                 this.btnSetRepository.IsEnabled = false;
                 this.btnSeleccionarRepo.IsEnabled = false;
+                this.remoteBranchesCategory.IsEnabled = false;
                 this.btnRefresh.IsEnabled = false;
                 this.btnFetchCheckout.IsEnabled = false;
                 this.btnPull.IsEnabled = false;
@@ -1540,6 +1569,8 @@ namespace Formiik.DependenciesAnalyzer
                 this.btnPull.IsEnabled = false;
                 this.btnAnalyze.IsEnabled = false;
                 this.btnScan.IsEnabled = false;
+                this.Less.IsEnabled = false;
+                this.More.IsEnabled = false;
 
                 backgroundWorkerAllComponents.RunWorkerAsync(Properties.Settings.Default.RepoPath);
 
@@ -1717,6 +1748,9 @@ namespace Formiik.DependenciesAnalyzer
 
         private void Refresh_Click(object sender, RoutedEventArgs e)
         {
+            this.Less.IsEnabled = false;
+            this.More.IsEnabled = false;
+
             try
             {
                 using (var gitActionsManager = new GitActionsManager())
@@ -1766,6 +1800,9 @@ namespace Formiik.DependenciesAnalyzer
 
         private void remoteBranches_SelectionChanged(object sender, RoutedPropertyChangedEventArgs<object> e)
         {
+            this.Less.IsEnabled = false;
+            this.More.IsEnabled = false;
+
             if (!this.isStartAnalysis)
             {
                 RibbonGallery source = e.OriginalSource as RibbonGallery;
@@ -1837,6 +1874,8 @@ namespace Formiik.DependenciesAnalyzer
                     this.btnAnalyze.IsEnabled = true;
                     this.btnStopAnalysis.IsEnabled = false;
                     this.btnScan.IsEnabled = true;
+                    this.Less.IsEnabled = false;
+                    this.More.IsEnabled = false;
 
                     this.isStartAnalysis = false;
 
