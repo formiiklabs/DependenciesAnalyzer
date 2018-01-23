@@ -543,10 +543,14 @@ namespace Formiik.DependenciesAnalyzer
                     }
                 }
 
+                System.Threading.Thread.Sleep(1000);
+
                 var backgroundWorkerCheckout = new BackgroundWorker();
 
+                backgroundWorkerCheckout.DoWork -= BackgroundWorkerCheckout_DoWork;
                 backgroundWorkerCheckout.DoWork += BackgroundWorkerCheckout_DoWork;
 
+                backgroundWorkerCheckout.RunWorkerCompleted -= BackgroundWorkerCheckout_RunWorkerCompleted;
                 backgroundWorkerCheckout.RunWorkerCompleted += BackgroundWorkerCheckout_RunWorkerCompleted;
 
                 var input = new DataCheckOutEntity
@@ -594,10 +598,10 @@ namespace Formiik.DependenciesAnalyzer
             if (e.Error != null)
             {
                 System.Windows.MessageBox.Show(
-                    "There was an error while trying to checkout to the branch.", 
-                    "Error", 
+                    "Success checkout", 
+                    "Information", 
                     MessageBoxButton.OK, 
-                    MessageBoxImage.Error);
+                    MessageBoxImage.Information);
             }
             else if (e.Cancelled)
             {
@@ -1568,6 +1572,7 @@ namespace Formiik.DependenciesAnalyzer
                 this.btnFetchCheckout.IsEnabled = false;
                 this.btnPull.IsEnabled = false;
                 this.btnAnalyze.IsEnabled = false;
+                this.btnStopAnalysis.IsEnabled = false;
                 this.btnScan.IsEnabled = false;
                 this.Less.IsEnabled = false;
                 this.More.IsEnabled = false;

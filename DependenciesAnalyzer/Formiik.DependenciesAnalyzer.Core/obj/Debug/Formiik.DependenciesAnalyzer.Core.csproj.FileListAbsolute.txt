@@ -145,4 +145,3 @@ C:\formiiklabs\DependenciesAnalyzer\DependenciesAnalyzer\Formiik.DependenciesAna
 C:\formiiklabs\DependenciesAnalyzer\DependenciesAnalyzer\Formiik.DependenciesAnalyzer.Core\obj\Debug\Formiik.DependenciesAnalyzer.Core.csproj.GenerateResource.Cache
 C:\formiiklabs\DependenciesAnalyzer\DependenciesAnalyzer\Formiik.DependenciesAnalyzer.Core\obj\Debug\Formiik.DependenciesAnalyzer.Core.dll
 C:\formiiklabs\DependenciesAnalyzer\DependenciesAnalyzer\Formiik.DependenciesAnalyzer.Core\obj\Debug\Formiik.DependenciesAnalyzer.Core.pdb
-C:\formiiklabs\DependenciesAnalyzer\DependenciesAnalyzer\Formiik.DependenciesAnalyzer.Core\obj\Debug\Formiik.DependenciesAnalyzer.Core.csprojResolveAssemblyReference.cache
