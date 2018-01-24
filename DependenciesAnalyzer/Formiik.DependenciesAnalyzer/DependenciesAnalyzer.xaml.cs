@@ -172,10 +172,7 @@ namespace Formiik.DependenciesAnalyzer
         private void BackgroundWorkerClone_RunWorkerCompleted(object sender, RunWorkerCompletedEventArgs e)
         {
             this.isStartAnalysis = false;
-
             this.remoteBranchesCategory.IsEnabled = true;
-
-            this.btnScan.IsEnabled = true;
 
             if (e.Error != null)
             {
@@ -219,13 +216,14 @@ namespace Formiik.DependenciesAnalyzer
 
             this.pgbIndeterminate.IsIndeterminate = false;
 
-            btnSetRepository.IsEnabled = true;
-            btnSeleccionarRepo.IsEnabled = true;
-            btnRefresh.IsEnabled = true;
-            btnFetchCheckout.IsEnabled = true;
-            btnPull.IsEnabled = true;
-            btnAnalyze.IsEnabled = true;
-            btnScan.IsEnabled = true;
+            this.btnSetRepository.IsEnabled = true;
+            this.btnSeleccionarRepo.IsEnabled = true;
+            this.btnRefresh.IsEnabled = true;
+            this.btnFetchCheckout.IsEnabled = true;
+            this.btnPull.IsEnabled = true;
+            this.btnAnalyze.IsEnabled = true;
+            this.btnStopAnalysis.IsEnabled = false;
+            this.btnScan.IsEnabled = false;
 
             if (!string.IsNullOrEmpty(Properties.Settings.Default.SelectedBranch))
             {
@@ -237,23 +235,21 @@ namespace Formiik.DependenciesAnalyzer
                         {
                             remoteBranchesGallery.SelectedItem = ((RibbonGalleryItem)subItem);
 
-                            btnRefresh.IsEnabled = true;
-                            btnFetchCheckout.IsEnabled = true;
-                            btnPull.IsEnabled = true;
-                            btnAnalyze.IsEnabled = true;
+                            this.btnRefresh.IsEnabled = true;
+                            this.btnFetchCheckout.IsEnabled = true;
+                            this.btnPull.IsEnabled = true;
+                            this.btnAnalyze.IsEnabled = true;
                         }
                     }
                 }
             }
             else
             {
-                btnRefresh.IsEnabled = true;
-                btnFetchCheckout.IsEnabled = false;
-                btnPull.IsEnabled = false;
-                btnAnalyze.IsEnabled = false;
+                this.btnRefresh.IsEnabled = true;
+                this.btnFetchCheckout.IsEnabled = false;
+                this.btnPull.IsEnabled = false;
+                this.btnAnalyze.IsEnabled = false;
             }
-
-            btnScan.IsEnabled = true;
         }
 
         private void BackgroundWorkerClone_DoWork(object sender, DoWorkEventArgs e)
@@ -592,6 +588,7 @@ namespace Formiik.DependenciesAnalyzer
         private void BackgroundWorkerCheckout_RunWorkerCompleted(object sender, RunWorkerCompletedEventArgs e)
         {
             this.btnAnalyze.IsEnabled = true;
+            this.btnScan.IsEnabled = true;
 
             if (e.Error != null)
             {
@@ -608,6 +605,9 @@ namespace Formiik.DependenciesAnalyzer
                     "Warning",
                     MessageBoxButton.OK,
                     MessageBoxImage.Warning);
+
+                this.btnAnalyze.IsEnabled = false;
+                this.btnScan.IsEnabled = false;
             }
             else
             {
@@ -624,9 +624,7 @@ namespace Formiik.DependenciesAnalyzer
             this.btnRefresh.IsEnabled = true;
             this.btnFetchCheckout.IsEnabled = true;
             this.btnPull.IsEnabled = true;
-            this.btnAnalyze.IsEnabled = true;
             this.btnStopAnalysis.IsEnabled = true;
-            this.btnScan.IsEnabled = true;
         }
 
         private void BackgroundWorkerCheckout_DoWork(object sender, DoWorkEventArgs e)
@@ -1512,6 +1510,7 @@ namespace Formiik.DependenciesAnalyzer
 
         private void Window_Loaded(object sender, RoutedEventArgs e)
         {
+            this.btnAnalyze.IsEnabled = false;
             this.btnScan.IsEnabled = false;
             this.Less.IsEnabled = false;
             this.More.IsEnabled = false;
@@ -1800,8 +1799,11 @@ namespace Formiik.DependenciesAnalyzer
 
         private void remoteBranches_SelectionChanged(object sender, RoutedPropertyChangedEventArgs<object> e)
         {
+            this.btnScan.IsEnabled = false;
             this.Less.IsEnabled = false;
             this.More.IsEnabled = false;
+            this.btnPull.IsEnabled = false;
+            this.btnStopAnalysis.IsEnabled = false;
 
             if (!this.isStartAnalysis)
             {
@@ -1818,9 +1820,8 @@ namespace Formiik.DependenciesAnalyzer
                 {
                     this.btnRefresh.IsEnabled = true;
                     this.btnFetchCheckout.IsEnabled = true;
-                    this.btnPull.IsEnabled = true;
+                    this.btnPull.IsEnabled = false;
                     this.btnAnalyze.IsEnabled = false;
-                    this.btnScan.IsEnabled = true;
 
                     Properties.Settings.Default.SelectedBranch = selectedValue;
                 }
@@ -1830,7 +1831,6 @@ namespace Formiik.DependenciesAnalyzer
                     this.btnFetchCheckout.IsEnabled = false;
                     this.btnPull.IsEnabled = false;
                     this.btnAnalyze.IsEnabled = false;
-                    this.btnScan.IsEnabled = true;
 
                     Properties.Settings.Default.SelectedBranch = string.Empty;
                 }
@@ -1839,7 +1839,7 @@ namespace Formiik.DependenciesAnalyzer
             }
             else
             {
-                this.btnScan.IsEnabled = false;
+                this.btnAnalyze.IsEnabled = false;
             }
         }
 
