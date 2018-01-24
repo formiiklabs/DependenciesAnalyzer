@@ -624,7 +624,7 @@ namespace Formiik.DependenciesAnalyzer
             this.btnRefresh.IsEnabled = true;
             this.btnFetchCheckout.IsEnabled = true;
             this.btnPull.IsEnabled = true;
-            this.btnStopAnalysis.IsEnabled = true;
+            this.btnStopAnalysis.IsEnabled = false;
         }
 
         private void BackgroundWorkerCheckout_DoWork(object sender, DoWorkEventArgs e)
