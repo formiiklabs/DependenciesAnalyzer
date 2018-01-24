@@ -547,10 +547,8 @@ namespace Formiik.DependenciesAnalyzer
 
                 var backgroundWorkerCheckout = new BackgroundWorker();
 
-                backgroundWorkerCheckout.DoWork -= BackgroundWorkerCheckout_DoWork;
                 backgroundWorkerCheckout.DoWork += BackgroundWorkerCheckout_DoWork;
 
-                backgroundWorkerCheckout.RunWorkerCompleted -= BackgroundWorkerCheckout_RunWorkerCompleted;
                 backgroundWorkerCheckout.RunWorkerCompleted += BackgroundWorkerCheckout_RunWorkerCompleted;
 
                 var input = new DataCheckOutEntity
@@ -799,15 +797,12 @@ namespace Formiik.DependenciesAnalyzer
                 backgroundWorkerAnalysis = new BackgroundWorker();
 
                 backgroundWorkerAnalysis.WorkerSupportsCancellation = true;
-                
-                backgroundWorkerAnalysis.DoWork -= BackgroundWorker_DoWork;
+
                 backgroundWorkerAnalysis.DoWork += BackgroundWorker_DoWork;
 
-                backgroundWorkerAnalysis.RunWorkerCompleted -= BackgroundWorker_RunWorkerCompleted;
                 backgroundWorkerAnalysis.RunWorkerCompleted += BackgroundWorker_RunWorkerCompleted;
 
                 backgroundWorkerAnalysis.Disposed += BackgroundWorkerAnalysis_Disposed;
-                backgroundWorkerAnalysis.Disposed -= BackgroundWorkerAnalysis_Disposed;
 
                 var remoteBranch = string.IsNullOrEmpty(Properties.Settings.Default.SelectedBranch) ?
                     ((RibbonGalleryItem)this.remoteBranchesGallery.SelectedItem).Content.ToString() :
