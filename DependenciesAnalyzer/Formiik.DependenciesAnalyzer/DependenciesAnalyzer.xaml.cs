@@ -33,6 +33,7 @@ namespace Formiik.DependenciesAnalyzer
         private GraphViewer graphViewer = null;
         private double identityZoom = 1.0;
         private double factorZoom = 0.1;
+        private bool isCheckOut = false;
         #endregion
 
         public DependenciesAnalyzer()
@@ -504,6 +505,8 @@ namespace Formiik.DependenciesAnalyzer
 
         private void BtnFetchCheckout_Click(object sender, RoutedEventArgs e)
         {
+            this.remoteBranchesCategory.IsEnabled = false;
+
             var selectedBranch = string.Empty;
 
             try
@@ -539,8 +542,6 @@ namespace Formiik.DependenciesAnalyzer
                     }
                 }
 
-                System.Threading.Thread.Sleep(1000);
-
                 var backgroundWorkerCheckout = new BackgroundWorker();
 
                 backgroundWorkerCheckout.DoWork += BackgroundWorkerCheckout_DoWork;
@@ -553,9 +554,10 @@ namespace Formiik.DependenciesAnalyzer
                     BranchSelected = selectedBranch
                 };
 
+                this.isCheckOut = true;
+
                 this.btnSetRepository.IsEnabled = false;
                 this.btnSeleccionarRepo.IsEnabled = false;
-                this.remoteBranchesCategory.IsEnabled = false;
                 this.btnRefresh.IsEnabled = false;
                 this.btnFetchCheckout.IsEnabled = false;
                 this.btnPull.IsEnabled = false;
@@ -564,6 +566,10 @@ namespace Formiik.DependenciesAnalyzer
                 this.btnScan.IsEnabled = false;
                 this.Less.IsEnabled = false;
                 this.More.IsEnabled = false;
+
+                this.isCheckOut = true;
+
+                System.Threading.Thread.Sleep(2000);
 
                 backgroundWorkerCheckout.RunWorkerAsync(input);
             }
@@ -588,6 +594,7 @@ namespace Formiik.DependenciesAnalyzer
         private void BackgroundWorkerCheckout_RunWorkerCompleted(object sender, RunWorkerCompletedEventArgs e)
         {
             this.btnAnalyze.IsEnabled = true;
+
             this.btnScan.IsEnabled = true;
 
             if (e.Error != null)
@@ -620,11 +627,14 @@ namespace Formiik.DependenciesAnalyzer
 
             this.btnSetRepository.IsEnabled = true;
             this.btnSeleccionarRepo.IsEnabled = true;
-            this.remoteBranchesCategory.IsEnabled = true;
             this.btnRefresh.IsEnabled = true;
             this.btnFetchCheckout.IsEnabled = true;
             this.btnPull.IsEnabled = true;
             this.btnStopAnalysis.IsEnabled = false;
+
+            this.isCheckOut = false;
+
+            this.remoteBranchesCategory.IsEnabled = true;
         }
 
         private void BackgroundWorkerCheckout_DoWork(object sender, DoWorkEventArgs e)
@@ -1543,6 +1553,15 @@ namespace Formiik.DependenciesAnalyzer
 
         private void BtnScan_Click(object sender, RoutedEventArgs e)
         {
+            if (this.isCheckOut)
+            {
+                System.Windows.MessageBox.Show(
+                    "A process of checkout for the branch is running",
+                    "Information",
+                    MessageBoxButton.OK,
+                    MessageBoxImage.Information);
+            }
+
             this.isStartAnalysis = true;
 
             this.stackAllComponents.Children.Clear();
@@ -1799,6 +1818,7 @@ namespace Formiik.DependenciesAnalyzer
 
         private void remoteBranches_SelectionChanged(object sender, RoutedPropertyChangedEventArgs<object> e)
         {
+            this.btnFetchCheckout.IsEnabled = false;
             this.btnScan.IsEnabled = false;
             this.Less.IsEnabled = false;
             this.More.IsEnabled = false;
@@ -1841,6 +1861,8 @@ namespace Formiik.DependenciesAnalyzer
             {
                 this.btnAnalyze.IsEnabled = false;
             }
+
+            this.btnFetchCheckout.IsEnabled = true;
         }
 
         private bool IsDirectoryEmpty(string path)
