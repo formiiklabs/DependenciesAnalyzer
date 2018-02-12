@@ -9,8 +9,6 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Formiik.DependenciesAnalyze
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Formiik.DependenciesAnalyzer", "Formiik.DependenciesAnalyzer\Formiik.DependenciesAnalyzer.csproj", "{D18287F5-800B-4812-AC15-DD70FA50DD96}"
 EndProject
-Project("{6141683F-8A12-4E36-9623-2EB02B2C2303}") = "Formiik.DependenciesAnalyzer.Installer", "Formiik.DependenciesAnalyzer.Installer\Formiik.DependenciesAnalyzer.Installer.isproj", "{BC25BAE5-DB04-4EC7-8B23-39F5C68AE39F}"
-EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		CD_ROM|Any CPU = CD_ROM|Any CPU
@@ -50,15 +48,6 @@ Global
 		{D18287F5-800B-4812-AC15-DD70FA50DD96}.Release|Any CPU.Build.0 = Release|Any CPU
 		{D18287F5-800B-4812-AC15-DD70FA50DD96}.SingleImage|Any CPU.ActiveCfg = Release|Any CPU
 		{D18287F5-800B-4812-AC15-DD70FA50DD96}.SingleImage|Any CPU.Build.0 = Release|Any CPU
-		{BC25BAE5-DB04-4EC7-8B23-39F5C68AE39F}.CD_ROM|Any CPU.ActiveCfg = CD_ROM
-		{BC25BAE5-DB04-4EC7-8B23-39F5C68AE39F}.CD_ROM|Any CPU.Build.0 = CD_ROM
-		{BC25BAE5-DB04-4EC7-8B23-39F5C68AE39F}.Debug|Any CPU.ActiveCfg = SingleImage
-		{BC25BAE5-DB04-4EC7-8B23-39F5C68AE39F}.Debug|Any CPU.Build.0 = SingleImage
-		{BC25BAE5-DB04-4EC7-8B23-39F5C68AE39F}.DVD-5|Any CPU.ActiveCfg = DVD-5
-		{BC25BAE5-DB04-4EC7-8B23-39F5C68AE39F}.DVD-5|Any CPU.Build.0 = DVD-5
-		{BC25BAE5-DB04-4EC7-8B23-39F5C68AE39F}.Release|Any CPU.ActiveCfg = SingleImage
-		{BC25BAE5-DB04-4EC7-8B23-39F5C68AE39F}.SingleImage|Any CPU.ActiveCfg = SingleImage
-		{BC25BAE5-DB04-4EC7-8B23-39F5C68AE39F}.SingleImage|Any CPU.Build.0 = SingleImage
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE

@@ -1280,18 +1280,22 @@ namespace Formiik.DependenciesAnalyzer
                     arguments.GitPath);
 
                 var treeNodes = treeGraph.TreeNodes;
-                    
+
+                MSBuildWorkspace workspace = null;
+
+                Solution solution = null;
+
                 if (fileSet != null)
                 {
                     var methodsObserved = new List<string>();
                         
                     if (fileSet.Modified.Any())
                     {
-                        var workspace = MSBuildWorkspace.Create();
+                        workspace = MSBuildWorkspace.Create();
 
                         workspace.WorkspaceFailed += Workspace_WorkspaceFailed;
 
-                        var solution = workspace.OpenSolutionAsync(solutionFile).Result;
+                        solution = workspace.OpenSolutionAsync(solutionFile).Result;
 
                         fileSet.Modified.ForEach(file =>
                         {
@@ -1333,11 +1337,17 @@ namespace Formiik.DependenciesAnalyzer
 
                     if (fileSet.Added.Any())
                     {
-                        var workspace = MSBuildWorkspace.Create();
+                        if (workspace == null)
+                        {
+                            workspace = MSBuildWorkspace.Create();
 
-                        workspace.WorkspaceFailed += Workspace_WorkspaceFailed;
+                            workspace.WorkspaceFailed += Workspace_WorkspaceFailed;
+                        }
 
-                        var solution = workspace.OpenSolutionAsync(solutionFile).Result;
+                        if (solution == null)
+                        {
+                            solution = workspace.OpenSolutionAsync(solutionFile).Result;
+                        }
 
                         fileSet.Added.ForEach(file =>
                         {
@@ -1378,11 +1388,17 @@ namespace Formiik.DependenciesAnalyzer
                     {
                         using (var methodAnalyzer = new MethodAnalyzer())
                         {
-                            var workspace = MSBuildWorkspace.Create();
+                            if (workspace == null)
+                            {
+                                workspace = MSBuildWorkspace.Create();
 
-                            workspace.WorkspaceFailed += Workspace_WorkspaceFailed;
+                                workspace.WorkspaceFailed += Workspace_WorkspaceFailed;
+                            }
 
-                            var solution = workspace.OpenSolutionAsync(solutionFile).Result;
+                            if (solution == null)
+                            {
+                                solution = workspace.OpenSolutionAsync(solutionFile).Result;
+                            }
 
                             foreach (var mo in methodsObserved)
                             {
